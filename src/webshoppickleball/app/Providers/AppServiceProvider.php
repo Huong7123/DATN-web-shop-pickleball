@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Interfaces\Mail\MailServiceInterface;
+use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRepositories;
+use App\Services\Mail\MailService;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(MailServiceInterface::class, MailService::class);
+        $this->app->bind(UserRepositoryInterface::class,UserRepositories::class);
     }
 
     /**
@@ -19,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Route::middleware('web')
+            ->group(base_path('routes/web.php'));
+
+        Route::prefix('api')
+            ->middleware('api')
+            ->group(base_path('routes/api.php'));
     }
 }
