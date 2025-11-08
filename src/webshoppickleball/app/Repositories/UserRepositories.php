@@ -35,4 +35,23 @@ class UserRepositories implements UserRepositoryInterface {
             'otp_expires_at' => null
         ]);
     }
+
+    public function updateOtpCode(int $userId, string $otp, \DateTime $expiresAt):bool
+    {
+        return (bool)User::where('id', $userId)->update([
+            'status' => 0,
+            'otp_code' => $otp,
+            'otp_expires_at' => $expiresAt
+        ]);
+    }
+
+    public function updatePassword(int $userId, string $hashedPassword):bool
+    {
+        return (bool)User::where('id', $userId)->update([
+            'status' => 1,
+            'password' => $hashedPassword,
+            'otp_code' => null,
+            'otp_expires_at' => null
+        ]);
+    }
 }
