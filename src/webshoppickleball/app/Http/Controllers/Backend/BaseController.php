@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use App\Services\BaseService;
+use App\DTO\DataResult;
+
+class BaseController extends Controller
+{
+    protected BaseService $service;
+
+    public function __construct(BaseService $service)
+    {
+        $this->service = $service;
+    }
+
+    public function index(): JsonResponse
+    {
+        $result = $this->service->getAll();
+        return response()->json($result, $result->http_code);
+    }
+
+    public function show(int $id): JsonResponse
+    {
+        $result = $this->service->getById($id);
+        return response()->json($result, $result->http_code);
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $data = $request->all();
+        $result = $this->service->create($data);
+        return response()->json($result, $result->http_code);
+    }
+
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $data = $request->all();
+        $result = $this->service->update($id, $data);
+        return response()->json($result, $result->http_code);
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $result = $this->service->delete($id);
+        return response()->json($result, $result->http_code);
+    }
+}

@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Interfaces\BaseRepositoryInterface;
 use App\Interfaces\Mail\MailServiceInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\BaseRepositories;
 use App\Repositories\UserRepositories;
 use App\Services\Mail\MailService;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(MailServiceInterface::class, MailService::class);
         $this->app->bind(UserRepositoryInterface::class,UserRepositories::class);
+        $this->app->bind(BaseRepositoryInterface::class,BaseRepositories::class);
+
     }
 
     /**
