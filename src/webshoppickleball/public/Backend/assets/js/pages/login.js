@@ -21,11 +21,17 @@ function login() {
         data: JSON.stringify(data),
         xhrFields: { withCredentials: true },
         success: function (response) {
-            if(response.data.user.role == 1){
+            console.log(response.data.user.role);
+            
+            if(response.data.user.role === "1"){
                 Swal.close();
-                setTimeout(() => {
-                    window.location.href = "/home";
-                }, 200);
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Không có quyền',
+                    text: 'Bạn không được phép truy cập trang này!',
+                    showConfirmButton: false,
+                    timer: 2000 
+                })
             } else{
                 Swal.close();
                 setTimeout(() => {
