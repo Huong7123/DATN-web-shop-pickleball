@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Backend;
 
 use App\Interfaces\BaseRepositoryInterface;
 use App\DTO\DataResult;

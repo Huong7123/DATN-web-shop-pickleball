@@ -12,6 +12,7 @@ class AuthService {
     public function me(): User
     {
         $user = JWTAuth::parseToken()->authenticate();
+        dd($user);
         if (!$user) {
             throw new Exception("Token không hợp lệ hoặc hết hạn");
         }
