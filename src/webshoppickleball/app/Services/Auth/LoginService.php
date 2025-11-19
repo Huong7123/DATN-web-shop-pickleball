@@ -30,9 +30,6 @@ class LoginService
 
             $token = JWTAuth::fromUser($user);
 
-            // Lưu token vào session nếu cần
-            session(['jwt_token' => $token]);
-
             return new DataResult(
                 'Đăng nhập thành công',
                 200,

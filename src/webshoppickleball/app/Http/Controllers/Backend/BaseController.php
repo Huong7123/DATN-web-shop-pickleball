@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Services\BaseService;
+use App\Services\Backend\BaseService;
 use App\DTO\DataResult;
 
-class BaseController extends Controller
+class BaseController
 {
     protected BaseService $service;
+    protected string $storeRequest;
 
     public function __construct(BaseService $service)
     {
@@ -28,10 +29,10 @@ class BaseController extends Controller
         return response()->json($result, $result->http_code);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(): JsonResponse
     {
-        $data = $request->all();
-        $result = $this->service->create($data);
+        $validated = app($this->storeRequest)->validated();
+        $result = $this->service->create($validated);
         return response()->json($result, $result->http_code);
     }
 
