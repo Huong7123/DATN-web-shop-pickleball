@@ -7,7 +7,7 @@
             <div class="card card-custom gutter-b">
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Danh sách Quản trị viên</h3>
+                        <h3 class="card-label">Danh sách quản trị viên</h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -26,15 +26,47 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            <i class="la la-search"></i>
+                                            <i class="la la-id-card"></i>
                                         </span>
                                     </div>
                                     <input 
                                         type="text" 
-                                        id="input_search" 
-                                        name="input_search" 
+                                        id="input_id" 
+                                        name="input_id" 
                                         class="form-control search-input" 
-                                        placeholder="Tìm kiếm..."
+                                        placeholder="Nhập ID..."
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-sm-6 col-lg-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="la la-user"></i>
+                                        </span>
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        id="input_name" 
+                                        name="input_name" 
+                                        class="form-control search-input" 
+                                        placeholder="Nhập tên..."
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-sm-6 col-lg-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="la la-envelope"></i>
+                                        </span>
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        id="input_email" 
+                                        name="input_email" 
+                                        class="form-control search-input" 
+                                        placeholder="Nhập email..."
                                     >
                                 </div>
                             </div>
@@ -60,7 +92,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Ảnh đại diện</th>
-                                <th>Tên người dùng</th>
+                                <th>Tên</th>
                                 <th>Email</th>
                                 <th>Số liên hệ</th>
                                 <th>Trạng thái</th>
@@ -126,5 +158,6 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="/js/pages/user/list-user.js"></script>
+    <script src="/Backend/assets/js/pages/user/list-manage.js"></script>
+
 @endsection

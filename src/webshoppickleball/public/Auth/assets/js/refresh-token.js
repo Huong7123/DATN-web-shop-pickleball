@@ -33,9 +33,11 @@ function refreshToken() {
     if (!token) return;
 
     $.ajax({
-        url: '/refresh',
+        url: '/api/refresh',
         type: 'POST',
-        headers: { 'Authorization': 'Bearer ' + token },
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
         success: function(res) {
             if (res.data && res.data.token) {
                 // Lưu token mới và setup refresh tiếp theo
