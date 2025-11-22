@@ -37,6 +37,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/user', function () {
         return view('layouts.Backend.pages.user.user',['title' => 'Quản lý người dùng']);
     });
+    Route::get('/manage', function () {
+        return view('layouts.Backend.pages.user.manage',['title' => 'Quản lý QTV']);
+    });
     Route::middleware('admin.role')->group(function () {
         
     });

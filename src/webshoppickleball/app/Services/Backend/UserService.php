@@ -26,7 +26,7 @@ class UserService extends BaseService
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
-            'role' => $data['role'] ?? '2',
+            'role' => '2',
             'password' => Hash::make($data['password']),
             'status' => '1',
         ];
@@ -44,13 +44,15 @@ class UserService extends BaseService
             return new DataResult('Bạn không có quyền thực hiện thao tác này', 403);
         }
 
-        $avatarOld = $this->repository->getById($id);
+        $name = $user->name;
+        $password = $user->password;
+        $phone = $user->phone;
 
         $userData = [
-            'name' => $data['name'],
-            'phone' => $data['phone'],
-            'password' => isset($data['password']) ? Hash::make($data['password']) : null,
-            'role' => '2',
+            'name' => $data['name'] ?? $name,
+            'phone' => $data['phone'] ?? $phone,
+            'password' => isset($data['password']) ? Hash::make($data['password']) : $password,
+            'role' => $data['role'],
             'status' => $data['status'] ?? 1,
         ];
 
