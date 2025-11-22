@@ -20,6 +20,13 @@ class BaseService
         return new DataResult('Lấy dữ liệu thành công', 200, $data);
     }
 
+    public function paginateWithFilters(array $filters, int $perPage = 10): DataResult
+    {
+        $data = $this->repository->paginateWithFilters($filters, $perPage);
+
+        return new DataResult('Lấy danh sách thành công',200,$data);
+    }
+
     public function getById(int $id, array $columns = ['*']): DataResult
     {
         $item = $this->repository->getById($id, $columns);

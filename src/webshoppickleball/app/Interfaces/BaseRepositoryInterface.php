@@ -13,4 +13,6 @@ interface BaseRepositoryInterface
     public function update(int $id, array $data);
     
     public function delete(int $id);
+
+    public function paginateWithFilters(array $filters, int $perPage = 10, array $columns = ['*']);
 }

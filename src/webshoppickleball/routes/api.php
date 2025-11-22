@@ -22,8 +22,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Quản lý người dùng
+    Route::get('/list-user', [UserController::class, 'index']);
     Route::post('/add-user', [UserController::class, 'store']);
-    Route::put('/update-user/{id}', [UserController::class, 'update']);
+    Route::post('/update-user/{id}', [UserController::class, 'update']);
     Route::delete('/delete-user/{id}', [UserController::class, 'destroy']);
 
 });

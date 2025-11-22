@@ -7,7 +7,7 @@
             <div class="card card-custom gutter-b">
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Danh sách người dùng</h3>
+                        <h3 class="card-label">Danh sách Quản trị viên</h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -62,8 +62,7 @@
                                 <th>Ảnh đại diện</th>
                                 <th>Tên người dùng</th>
                                 <th>Email</th>
-                                <th>Địa chỉ</th>
-                                <th>Vai trò</th>
+                                <th>Số liên hệ</th>
                                 <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
                                 <th>Ngày cập nhật</th>
@@ -127,5 +126,5 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <!-- <script src="/js/user/user.js"></script> -->
+    <script src="/js/pages/user/list-user.js"></script>
 @endsection

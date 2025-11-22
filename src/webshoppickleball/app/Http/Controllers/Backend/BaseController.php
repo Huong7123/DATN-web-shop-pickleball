@@ -17,9 +17,15 @@ class BaseController
         $this->service = $service;
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $result = $this->service->getAll();
+        $filters = $request->query();
+        unset($filters['page'], $filters['per_page']);
+
+        $perPage = $request->get('per_page');
+
+        $result = $this->service->paginateWithFilters($filters, $perPage);
+
         return response()->json($result, $result->http_code);
     }
 
@@ -39,6 +45,12 @@ class BaseController
     public function update(Request $request, int $id): JsonResponse
     {
         $data = $request->all();
+
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public'); 
+            $data['avatar'] = $path;
+        }
+
         $result = $this->service->update($id, $data);
         return response()->json($result, $result->http_code);
     }

@@ -44,13 +44,19 @@ class UserService extends BaseService
             return new DataResult('Bạn không có quyền thực hiện thao tác này', 403);
         }
 
+        $avatarOld = $this->repository->getById($id);
+
         $userData = [
             'name' => $data['name'],
             'phone' => $data['phone'],
-            'password' => Hash::make($data['password']),
+            'password' => isset($data['password']) ? Hash::make($data['password']) : null,
             'role' => '2',
-            'status' => $data['status'],
+            'status' => $data['status'] ?? 1,
         ];
+
+        if (!empty($data['avatar'])) {
+            $userData['avatar'] = $data['avatar'];
+        }
 
         $item = $this->repository->update($id, $userData);
 

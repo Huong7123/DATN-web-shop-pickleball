@@ -21,6 +21,7 @@ class LoginController extends Controller
     {
         $data = $request->validated();
         $result = $this->loginService->login($data['email'], $data['password']);
+
         return response()->json($result, $result->http_code);
     }
 
