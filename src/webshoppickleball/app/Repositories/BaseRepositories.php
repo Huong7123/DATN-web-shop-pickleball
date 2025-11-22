@@ -46,4 +46,39 @@ class BaseRepositories
         }
         return false;
     }
+
+    public function paginateWithFilters(array $filters, int $perPage = 10, array $columns = ['*'])
+    {
+        return $this->model
+
+            ->when(!empty($filters['id']), function ($query) use ($filters) {
+                $query->where('id', $filters['id']);
+            })
+
+            ->when(!empty($filters['email']), function ($query) use ($filters) {
+                $query->where('email', 'LIKE', "%{$filters['email']}%");
+            })
+            ->when(!empty($filters['name']), function ($query) use ($filters) {
+                $query->where('name', 'LIKE', "%{$filters['name']}%");
+            })
+
+            ->when(!empty($filters['status']), function ($query) use ($filters) {
+                $query->where('status', $filters['status']);
+            })
+
+            ->when(!empty($filters['role']), function ($query) use ($filters) {
+                $query->where('role', $filters['role']);
+            })
+
+            ->when(!empty($filters['sort']) || !empty($filters['order']), function ($query) use ($filters) {
+                $sort = $filters['sort'] ?? 'id';
+                $order = $filters['order'] ?? 'desc';
+                $query->orderBy($sort, $order);
+            }, function ($query) {
+                $query->orderBy('id', 'desc');
+            })
+
+            ->paginate($perPage, $columns);
+    }
+
 }

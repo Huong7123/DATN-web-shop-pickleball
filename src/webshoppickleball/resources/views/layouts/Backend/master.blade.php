@@ -165,6 +165,7 @@
 		<!--end::Global Theme Bundle-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="/Backend/assets/js/pages/crud/ktdatatable/base/data-ajax.js"></script>
+		<script src="/Auth/assets/js/refresh-token.js"></script>
 		<!--end::Page Scripts-->
 	</body>
 	<!--end::Body-->
