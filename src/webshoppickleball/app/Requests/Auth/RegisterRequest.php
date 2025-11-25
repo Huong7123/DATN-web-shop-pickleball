@@ -28,6 +28,7 @@ class RegisterRequest extends FormRequest
                 'regex:/[@$!%*#?&]/'  // chứa ít nhất 1 ký tự đặc biệt
             ],
             'phone' => 'required|string',
+            'role' => 'string',
         ];
     }
 

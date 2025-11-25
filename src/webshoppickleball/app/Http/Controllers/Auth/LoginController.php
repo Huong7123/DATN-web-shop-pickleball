@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\DTO\DataResult;
 use App\Requests\Auth\LoginRequest;
 use App\Services\Auth\LoginService;
-use Exception;
+use Illuminate\Http\Request;
 
-class LoginController extends Controller{
+class LoginController extends Controller
+{
     private LoginService $loginService;
 
     public function __construct(LoginService $loginService)
@@ -18,23 +19,27 @@ class LoginController extends Controller{
 
     public function login(LoginRequest $request)
     {
-        try {
-            // Lấy dữ liệu từ request đã được validate
-            $data = $request->validated();
+        $data = $request->validated();
+        $result = $this->loginService->login($data['email'], $data['password']);
 
-            $user = $this->loginService->login($data['email'], $data['password']);
-            $result = new DataResult(
-                'Đăng nhập thành công',
-                200,
-                $user
-            );
-            return response()->json($result);
-        } catch (Exception $e) {
-            return response()->json(new DataResult(
-                $e->getMessage(),
-                400
-            ),400);
-        }
+        return response()->json($result, $result->http_code);
+    }
 
+    public function me()
+    {
+        $result = $this->loginService->me();
+        return response()->json($result, $result->http_code);
+    }
+
+    public function refresh()
+    {
+        $result = $this->loginService->refresh();
+        return response()->json($result, $result->http_code);
+    }
+
+    public function logout()
+    {
+        $result = $this->loginService->logout();
+        return response()->json($result, $result->http_code);
     }
 }

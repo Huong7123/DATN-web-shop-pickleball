@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->longText('avatar')->nullable();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('phone')->nullable();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->tinyInteger('role'); // hoặc admin, user tùy
+            $table->tinyInteger('status'); // trạng thái tài khoản
+            $table->string('otp_code', 6)->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -9,15 +9,6 @@
                     <div class="card-title">
                         <h3 class="card-label">Danh sách người dùng</h3>
                     </div>
-                    <div class="card-toolbar">
-                        <!--begin::Dropdown-->
-                        <div class="dropdown dropdown-inline mr-2">
-                            <button type="button" class="btn-add-user btn btn-primary font-weight-bolder">
-                                <span class="svg-icon svg-icon-md"></span>Thêm mới
-                            </button>
-                        </div>
-                        <!--end::Dropdown-->
-                    </div>
                 </div>
                 <div class="card-body">
                     <form class="mb-10">
@@ -26,15 +17,47 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            <i class="la la-search"></i>
+                                            <i class="la la-id-card"></i>
                                         </span>
                                     </div>
                                     <input 
                                         type="text" 
-                                        id="input_search" 
-                                        name="input_search" 
+                                        id="input_id" 
+                                        name="input_id" 
                                         class="form-control search-input" 
-                                        placeholder="Tìm kiếm..."
+                                        placeholder="Nhập ID..."
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-sm-6 col-lg-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="la la-user"></i>
+                                        </span>
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        id="input_name" 
+                                        name="input_name" 
+                                        class="form-control search-input" 
+                                        placeholder="Nhập tên..."
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group col-12 col-sm-6 col-lg-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="la la-envelope"></i>
+                                        </span>
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        id="input_email" 
+                                        name="input_email" 
+                                        class="form-control search-input" 
+                                        placeholder="Nhập email..."
                                     >
                                 </div>
                             </div>
@@ -60,10 +83,9 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Ảnh đại diện</th>
-                                <th>Tên người dùng</th>
+                                <th>Tên</th>
                                 <th>Email</th>
-                                <th>Địa chỉ</th>
-                                <th>Vai trò</th>
+                                <th>Số liên hệ</th>
                                 <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
                                 <th>Ngày cập nhật</th>
@@ -116,16 +138,6 @@
         <!--end::Container-->
     </div>
     
-    <!-- Button trigger modal-->
-
-    <!-- Modal-->
-    <div class="modal fade" id="exampleModalCenter" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" id="modalContent">
-                
-            </div>
-        </div>
-    </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <!-- <script src="/js/user/user.js"></script> -->
+    <script src="/Backend/assets/js/pages/user/list-user.js"></script>
 @endsection
