@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Http\Request;
 
@@ -26,5 +27,10 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/add-user', [UserController::class, 'store']);
     Route::post('/update-user/{id}', [UserController::class, 'update']);
     Route::delete('/delete-user/{id}', [UserController::class, 'destroy']);
+
+    //quản lý danh mục
+    Route::get('/list-category', [CategoryController::class, 'index']);
+    Route::post('/add-category', [CategoryController::class, 'store']);
+
 
 });
