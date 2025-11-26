@@ -34,12 +34,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('layouts.Backend.login',['title' => 'Đăng nhập']);
     })->name('login');
 
+    //user
     Route::get('/user', function () {
         return view('layouts.Backend.pages.user.user',['title' => 'Quản lý người dùng']);
     });
     Route::get('/manage', function () {
         return view('layouts.Backend.pages.user.manage',['title' => 'Quản lý QTV']);
     });
+
+    //category
+    Route::get('/category', function () {
+        return view('layouts.Backend.pages.category.category',['title' => 'Quản lý danh mục']);
+    });
+
     Route::middleware('admin.role')->group(function () {
         
     });

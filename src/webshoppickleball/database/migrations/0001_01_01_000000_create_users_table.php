@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->tinyInteger('role'); // hoặc admin, user tùy
-            $table->tinyInteger('status'); // trạng thái tài khoản
+            $table->tinyInteger('role');
+            $table->tinyInteger('status');
             $table->string('otp_code', 6)->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->rememberToken();

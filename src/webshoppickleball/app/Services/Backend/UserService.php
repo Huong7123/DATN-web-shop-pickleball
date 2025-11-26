@@ -6,6 +6,7 @@ use App\DTO\DataResult;
 use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Storage;
 
 class UserService extends BaseService
 {
@@ -44,27 +45,33 @@ class UserService extends BaseService
             return new DataResult('Bạn không có quyền thực hiện thao tác này', 403);
         }
 
-        $name = $user->name;
-        $password = $user->password;
-        $phone = $user->phone;
+        $currentUser = $this->repository->getById($id);
+        if (!$currentUser) {
+            return new DataResult("Cập nhật thất bại, id $id không tồn tại", 404);
+        }
 
-        $userData = [
-            'name' => $data['name'] ?? $name,
-            'phone' => $data['phone'] ?? $phone,
-            'password' => isset($data['password']) ? Hash::make($data['password']) : $password,
-            'role' => $data['role'],
-            'status' => $data['status'] ?? 1,
+        if (!empty($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
+           
+            if ($currentUser->avatar && Storage::disk('public')->exists($currentUser->avatar)) {
+                Storage::disk('public')->delete($currentUser->avatar);
+            }
+
+            $data['avatar'] = $data['avatar']->store('images', 'public');
+        }
+
+        $updateData = [
+            'name'     => $data['name'] ?? $currentUser->name,
+            'phone'    => $data['phone'] ?? $currentUser->phone,
+            'password' => isset($data['password']) ? Hash::make($data['password']) : $currentUser->password,
+            'role'     => $data['role'] ?? $currentUser->role,
+            'status'   => $data['status'] ?? $currentUser->status,
         ];
 
         if (!empty($data['avatar'])) {
-            $userData['avatar'] = $data['avatar'];
+            $updateData['avatar'] = $data['avatar'];
         }
 
-        $item = $this->repository->update($id, $userData);
-
-        if (!$item) {
-            return new DataResult("Cập nhật thất bại, id $id không tồn tại", 404);
-        }
+        $item = $this->repository->update($id, $updateData);
 
         return new DataResult('Cập nhật thành công', 200, $item);
     }

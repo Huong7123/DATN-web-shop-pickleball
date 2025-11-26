@@ -55,7 +55,7 @@
                         </span>
                     </li>
                     <li class="menu-item" aria-haspopup="true">
-                        <a href="/admin/list/categories" class="menu-link">
+                        <a href="/admin/category" class="menu-link">
                             <i class="menu-bullet menu-bullet-dot">
                                 <span></span>
                             </i>

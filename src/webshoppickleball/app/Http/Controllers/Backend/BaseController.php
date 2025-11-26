@@ -45,12 +45,6 @@ class BaseController
     public function update(Request $request, int $id): JsonResponse
     {
         $data = $request->all();
-
-        if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public'); 
-            $data['avatar'] = $path;
-        }
-
         $result = $this->service->update($id, $data);
         return response()->json($result, $result->http_code);
     }
