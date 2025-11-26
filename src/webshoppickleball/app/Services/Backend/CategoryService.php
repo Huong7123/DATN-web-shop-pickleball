@@ -59,8 +59,8 @@ class CategoryService extends BaseService
         }
 
         $updateData = [
-            'name' => $data['name'],
-            'status' => $data['status'],
+            'name' => $data['name'] ?? $currentCategory->name,
+            'status' => $data['status'] ?? $currentCategory->status,
         ];
 
         if (!empty($data['image'])) {
