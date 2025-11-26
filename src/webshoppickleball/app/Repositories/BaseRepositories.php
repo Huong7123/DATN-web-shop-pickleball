@@ -70,6 +70,19 @@ class BaseRepositories
                 $query->where('role', $filters['role']);
             })
 
+            ->when(!empty($filters['title']), function ($query) use ($filters) {
+                $query->where('role', $filters['role']);
+            })
+
+            ->when(!empty($filters['code']), function ($query) use ($filters) {
+                $query->where('role', $filters['role']);
+            })
+
+            ->when(!empty($filters['date']), function ($query) use ($filters) {
+                $query->whereDate('start_date', '<=', $filters['date'])
+                    ->whereDate('end_date', '>=', $filters['date']);
+            })
+
             ->when(!empty($filters['sort']) || !empty($filters['order']), function ($query) use ($filters) {
                 $sort = $filters['sort'] ?? 'id';
                 $order = $filters['order'] ?? 'desc';
