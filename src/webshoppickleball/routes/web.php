@@ -47,6 +47,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('layouts.Backend.pages.category.category',['title' => 'Quản lý danh mục']);
     });
 
+    Route::get('/attribute', function () {
+        return view('layouts.Backend.pages.attribute.attribute',['title' => 'Quản lý biến thể']);
+    });
+
     Route::get('/discount', function () {
         return view('layouts.Backend.pages.discount.discount',['title' => 'Quản lý ưu đãi']);
     });

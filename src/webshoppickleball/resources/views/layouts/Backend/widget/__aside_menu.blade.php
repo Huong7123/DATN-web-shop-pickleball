@@ -68,6 +68,31 @@
         <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
             <a href="javascript:;" class="menu-link menu-toggle">
                 <i class="menu-icon fa fa-file-alt"></i>
+                <span class="menu-text">Quản lý biến thể</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="menu-submenu">
+                <i class="menu-arrow"></i>
+                <ul class="menu-subnav">
+                    <li class="menu-item menu-item-parent" aria-haspopup="true">
+                        <span class="menu-link">
+                            <span class="menu-text">Quản lý biến thể</span>
+                        </span>
+                    </li>
+                    <li class="menu-item" aria-haspopup="true">
+                        <a href="/admin/attribute" class="menu-link">
+                            <i class="menu-bullet menu-bullet-dot">
+                                <span></span>
+                            </i>
+                            <span class="menu-text">Danh sánh biến thể</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+            <a href="javascript:;" class="menu-link menu-toggle">
+                <i class="menu-icon fa fa-file-alt"></i>
                 <span class="menu-text">Quản lý ưu đãi</span>
                 <i class="menu-arrow"></i>
             </a>
