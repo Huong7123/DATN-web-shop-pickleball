@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Interfaces\AttributeRepositoryInterface;
 use App\Interfaces\BaseRepositoryInterface;
 use App\Interfaces\CategoryRepositoryInterface;
 use App\Interfaces\DiscountRepositoryInterface;
 use App\Interfaces\Mail\MailServiceInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\AttributeRepositories;
 use App\Repositories\BaseRepositories;
 use App\Repositories\CategoryRepositories;
 use App\Repositories\DiscountRepositories;
@@ -27,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BaseRepositoryInterface::class,BaseRepositories::class);
         $this->app->bind(CategoryRepositoryInterface::class,CategoryRepositories::class);
         $this->app->bind(DiscountRepositoryInterface::class,DiscountRepositories::class);
+        $this->app->bind(AttributeRepositoryInterface::class,AttributeRepositories::class);
+
 
     }
 

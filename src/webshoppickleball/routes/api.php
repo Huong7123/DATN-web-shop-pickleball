@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Backend\AttributeController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\DiscountController;
@@ -41,4 +42,10 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/add-discount', [DiscountController::class, 'store']);
     Route::post('/update-discount/{id}', [DiscountController::class, 'update']);
     Route::delete('/delete-discount/{id}', [DiscountController::class, 'destroy']);
+
+    // quản lý mã thuộc tính
+    Route::get('/list-attribute', [AttributeController::class, 'index']);
+    Route::post('/add-attribute', [AttributeController::class, 'store']);
+    Route::post('/update-attribute/{id}', [AttributeController::class, 'update']);
+    Route::delete('/delete-attribute/{id}', [AttributeController::class, 'destroy']);
 });
