@@ -22,16 +22,12 @@ class AttributeService extends BaseService
             return new DataResult('Bạn không có quyền thực hiện thao tác này', 403);
         }
 
-        $AttributeData = [
+        $attributeData = [
             'name' => $data['name'],
             'status' => '1',
         ];
 
-        if (!empty($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
-            $AttributeData['image'] = $data['image']->store('images', 'public');
-        }
-
-        $item = $this->repository->create($AttributeData);
+        $item = $this->repository->create($attributeData);
 
         return new DataResult('Thêm mới thành công', 201, $item);
     }
@@ -49,23 +45,10 @@ class AttributeService extends BaseService
             return new DataResult("Cập nhật thất bại, id $id không tồn tại", 404);
         }
 
-        if (!empty($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
-           
-            if ($currentAttribute->image && Storage::disk('public')->exists($currentAttribute->image)) {
-                Storage::disk('public')->delete($currentAttribute->image);
-            }
-
-            $data['image'] = $data['image']->store('images', 'public');
-        }
-
         $updateData = [
             'name' => $data['name'] ?? $currentAttribute->name,
             'status' => $data['status'] ?? $currentAttribute->status,
         ];
-
-        if (!empty($data['image'])) {
-            $updateData['image'] = $data['image'];
-        }
 
         $item = $this->repository->update($id, $updateData);
 
