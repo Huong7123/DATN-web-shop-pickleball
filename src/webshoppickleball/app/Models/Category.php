@@ -11,6 +11,7 @@ class Category extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    protected $table = 'categories';
 
     /**
      * The attributes that are mass assignable.

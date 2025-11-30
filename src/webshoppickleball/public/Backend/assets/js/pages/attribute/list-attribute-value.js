@@ -33,7 +33,7 @@ function loadAttributes(filters = {}) {
     const queryData = {...currentFilters, per_page: pageSize, page: currentPage};
 
     $.ajax({
-        url: '/api/list-attribute',
+        url: '/api/list-attribute-value',
         method: 'GET',
         contentType: 'application/json',
         headers: {
@@ -55,23 +55,25 @@ function loadAttributes(filters = {}) {
             const tbody = $('#kt_datatable1_body');
             tbody.empty();
 
-            res.data.data.forEach(attribute => {
-                const createdAt = formatDate(attribute.created_at);
-                const updatedAt = formatDate(attribute.updated_at);
+            res.data.data.forEach(item => {
+                const createdAt = formatDate(item.created_at);
+                const updatedAt = formatDate(item.updated_at);
 
-                const lockBtn = attribute.status == 1
-                    ? `<button class="btn btn-danger btn-sm btn-lock" data-id="${attribute.id}" data-status="0">
+                const lockBtn = item.status == 1
+                    ? `<button class="btn btn-danger btn-sm btn-lock" data-id="${item.id}" data-status="0">
                             <i class="fa fa-lock p-0"></i>
                        </button>`
-                    : `<button class="btn btn-success btn-sm btn-lock" data-id="${attribute.id}" data-status="1">
+                    : `<button class="btn btn-success btn-sm btn-lock" data-id="${item.id}" data-status="1">
                             <i class="fa fa-unlock p-0"></i>
                        </button>`;
 
                 tbody.append(`
                     <tr>
-                        <td>${attribute.id}</td>
-                        <td>${attribute.name}</td>
-                        <td>${attribute.status == 1 ? '<span class="label label-success" style="width:100px;height:24px;border-radius:6px">Hoạt động</span>' : '<span class="label label-danger" style="width:100px;height:24px;border-radius:6px">Khoá</span>'}</td>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.attribute.name}</td>
+                        <td>${item.description}</td>
+                        <td>${item.status == 1 ? '<span class="label label-success" style="width:100px;height:24px;border-radius:6px">Hoạt động</span>' : '<span class="label label-danger" style="width:100px;height:24px;border-radius:6px">Khoá</span>'}</td>
                         <td>${createdAt}</td>
                         <td>${updatedAt}</td>
                         <td style="text-align:center;">

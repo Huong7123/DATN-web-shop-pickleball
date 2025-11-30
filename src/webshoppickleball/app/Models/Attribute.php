@@ -11,6 +11,7 @@ class Attribute extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    protected $table = 'attributes';
 
     /**
      * The attributes that are mass assignable.
@@ -21,4 +22,9 @@ class Attribute extends Model
         'name',
         'status',
     ];
+
+    public function attributeValues()
+    {
+        return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
+    }
 }

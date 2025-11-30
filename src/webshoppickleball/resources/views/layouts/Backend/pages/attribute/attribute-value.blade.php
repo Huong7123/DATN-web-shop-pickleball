@@ -7,7 +7,7 @@
             <div class="card card-custom gutter-b">
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Danh sách bộ thuộc tính</h3>
+                        <h3 class="card-label">Danh sách giá trị thuộc tính</h3>
                     </div>
                 </div>
                 <div class="card-body">
@@ -50,7 +50,9 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên biến thể</th>
+                                <th>Giá trị</th>
+                                <th>Bộ thuộc tính</th>
+                                <th>Mô tả</th>
                                 <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
                                 <th>Ngày cập nhật</th>
@@ -104,5 +106,5 @@
     </div>
     
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="/Backend/assets/js/pages/attribute/list-attribute.js"></script>
+    <script src="/Backend/assets/js/pages/attribute/list-attribute-value.js"></script>
 @endsection

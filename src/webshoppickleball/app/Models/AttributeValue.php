@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Discount extends Model
+class AttributeValue extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    protected $table = 'discounts';
+    protected $table = 'attribute_values';
 
     /**
      * The attributes that are mass assignable.
@@ -19,13 +19,14 @@ class Discount extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'image',
-        'title',
-        'code',
+        'name',
         'description',
-        'percent_off',
-        'start_date',
-        'end_date',
+        'attribute_id',
         'status',
     ];
+
+    public function attribute()
+    {
+        return $this->belongsTo(Attribute::class, 'attribute_id', 'id');
+    }
 }

@@ -74,7 +74,7 @@ function loadCategories(filters = {}) {
                             <img src="${category.image ? '/storage/' + category.image : '/img/user-default.png'}" style="width:80px;height:80px;border-radius:16px;">
                         </td>
                         <td>${category.name}</td>
-                        <td>${category.status == 1 ? '<span class="label label-success" style="width:100px;height:24px;border-radius:6px">Hoạt động</span>' : '<span class="label label-danger" style="width:100px;height:24px;border-radius:6px">Chưa kích hoạt</span>'}</td>
+                        <td>${category.status == 1 ? '<span class="label label-success" style="width:100px;height:24px;border-radius:6px">Hoạt động</span>' : '<span class="label label-danger" style="width:100px;height:24px;border-radius:6px">Khoá</span>'}</td>
                         <td>${createdAt}</td>
                         <td>${updatedAt}</td>
                         <td style="text-align:center;">
