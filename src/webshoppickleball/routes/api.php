@@ -10,7 +10,7 @@ use App\Http\Controllers\Backend\AttributeValueController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\DiscountController;
-
+use App\Http\Controllers\Backend\ProductController;
 use Illuminate\Http\Request;
 
 Route::post('/register', [RegisterController::class, 'register']);
@@ -37,6 +37,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/add-category', [CategoryController::class, 'store']);
     Route::post('/update-category/{id}', [CategoryController::class, 'update']);
     Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy']);
+
+    //quản lý sản phẩm
+    Route::get('/list-product', [ProductController::class, 'index']);
+    Route::post('/add-product', [ProductController::class, 'store']);
+    Route::post('/update-product/{id}', [ProductController::class, 'update']);
+    Route::delete('/delete-product/{id}', [ProductController::class, 'destroy']);
 
     // quản lý mã giảm giá
     Route::get('/list-discount', [DiscountController::class, 'index']);

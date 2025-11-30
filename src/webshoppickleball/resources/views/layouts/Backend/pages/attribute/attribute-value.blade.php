@@ -53,7 +53,6 @@
                                 <th>Giá trị</th>
                                 <th>Bộ thuộc tính</th>
                                 <th>Mô tả</th>
-                                <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
                                 <th>Ngày cập nhật</th>
                                 <th style="width: 100px;padding-left:0;text-align: center;">Thao tác</th>

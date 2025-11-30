@@ -55,6 +55,14 @@
                             <span class="menu-text" style="font-size: 14px;">Danh mục sản phẩm</span>
                         </a>
                     </li>
+                    <li class="menu-item" aria-haspopup="true">
+                        <a href="/admin/product" class="menu-link">
+                            <i class="menu-bullet menu-bullet-dot">
+                                <span></span>
+                            </i>
+                            <span class="menu-text" style="font-size: 14px;">Sản phẩm</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </li>

@@ -7,7 +7,7 @@
             <div class="card card-custom gutter-b">
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <div class="card-title">
-                        <h3 class="card-label">Danh sách danh mục</h3>
+                        <h3 class="card-label">Danh sách sản phẩm</h3>
                     </div>
                 </div>
                 <div class="card-body">
@@ -51,7 +51,11 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Hình ảnh</th>
-                                <th>Tên</th>
+                                <th>Tên SP</th>
+                                <th>Danh mục</th>
+                                <th>Biến thể</th>
+                                <th>Thuộc tính</th>
+                                <th>Số lượng</th>
                                 <th>Trạng thái</th>
                                 <th>Ngày tạo</th>
                                 <th>Ngày cập nhật</th>
@@ -105,5 +109,5 @@
     </div>
     
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="/Backend/assets/js/pages/category/list-category.js"></script>
+    <script src="/Backend/assets/js/pages/product/list-product.js"></script>
 @endsection
