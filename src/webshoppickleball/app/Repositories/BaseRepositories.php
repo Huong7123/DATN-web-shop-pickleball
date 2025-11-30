@@ -13,14 +13,16 @@ class BaseRepositories
         $this->model = $model;
     }
 
-    public function getAll(array $columns = ['*'])
+    public function getAll(array $columns = ['*'], array $with = [])
     {
-        return $this->model->all($columns);
+        $query = $this->model->with($with);
+        return $query->get($columns);
     }
 
-    public function getById(int $id, array $columns = ['*'])
+    public function getById(int $id, array $columns = ['*'], array $with = [])
     {
-        return $this->model->find($id, $columns);
+        $query = $this->model->with($with);
+        return $query->find($id, $columns);
     }
 
     public function create(array $data)
@@ -47,51 +49,44 @@ class BaseRepositories
         return false;
     }
 
-    public function paginateWithFilters(array $filters, int $perPage = 10, array $columns = ['*'])
+    public function paginateWithFilters(array $filters, int $perPage = 10, array $columns = ['*'], array $with = [])
     {
-        return $this->model
+        $query = $this->model->with($with);
 
-            ->when(!empty($filters['id']), function ($query) use ($filters) {
-                $query->where('id', $filters['id']);
+        $query->when(!empty($filters['id']), function ($q) use ($filters) {
+                $q->where('id', $filters['id']);
             })
-
-            ->when(!empty($filters['email']), function ($query) use ($filters) {
-                $query->where('email', 'LIKE', "%{$filters['email']}%");
+            ->when(!empty($filters['email']), function ($q) use ($filters) {
+                $q->where('email', 'LIKE', "%{$filters['email']}%");
             })
-            ->when(!empty($filters['name']), function ($query) use ($filters) {
-                $query->where('name', 'LIKE', "%{$filters['name']}%");
+            ->when(!empty($filters['name']), function ($q) use ($filters) {
+                $q->where('name', 'LIKE', "%{$filters['name']}%");
             })
-
-            ->when(!empty($filters['status']), function ($query) use ($filters) {
-                $query->where('status', $filters['status']);
+            ->when(!empty($filters['status']), function ($q) use ($filters) {
+                $q->where('status', $filters['status']);
             })
-
-            ->when(!empty($filters['role']), function ($query) use ($filters) {
-                $query->where('role', $filters['role']);
+            ->when(!empty($filters['role']), function ($q) use ($filters) {
+                $q->where('role', $filters['role']);
             })
-
-            ->when(!empty($filters['title']), function ($query) use ($filters) {
-                $query->where('role', $filters['role']);
+            ->when(!empty($filters['title']), function ($q) use ($filters) {
+                $q->where('title', 'LIKE', "%{$filters['title']}%");
             })
-
-            ->when(!empty($filters['code']), function ($query) use ($filters) {
-                $query->where('role', $filters['role']);
+            ->when(!empty($filters['code']), function ($q) use ($filters) {
+                $q->where('code', 'LIKE', "%{$filters['code']}%");
             })
-
-            ->when(!empty($filters['date']), function ($query) use ($filters) {
-                $query->whereDate('start_date', '<=', $filters['date'])
-                    ->whereDate('end_date', '>=', $filters['date']);
+            ->when(!empty($filters['date']), function ($q) use ($filters) {
+                $q->whereDate('start_date', '<=', $filters['date'])
+                ->whereDate('end_date', '>=', $filters['date']);
             })
-
-            ->when(!empty($filters['sort']) || !empty($filters['order']), function ($query) use ($filters) {
+            ->when(!empty($filters['sort']) || !empty($filters['order']), function ($q) use ($filters) {
                 $sort = $filters['sort'] ?? 'id';
                 $order = $filters['order'] ?? 'desc';
-                $query->orderBy($sort, $order);
-            }, function ($query) {
-                $query->orderBy('id', 'desc');
-            })
+                $q->orderBy($sort, $order);
+            }, function ($q) {
+                $q->orderBy('id', 'desc');
+            });
 
-            ->paginate($perPage, $columns);
+        return $query->paginate($perPage, $columns);
     }
 
 }

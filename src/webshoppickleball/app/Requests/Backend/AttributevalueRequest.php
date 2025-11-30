@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AttributeRequest extends FormRequest
+class AttributevalueRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,6 +17,8 @@ class AttributeRequest extends FormRequest
     {
         return [
             'name'     => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'attribute_id' => 'required|integer|exists:attributes,id',
         ];
     }
 
@@ -24,6 +26,9 @@ class AttributeRequest extends FormRequest
     {
         return [
             'name.required'   => 'Trường tên không được để trống.',
+            'attribute_id.required' => 'Trường thuộc tính cha là bắt buộc.',
+            'attribute_id.integer' => 'Trường thuộc tính cha phải là số.',
+            'attribute_id.exists' => 'Thuộc tính cha không tồn tại.',
         ];
     }
 

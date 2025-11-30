@@ -79,7 +79,7 @@ function loadDiscounts(filters = {}) {
                         <td>${discount.percent_off}%</td>
                         <td>${formatDate(discount.start_date)}</td>
                         <td>${formatDate(discount.end_date)}</td>
-                        <td>${discount.status == 1 ? '<span class="label label-success" style="width:100px;height:24px;border-radius:6px">Hoạt động</span>' : '<span class="label label-danger" style="width:100px;height:24px;border-radius:6px">Chưa kích hoạt</span>'}</td>
+                        <td>${discount.status == 1 ? '<span class="label label-success" style="width:100px;height:24px;border-radius:6px">Hoạt động</span>' : '<span class="label label-danger" style="width:100px;height:24px;border-radius:6px">Khoá</span>'}</td>
                         <td style="text-align:center;">
                             ${lockBtn}
                         </td>

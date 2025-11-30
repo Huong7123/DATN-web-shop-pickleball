@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Backend\AttributeController;
+use App\Http\Controllers\Backend\AttributeValueController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\DiscountController;
@@ -43,9 +44,15 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/update-discount/{id}', [DiscountController::class, 'update']);
     Route::delete('/delete-discount/{id}', [DiscountController::class, 'destroy']);
 
-    // quản lý mã thuộc tính
+    // quản lý bộ thuộc tính
     Route::get('/list-attribute', [AttributeController::class, 'index']);
     Route::post('/add-attribute', [AttributeController::class, 'store']);
     Route::post('/update-attribute/{id}', [AttributeController::class, 'update']);
     Route::delete('/delete-attribute/{id}', [AttributeController::class, 'destroy']);
+
+    // quản lý giá trị bộ thuộc tính
+    Route::get('/list-attribute-value', [AttributeValueController::class, 'index']);
+    Route::post('/add-attribute-value', [AttributeValueController::class, 'store']);
+    Route::post('/update-attribute-value/{id}', [AttributeValueController::class, 'update']);
+    Route::delete('/delete-attribute-value/{id}', [AttributeValueController::class, 'destroy']);
 });
