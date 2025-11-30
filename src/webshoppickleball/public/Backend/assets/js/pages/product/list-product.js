@@ -19,7 +19,7 @@ function getCookie(name) {
 }
 
 
-function loadAttributes(filters = {}) {
+function loadCategories(filters = {}) {
     Swal.fire({
         title: 'Đang xử lý...',
         allowOutsideClick: false,
@@ -33,7 +33,7 @@ function loadAttributes(filters = {}) {
     const queryData = {...currentFilters, per_page: pageSize, page: currentPage};
 
     $.ajax({
-        url: '/api/list-attribute-value',
+        url: '/api/list-product',
         method: 'GET',
         contentType: 'application/json',
         headers: {
@@ -55,24 +55,55 @@ function loadAttributes(filters = {}) {
             const tbody = $('#kt_datatable1_body');
             tbody.empty();
 
-            res.data.data.forEach(item => {
-                const createdAt = formatDate(item.created_at);
-                const updatedAt = formatDate(item.updated_at);
+            res.data.data.forEach(product => {
+                const createdAt = formatDate(product.created_at);
+                const updatedAt = formatDate(product.updated_at);
 
-                const lockBtn = item.status == 1
-                    ? `<button class="btn btn-danger btn-sm btn-lock" data-id="${item.id}" data-status="0">
+                const lockBtn = product.status == 1
+                    ? `<button class="btn btn-danger btn-sm btn-lock" data-id="${product.id}" data-status="0">
                             <i class="fa fa-lock p-0"></i>
                        </button>`
-                    : `<button class="btn btn-success btn-sm btn-lock" data-id="${item.id}" data-status="1">
+                    : `<button class="btn btn-success btn-sm btn-lock" data-id="${product.id}" data-status="1">
                             <i class="fa fa-unlock p-0"></i>
                        </button>`;
 
                 tbody.append(`
                     <tr>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.attribute.name}</td>
-                        <td>${item.description}</td>
+                        <td>${product.id}</td>
+                        <td>
+                            <img src="${product.image ? '/storage/' + JSON.parse(product.image)[0] : '/img/user-default.png'}" style="width:80px;height:80px;border-radius:16px;">
+                        </td>
+                        <td>${product.name}</td>
+                        <td>${product.category.name}</td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                ${
+                                    (product.attributes || [])
+                                    .map(attr => `<span class="m-1 label label-info label-pill label-inline mr-2">${attr.name}</span>`)
+                                    .join(' ')
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                ${
+                                    (product.attributes || [])
+                                    .map(attr => {
+                                        const values = (attr.attribute_values || []).map(value => `<span class="m-1 label label-info label-pill label-inline mr-2">${value.name}</span>`).join(' ');
+                                        return `<div>${values}</div>`;
+                                    })
+                                    .join('')
+                                }
+                            </div>
+                        </td>
+                        <td>${product.quantity}</td>
+                        <td>
+                            ${
+                                product.status == 1 
+                                ? '<span class="label label-success" style="width:100px;height:24px;border-radius:6px">Đang bán</span>'
+                                : '<span class="label label-danger" style="width:100px;height:24px;border-radius:6px">Ngưng bán</span>'
+                            }
+                        </td>
                         <td>${createdAt}</td>
                         <td>${updatedAt}</td>
                         <td style="text-align:center;">
@@ -105,21 +136,21 @@ function loadAttributes(filters = {}) {
 }
 
 $('#prev-page').click(function() {
-    if (currentPage > 1) loadAttributes(currentFilters);
+    if (currentPage > 1) loadCategories(currentFilters);
 });
 
 $('#next-page').click(function() {
-    loadAttributes(currentFilters);
+    loadCategories(currentFilters);
 });
 
 $('#page-size-selector').change(function() {
     pageSize = parseInt($(this).val());
     currentPage = 1;
-    loadAttributes(currentFilters);
+    loadCategories(currentFilters);
 });
 
 $(document).ready(function() {
-    loadAttributes();
+    loadCategories();
 
     // $(document).on('click', '.btn-lock', function() {
     //     const userId = $(this).data('id');
@@ -177,7 +208,7 @@ $(document).ready(function() {
 
         const searchName = $('#input_name').val().trim();
 
-        loadAttributes({
+        loadCategories({
             name: searchName,
         });
     });
@@ -186,7 +217,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         $('#input_name').val('');
-        loadAttributes();
+        loadCategories();
     });
 
 });
