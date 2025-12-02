@@ -33,7 +33,7 @@ function loadDiscounts(filters = {}) {
     const queryData = {...currentFilters, per_page: pageSize, page: currentPage};
 
     $.ajax({
-        url: '/api/list-discount',
+        url: '/api/discount',
         method: 'GET',
         contentType: 'application/json',
         headers: {
