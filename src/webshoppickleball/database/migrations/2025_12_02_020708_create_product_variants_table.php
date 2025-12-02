@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
-            $table->longText('image')->nullable();
-            $table->string('name');
+            $table->unsignedBigInteger('product_id');
+            $table->string('sku')->nullable(); // mã riêng của variant
+            $table->decimal('price', 15, 2)->default(0);
+            $table->integer('quantity')->default(0);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('product_variants');
     }
 };
