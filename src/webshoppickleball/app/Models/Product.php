@@ -9,15 +9,10 @@ use Illuminate\Notifications\Notifiable;
 
 class Product extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
     protected $table = 'products';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'image',
         'name',
@@ -34,13 +29,28 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
     public function attributes()
     {
-        return $this->belongsToMany(Attribute::class, 'attribute_product', 'product_id', 'attribute_id');
+        return $this->belongsToMany(
+            Attribute::class,
+            'attribute_product',
+            'product_id',
+            'attribute_id'
+        );
     }
 
     public function attributeValues()
     {
-        return $this->belongsToMany(AttributeValue::class,'attribute_value_product','product_id','attribute_value_id');
+        return $this->belongsToMany(
+            AttributeValue::class,
+            'product_attribute_values',
+            'product_id',
+            'attribute_value_id'
+        );
     }
 }

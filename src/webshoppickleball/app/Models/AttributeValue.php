@@ -27,6 +27,26 @@ class AttributeValue extends Model
 
     public function attribute()
     {
-        return $this->belongsTo(Attribute::class, 'attribute_id', 'id');
+        return $this->belongsTo(Attribute::class, 'attribute_id');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(
+            Product::class,
+            'product_attribute_values',
+            'attribute_value_id',
+            'product_id'
+        );
+    }
+
+    public function variants()
+    {
+        return $this->belongsToMany(
+            ProductVariant::class,
+            'product_variant_values',
+            'attribute_value_id',
+            'variant_id'
+        );
     }
 }

@@ -25,11 +25,16 @@ class Attribute extends Model
 
     public function attributeValues()
     {
-        return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
+        return $this->hasMany(AttributeValue::class, 'attribute_id');
     }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'attribute_product', 'attribute_id', 'product_id');
+        return $this->belongsToMany(
+            Product::class,
+            'attribute_product',
+            'attribute_id',
+            'product_id'
+        );
     }
 }
