@@ -8,14 +8,20 @@ use App\Interfaces\BaseRepositoryInterface;
 use App\Interfaces\CategoryRepositoryInterface;
 use App\Interfaces\DiscountRepositoryInterface;
 use App\Interfaces\Mail\MailServiceInterface;
+use App\Interfaces\OrderItemRepositoryInterface;
+use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
+use App\Interfaces\ProductVariantRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Repositories\AttributeRepositories;
 use App\Repositories\AttributeValueRepositories;
 use App\Repositories\BaseRepositories;
 use App\Repositories\CategoryRepositories;
 use App\Repositories\DiscountRepositories;
+use App\Repositories\OrderItemRepositories;
+use App\Repositories\OrderRepositories;
 use App\Repositories\ProductRepositories;
+use App\Repositories\ProductVariantRepositories;
 use App\Repositories\UserRepositories;
 use App\Services\Mail\MailService;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AttributeRepositoryInterface::class,AttributeRepositories::class);
         $this->app->bind(AttributeValueRepositoryInterface::class,AttributeValueRepositories::class);
         $this->app->bind(ProductRepositoryInterface::class,ProductRepositories::class);
+        $this->app->bind(ProductVariantRepositoryInterface::class,ProductVariantRepositories::class);
+        $this->app->bind(OrderRepositoryInterface::class,OrderRepositories::class);
+        $this->app->bind(OrderItemRepositoryInterface::class,OrderItemRepositories::class);
 
     }
 

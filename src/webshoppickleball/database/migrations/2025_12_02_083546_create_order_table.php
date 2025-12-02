@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->constrained();
             $table->string('user_name');
             $table->string('user_phone');
-            $table->string('description');
-            $table->string('address')->nullable();
+            $table->string('description')->nullable();
+            $table->string('address');
             $table->decimal('total', 15, 2)->default(0);
             $table->string('status')->default('pending');
             $table->timestamps();
