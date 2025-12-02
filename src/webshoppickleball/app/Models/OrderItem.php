@@ -15,4 +15,14 @@ class OrderItem extends Model
         'quantity',           // số lượng mua
         'price',              // giá tại thời điểm mua
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    }
 }

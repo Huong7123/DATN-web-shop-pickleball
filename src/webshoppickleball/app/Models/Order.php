@@ -18,4 +18,14 @@ class Order extends Model
         'total',          // tổng tiền
         'status',         // trạng thái đơn hàng
     ];
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
