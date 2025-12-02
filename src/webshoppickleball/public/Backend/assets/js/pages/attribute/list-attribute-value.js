@@ -33,7 +33,7 @@ function loadAttributes(filters = {}) {
     const queryData = {...currentFilters, per_page: pageSize, page: currentPage};
 
     $.ajax({
-        url: '/api/list-attribute-value',
+        url: '/api/attribute-value',
         method: 'GET',
         contentType: 'application/json',
         headers: {

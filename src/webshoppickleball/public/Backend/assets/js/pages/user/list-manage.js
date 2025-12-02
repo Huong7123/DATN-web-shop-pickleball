@@ -33,7 +33,7 @@ function loadUsers(filters = {}) {
     const queryData = {...currentFilters, per_page: pageSize, page: currentPage};
 
     $.ajax({
-        url: '/api/list-user',
+        url: '/api/user',
         method: 'GET',
         contentType: 'application/json',
         headers: {

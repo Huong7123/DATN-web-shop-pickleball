@@ -33,7 +33,7 @@ function loadCategories(filters = {}) {
     const queryData = {...currentFilters, per_page: pageSize, page: currentPage};
 
     $.ajax({
-        url: '/api/list-category',
+        url: '/api/category',
         method: 'GET',
         contentType: 'application/json',
         headers: {
