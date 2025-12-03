@@ -12,6 +12,8 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\DiscountController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\Backend\CartController;
+
 use Illuminate\Http\Request;
 
 Route::post('/register', [RegisterController::class, 'register']);
@@ -50,6 +52,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/order', [OrderController::class, 'store']);
     Route::post('/order/{id}', [OrderController::class, 'update']);
     Route::delete('/order/{id}', [OrderController::class, 'destroy']);
+
+    //quản lý giỏ hàng
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart', [CartController::class, 'store']);
+    Route::post('/cart/{id}', [CartController::class, 'update']);
+    Route::delete('/cart', [CartController::class, 'deleteItems']);
 
     // quản lý mã giảm giá
     Route::get('/discount', [DiscountController::class, 'index']);
