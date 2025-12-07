@@ -4,9 +4,9 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 //Auth
 Route::get('/register', function () {
@@ -28,6 +28,49 @@ Route::get('/reset-password', function () {
     return view('layouts.Auth.pages.reset-password', ['title' => 'Đặt lại mật khẩu']);
 });
 
+// routes web
+Route::get('/', function () {
+    return view('layouts.Frontend.pages.index',['title' => 'Trang chủ']);
+});
+Route::get('/dang-nhap', function () {
+    return view('layouts.Frontend.pages.auth.login', ['title' => 'Đăng nhập']);
+});
+Route::get('/dang-ky', function () {
+    return view('layouts.Frontend.pages.auth.register', ['title' => 'Đăng ký']);
+});
+Route::get('/quen-mat-khau', function () {
+    return view('layouts.Frontend.pages.auth.forgot', ['title' => 'Quên mật khẩu']);
+});
+Route::get('/dat-lai-mat-khau', function () {
+    return view('layouts.Frontend.pages.auth.reset-password', ['title' => 'Đặt lại mật khẩu']);
+});
+Route::get('/dang-xuat', function () {
+    return view('layouts.Frontend.pages.auth.logout', ['title' => 'Đăng xuất']);
+});
+Route::get('/thong-tin-ca-nhan', function () {
+    return view('layouts.Frontend.pages.profile.profile',['title' => 'Thông tin cá nhân']);
+});
+Route::get('/lich-su-don-hang', function () {
+    return view('layouts.Frontend.pages.profile.history-order',['title' => 'Lịch sử đơn hàng']);
+});
+Route::get('/dia-chi-giao-hang', function () {
+    return view('layouts.Frontend.pages.profile.address',['title' => 'Địa chỉ giao hàng']);
+});
+Route::get('/san-pham', function () {
+    return view('layouts.Frontend.pages.product.list-product',['title' => 'Sản phẩm']);
+});
+Route::get('/chi-tiet-san-pham', function () {
+    return view('layouts.Frontend.pages.product.detail-product',['title' => 'Chi tiết sản phẩm']);
+});
+Route::get('/gio-hang', function () {
+    return view('layouts.Frontend.pages.cart.cart',['title' => 'Giỏ hàng của bạn']);
+});
+Route::get('/thanh-toan', function () {
+    return view('layouts.Frontend.pages.payment.payment',['title' => 'Thanh toán đơn hàng']);
+});
+Route::get('/lien-he', function () {
+    return view('layouts.Frontend.pages.contact.contact',['title' => 'Liên hệ chúng tôi']);
+});
 //routes admin
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', function () {
