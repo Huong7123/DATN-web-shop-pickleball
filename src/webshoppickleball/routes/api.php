@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Backend\AttributeController;
 use App\Http\Controllers\Backend\AttributeValueController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\AddressController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\DiscountController;
 use App\Http\Controllers\Backend\ProductController;
@@ -28,6 +29,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    //quản lý sổ địa chỉ
+    Route::get('/address', [AddressController::class, 'index']);
+    Route::post('/address', [AddressController::class, 'store']);
+    Route::post('/address/{id}', [AddressController::class, 'update']);
+    Route::delete('/address/{id}', [AddressController::class, 'destroy']);
 
     // Quản lý người dùng
     Route::get('/user', [UserController::class, 'index']);
