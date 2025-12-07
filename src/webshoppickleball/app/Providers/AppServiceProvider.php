@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Interfaces\AddressRepositoryInterface;
 use App\Interfaces\AttributeRepositoryInterface;
 use App\Interfaces\AttributeValueRepositoryInterface;
 use App\Interfaces\BaseRepositoryInterface;
@@ -15,6 +16,7 @@ use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Interfaces\ProductVariantRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\AddressRepositories;
 use App\Repositories\AttributeRepositories;
 use App\Repositories\AttributeValueRepositories;
 use App\Repositories\BaseRepositories;
@@ -51,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(OrderItemRepositoryInterface::class,OrderItemRepositories::class);
         $this->app->bind(CartRepositoryInterface::class,CartRepositories::class);
         $this->app->bind(CartItemRepositoryInterface::class,CartItemRepositories::class);
+        $this->app->bind(AddressRepositoryInterface::class,AddressRepositories::class);
 
     }
 
