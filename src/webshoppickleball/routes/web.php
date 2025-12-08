@@ -38,6 +38,9 @@ Route::get('/dang-nhap', function () {
 Route::get('/dang-ky', function () {
     return view('layouts.Frontend.pages.auth.register', ['title' => 'Đăng ký']);
 });
+Route::get('/xac-minh-otp', function () {
+    return view('layouts.Frontend.pages.auth.verify', ['title' => 'Xác minh OTP']);
+});
 Route::get('/quen-mat-khau', function () {
     return view('layouts.Frontend.pages.auth.forgot', ['title' => 'Quên mật khẩu']);
 });
@@ -70,6 +73,9 @@ Route::get('/thanh-toan', function () {
 });
 Route::get('/lien-he', function () {
     return view('layouts.Frontend.pages.contact.contact',['title' => 'Liên hệ chúng tôi']);
+});
+Route::get('/kho-voucher', function () {
+    return view('layouts.Frontend.pages.voucher.list-voucher',['title' => 'Kho voucher']);
 });
 //routes admin
 Route::prefix('admin')->name('admin.')->group(function () {
