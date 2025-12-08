@@ -15,7 +15,7 @@
                 Khám phá bộ sưu tập vợt và phụ kiện pickleball mới nhất để chinh phục mọi trận đấu.
             </h2>
         </div>
-        <button
+        <button id="btn_buy"
             class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-primary text-gray-900 text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em] hover:bg-opacity-90 transition-colors">
             <span class="truncate">Mua Ngay</span>
         </button>
@@ -142,4 +142,10 @@
         </div>
     </div>
 </section>
+
+<script>
+    $('#btn_buy').on('click', function () {
+        window.location.href = '/san-pham';
+    });
+</script>
 @endsection
