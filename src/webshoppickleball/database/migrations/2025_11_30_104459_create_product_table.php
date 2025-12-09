@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
             $table->decimal('price', 15, 2)->default(0);
             $table->integer('quantity')->default(0);
+            $table->integer('parent_id')->default(0);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
