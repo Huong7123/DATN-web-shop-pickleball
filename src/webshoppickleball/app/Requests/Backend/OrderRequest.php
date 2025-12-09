@@ -22,7 +22,7 @@ class OrderRequest extends FormRequest
             'description'=> 'nullable|string|max:500',
 
             'items'          => 'required|array|min:1',
-            'items.*.variant_id' => 'required|integer|exists:product_variants,id',
+            'items.*.product_id' => 'required|integer|exists:products,id',
             'items.*.quantity'   => 'required|integer|min:1',
         ];
     }
@@ -35,8 +35,8 @@ class OrderRequest extends FormRequest
 
             'items.required'         => 'Danh sách sản phẩm không được để trống',
             'items.array'            => 'Danh sách sản phẩm phải là mảng',
-            'items.*.variant_id.required' => 'Biến thể sản phẩm không được để trống',
-            'items.*.variant_id.exists'   => 'Biến thể sản phẩm không tồn tại',
+            'items.*.product_id.required' => 'Sản phẩm không được để trống',
+            'items.*.product_id.exists'   => 'Sản phẩm không tồn tại',
             'items.*.quantity.required'   => 'Số lượng không được để trống',
             'items.*.quantity.integer'    => 'Số lượng phải là số nguyên',
             'items.*.quantity.min'        => 'Số lượng phải lớn hơn 0',

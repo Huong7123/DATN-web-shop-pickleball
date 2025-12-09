@@ -5,23 +5,23 @@ namespace App\Services\Backend;
 use App\DTO\DataResult;
 use App\Interfaces\OrderItemRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
-use App\Interfaces\ProductVariantRepositoryInterface;
+use App\Interfaces\ProductRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Storage;
 
 class OrderService extends BaseService
 {
     protected OrderItemRepositoryInterface $orderItemRepository;
-    protected ProductVariantRepositoryInterface $productVariantRepository;
+    protected ProductRepositoryInterface $productRepository;
 
     public function __construct(
         OrderRepositoryInterface $repository,
         OrderItemRepositoryInterface $orderItemRepository,
-        ProductVariantRepositoryInterface $productVariantRepository
+        ProductRepositoryInterface $productRepository
     ){
         parent::__construct($repository);
         $this->orderItemRepository = $orderItemRepository;
-        $this->productVariantRepository = $productVariantRepository;
+        $this->productRepository = $productRepository;
     }
 
     public function create(array $data): DataResult
@@ -49,44 +49,44 @@ class OrderService extends BaseService
 
             // 2. Tạo order items
             foreach ($data['items'] as $itemData) {
-                $variant = $this->productVariantRepository->getById($itemData['variant_id']);
+                $product = $this->productRepository->getById($itemData['product_id']);
 
                 // kiểm tra mặt hàng còn bán hay không
-                if (!$variant || $variant->status != 1) {
+                if (!$product || $product->status != 1) {
                     $this->orderItemRepository->deleteByOrderId($order->id);
                     $this->repository->delete($order->id);
-                    return new DataResult("Biến thể {$itemData['variant_id']} đang ngừng bán", 400);
+                    return new DataResult("Biến thể {$itemData['product_id']} đang ngừng bán", 400);
                 }
 
                 // kiểm tra tồn kho
-                if ($variant->quantity <= 0) {
+                if ($product->quantity <= 0) {
                     $this->orderItemRepository->deleteByOrderId($order->id);
                     $this->repository->delete($order->id);
-                    return new DataResult("Mặt hàng {$itemData['variant_id']} đã hết hàng", 400);
+                    return new DataResult("Mặt hàng {$itemData['product_id']} đã hết hàng", 400);
                 }
 
                 // kiểm tra số lượng muốn mua có lớn hơn tồn kho không
-                if ($itemData['quantity'] > $variant->quantity) {
+                if ($itemData['quantity'] > $product->quantity) {
                     $this->orderItemRepository->deleteByOrderId($order->id);
                     $this->repository->delete($order->id);
-                    return new DataResult("Số lượng biến thể {$itemData['variant_id']} vượt quá số lượng trong kho", 400);
+                    return new DataResult("Số lượng biến thể {$itemData['product_id']} vượt quá số lượng trong kho", 400);
                 }
 
                 $quantityToBuy = $itemData['quantity'];
-                $price = $variant->price;
+                $price = $product->price;
 
                 // tạo order item
                 $this->orderItemRepository->create([
                     'order_id'           => $order->id,
-                    'product_variant_id' => $variant->id,
+                    'product_id' => $product->id,
                     'quantity'           => $quantityToBuy,
                     'price'              => $price,
                 ]);
 
                 // trừ quantity biến thể bằng update của base repo
-                $newQuantity = $variant->quantity - $quantityToBuy;
+                $newQuantity = $product->quantity - $quantityToBuy;
                 if ($newQuantity < 0) $newQuantity = 0;
-                $this->productVariantRepository->update($variant->id, ['quantity' => $newQuantity]);
+                $this->productRepository->update($product->id, ['quantity' => $newQuantity]);
 
                 // cộng tổng tiền
                 $total += $price * $quantityToBuy;
@@ -113,6 +113,7 @@ class OrderService extends BaseService
     public function update(int $orderId, array $data): DataResult
     {
         try {
+            $user = JWTAuth::parseToken()->authenticate();
             // Lấy đơn hàng
             $order = $this->repository->getById($orderId);
             if (!$order) {
@@ -124,13 +125,31 @@ class OrderService extends BaseService
                 return new DataResult('Không thể cập nhật đơn hàng', 400);
             }
 
+            $isAdmin = ($user->role == 2);
+
             $updateData = [
                 'user_name'   => $data['user_name'] ?? $order->user_name,
                 'user_phone'  => $data['user_phone'] ?? $order->user_phone,
                 'address'     => $data['address'] ?? $order->address,
                 'description' => $data['description'] ?? $order->description,
-                'status'      => $data['status'] ?? $order->status,
             ];
+
+            if (isset($data['status'])) {
+                if ($isAdmin) {
+                    $updateData['status'] = $data['status'];
+                }
+
+                if (!$isAdmin) {
+                    if ($data['status'] !== 'cancel') {
+                        return new DataResult(
+                            'Bạn chỉ được phép hủy đơn hàng (status = cancel)',
+                            403
+                        );
+                    }
+
+                    $updateData['status'] = 'cancel';
+                }
+            }
 
             $updatedOrder = $this->repository->update($orderId, $updateData);
 
