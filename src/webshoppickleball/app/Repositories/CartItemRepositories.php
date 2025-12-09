@@ -12,11 +12,11 @@ class CartItemRepositories extends BaseRepositories implements CartItemRepositor
         parent::__construct($model);
     }
 
-    public function getByCartAndVariant($cartId, $variantId)
+    public function getByCartAndProduct($cartId, $productId)
     {
         return $this->model
             ->where('cart_id', $cartId)
-            ->where('product_variant_id', $variantId)
+            ->where('product_id', $productId)
             ->first();
     }
 
