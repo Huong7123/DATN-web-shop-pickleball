@@ -31,28 +31,20 @@ class ProductRequest extends FormRequest
             'name'            => 'required|string|max:255',
             'description'     => 'nullable|string',
             'category_id'     => 'nullable|integer|exists:categories,id',
-            'price'           => 'nullable|numeric|min:0',
-            'quantity'        => 'nullable|integer|min:0',
+            
+            'price'           => 'nullable|array',
+            'price.*'         => 'nullable|numeric|min:0',
+
+            'quantity'        => 'nullable|array',
+            'quantity.*'      => 'nullable|integer|min:0',
             // Thuộc tính của sản phẩm
             'attribute_ids'   => 'nullable|array',
             'attribute_ids.*' => 'integer|exists:attributes,id',
 
             // Giá trị thuộc tính của sản phẩm
-            'attribute_value_ids'   => 'nullable|array',
-            'attribute_value_ids.*' => 'integer|exists:attribute_values,id',
-
-            // Biến thể
-            'variants' => 'nullable|array',
-
-            // Từng biến thể
-            'variants.*.sku'      => 'nullable|string|max:255',
-            'variants.*.price'    => 'nullable|numeric|min:0',
-            'variants.*.quantity' => 'nullable|integer|min:0',
-            'variants.*.status'   => 'nullable|integer|in:0,1',
-
-            // Giá trị của từng biến thể
-            'variants.*.value_ids'   => 'nullable|array',
-            'variants.*.value_ids.*' => 'integer|exists:attribute_values,id',
+            'attribute_value_ids'        => 'nullable|array',
+            'attribute_value_ids.*'      => 'required|array',
+            'attribute_value_ids.*.*'    => 'required|integer|exists:attribute_values,id',
         ];
     }
 
@@ -71,13 +63,6 @@ class ProductRequest extends FormRequest
             'attribute_value_ids.array'   => 'Danh sách giá trị thuộc tính phải là mảng.',
             'attribute_value_ids.*.exists'=> 'Giá trị thuộc tính không hợp lệ.',
 
-            // Variants
-            'variants.array'                  => 'Danh sách biến thể phải là mảng.',
-            'variants.*.sku.required'         => 'SKU của biến thể không được để trống.',
-            'variants.*.price.required'       => 'Giá biến thể không được để trống.',
-            'variants.*.quantity.required'       => 'Số lượng không được để trống.',
-            'variants.*.attribute_value_ids.array'   => 'Giá trị thuộc tính biến thể phải là mảng.',
-            'variants.*.attribute_value_ids.*.exists'=> 'Giá trị thuộc tính của biến thể không hợp lệ.',
         ];
     }
 
