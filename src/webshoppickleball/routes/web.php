@@ -71,6 +71,12 @@ Route::get('/gio-hang', function () {
 Route::get('/thanh-toan', function () {
     return view('layouts.Frontend.pages.payment.payment',['title' => 'Thanh toán đơn hàng']);
 });
+Route::get('/thanh-toan-thanh-cong', function () {
+    return view('layouts.Frontend.pages.payment.payment-success',['title' => 'Thanh toán đơn hàng thành công']);
+});
+Route::get('/thanh-toan-that-bai', function () {
+    return view('layouts.Frontend.pages.payment.payment-failed',['title' => 'Thanh toán đơn hàng thất bại']);
+});
 Route::get('/lien-he', function () {
     return view('layouts.Frontend.pages.contact.contact',['title' => 'Liên hệ chúng tôi']);
 });

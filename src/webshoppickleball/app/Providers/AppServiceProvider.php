@@ -16,6 +16,7 @@ use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Interfaces\ProductVariantRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
+use App\Interfaces\VnPayRepositoryInterface;
 use App\Repositories\AddressRepositories;
 use App\Repositories\AttributeRepositories;
 use App\Repositories\AttributeValueRepositories;
@@ -29,6 +30,7 @@ use App\Repositories\OrderRepositories;
 use App\Repositories\ProductRepositories;
 use App\Repositories\ProductVariantRepositories;
 use App\Repositories\UserRepositories;
+use App\Repositories\VnPayRepositories;
 use App\Services\Mail\MailService;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -54,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CartRepositoryInterface::class,CartRepositories::class);
         $this->app->bind(CartItemRepositoryInterface::class,CartItemRepositories::class);
         $this->app->bind(AddressRepositoryInterface::class,AddressRepositories::class);
+        $this->app->bind(VnPayRepositoryInterface::class,VnPayRepositories::class);
 
     }
 

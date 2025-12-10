@@ -14,7 +14,7 @@ use App\Http\Controllers\Backend\DiscountController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\CartController;
-
+use App\Http\Controllers\Backend\PaymentController;
 use Illuminate\Http\Request;
 
 Route::post('/register', [RegisterController::class, 'register']);
@@ -24,7 +24,8 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
 Route::post('/reset-password', [ForgotPasswordController::class, 'ResetPassword']);
 
-
+Route::get('/vnpay/return', [PaymentController::class, 'returnVnpay'])->name('vnpay.return');
+Route::get('/vnpay/redirect', [PaymentController::class, 'redirectToVnpay'])->name('vnpay.redirect');
 Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
@@ -35,6 +36,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/address', [AddressController::class, 'store']);
     Route::post('/address/{id}', [AddressController::class, 'update']);
     Route::delete('/address/{id}', [AddressController::class, 'destroy']);
+
+    //payment vnpay
+    Route::post('/vnpay/create', [PaymentController::class, 'createPayUrl'])->name('vnpay.create');
 
     // Quản lý người dùng
     Route::get('/user', [UserController::class, 'index']);
@@ -83,4 +87,5 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/attribute-value', [AttributeValueController::class, 'store']);
     Route::post('/attribute-value/{id}', [AttributeValueController::class, 'update']);
     Route::delete('/attribute-value/{id}', [AttributeValueController::class, 'destroy']);
+
 });
