@@ -88,7 +88,7 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (response) {
-                sessionStorage.setItem('email', email.value);
+                sessionStorage.setItem('email', response.data.user.email);
                 sessionStorage.setItem('id', response.data.user.id);
                 document.cookie = `user_token=${response.data.access_token}; path=/; max-age=10800;`;
                 if(response.data.user.role == 1){

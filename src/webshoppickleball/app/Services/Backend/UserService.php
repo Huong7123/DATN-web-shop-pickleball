@@ -4,6 +4,7 @@ namespace App\Services\Backend;
 
 use App\DTO\DataResult;
 use App\Interfaces\UserRepositoryInterface;
+use Dotenv\Validator;
 use Illuminate\Support\Facades\Hash;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Storage;
@@ -39,11 +40,6 @@ class UserService extends BaseService
 
     public function update($id, array $data): DataResult
     {
-        $user = JWTAuth::parseToken()->authenticate();
-
-        if ($user->role != "2") {
-            return new DataResult('Bạn không có quyền thực hiện thao tác này', 403);
-        }
 
         $currentUser = $this->repository->getById($id);
         if (!$currentUser) {
@@ -76,5 +72,29 @@ class UserService extends BaseService
         return new DataResult('Cập nhật thành công', 200, $item);
     }
 
+
+    public function updatePassword($id, array $data): DataResult
+    {
+        $currentUser = $this->repository->getById($id);
+        if (!$currentUser) {
+            return new DataResult("Cập nhật thất bại, id $id không tồn tại", 404);
+        }
+
+        if (!Hash::check($data['current_password'], $currentUser->password)) {
+            return new DataResult('Mật khẩu hiện tại không đúng', 400);
+        }
+
+        if (Hash::check($data['new_password'], $currentUser->password)) {
+            return new DataResult('Mật khẩu mới phải khác mật khẩu cũ', 400);
+        }
+
+        $updateData = [
+            'password' => Hash::make($data['new_password']),
+        ];
+
+        $item = $this->repository->update($id, $updateData);
+
+        return new DataResult('Cập nhật thành công', 200, $item);
+    }
     
 }

@@ -42,8 +42,10 @@ Route::middleware('auth:api')->group(function () {
 
     // Quản lý người dùng
     Route::get('/user', [UserController::class, 'index']);
+    Route::get('/user/{id}', [UserController::class, 'show']);
     Route::post('/user', [UserController::class, 'store']);
     Route::post('/user/{id}', [UserController::class, 'update']);
+    Route::post('/user/update-pass/{id}', [UserController::class, 'updatePassword']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
     //quản lý danh mục
