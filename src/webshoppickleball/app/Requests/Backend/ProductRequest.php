@@ -32,6 +32,7 @@ class ProductRequest extends FormRequest
             'description'     => 'nullable|string',
             'category_id'     => 'nullable|integer|exists:categories,id',
             
+            'price_main'      => 'required|string|max:255',
             'price'           => 'nullable|array',
             'price.*'         => 'nullable|numeric|min:0',
 
@@ -56,15 +57,50 @@ class ProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'attribute_ids.array'         => 'Danh sách thuộc tính phải là mảng.',
-            'attribute_ids.*.exists'      => 'Thuộc tính không hợp lệ.',
+            // ===== IMAGE =====
+            'image.array'            => 'Danh sách hình ảnh phải là một mảng.',
+            'image.*.image'          => 'File tải lên phải là hình ảnh.',
+            'image.*.mimes'          => 'Hình ảnh chỉ chấp nhận định dạng jpeg, png, jpg, webp hoặc gif.',
+            'image.*.max'            => 'Kích thước mỗi hình ảnh không được vượt quá 5MB.',
 
-            // Attribute Values
-            'attribute_value_ids.array'   => 'Danh sách giá trị thuộc tính phải là mảng.',
-            'attribute_value_ids.*.exists'=> 'Giá trị thuộc tính không hợp lệ.',
+            // ===== BASIC INFO =====
+            'name.required'          => 'Tên sản phẩm không được để trống.',
+            'name.string'            => 'Tên sản phẩm phải là chuỗi ký tự.',
+            'name.max'               => 'Tên sản phẩm không được vượt quá 255 ký tự.',
 
+            'description.string'     => 'Mô tả sản phẩm phải là chuỗi ký tự.',
+
+            'category_id.integer'    => 'Danh mục sản phẩm không hợp lệ.',
+            'category_id.exists'     => 'Danh mục sản phẩm không tồn tại.',
+
+            // ===== PRICE =====
+            'price_main.required'    => 'Giá sản phẩm gốc là bắt buộc.',
+            'price_main.string'      => 'Giá sản phẩm gốc không hợp lệ.',
+            'price_main.max'         => 'Giá sản phẩm gốc không hợp lệ.',
+
+            'price.array'            => 'Danh sách giá của biến thể phải là một mảng.',
+            'price.*.numeric'        => 'Giá của mỗi biến thể phải là số.',
+            'price.*.min'            => 'Giá của biến thể không được nhỏ hơn 0.',
+
+            // ===== QUANTITY =====
+            'quantity.array'         => 'Danh sách số lượng biến thể phải là một mảng.',
+            'quantity.*.integer'     => 'Số lượng của mỗi biến thể phải là số nguyên.',
+            'quantity.*.min'         => 'Số lượng của biến thể không được nhỏ hơn 0.',
+
+            // ===== ATTRIBUTES =====
+            'attribute_ids.array'    => 'Danh sách thuộc tính phải là một mảng.',
+            'attribute_ids.*.integer'=> 'ID thuộc tính không hợp lệ.',
+            'attribute_ids.*.exists' => 'Thuộc tính không tồn tại trong hệ thống.',
+
+            // ===== ATTRIBUTE VALUES =====
+            'attribute_value_ids.array'        => 'Danh sách giá trị thuộc tính phải là một mảng.',
+            'attribute_value_ids.*.array'      => 'Mỗi nhóm giá trị thuộc tính phải là một mảng.',
+            'attribute_value_ids.*.*.required' => 'Giá trị thuộc tính không được để trống.',
+            'attribute_value_ids.*.*.integer'  => 'Giá trị thuộc tính không hợp lệ.',
+            'attribute_value_ids.*.*.exists'   => 'Giá trị thuộc tính không tồn tại trong hệ thống.',
         ];
     }
+
 
     /**
      * Xử lý khi validation thất bại (API trả JSON, không redirect view).

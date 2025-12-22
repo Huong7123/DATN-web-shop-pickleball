@@ -38,5 +38,9 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
      * Hủy gán attribute values của sản phẩm
      */
     public function detachAttributeValues(int $productId): bool;
+
+    public function getParentProduct($perPage);
+    public function getChildProduct($parentId);
+
     
 }

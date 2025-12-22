@@ -26,6 +26,10 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'ResetPassword'
 
 Route::get('/vnpay/return', [PaymentController::class, 'returnVnpay'])->name('vnpay.return');
 Route::get('/vnpay/redirect', [PaymentController::class, 'redirectToVnpay'])->name('vnpay.redirect');
+
+
+Route::get('/product', [ProductController::class, 'getParentProduct']);
+Route::get('/product-child', [ProductController::class, 'getChildProduct']);
 Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
@@ -55,7 +59,8 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
 
     //quản lý sản phẩm
-    Route::get('/product', [ProductController::class, 'index']);
+    // Route::get('/product', [ProductController::class, 'getParentProduct']);
+    // Route::get('/product-child', [ProductController::class, 'getChildProduct']);
     Route::post('/product', [ProductController::class, 'store']);
     Route::post('/product/{id}', [ProductController::class, 'update']);
     Route::delete('/product/{id}', [ProductController::class, 'destroy']);

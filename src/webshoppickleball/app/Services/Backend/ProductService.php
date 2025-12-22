@@ -21,10 +21,27 @@ class ProductService extends BaseService
         $relations = [
             'category',
             'attributes.attributeValues',
-            'variants.values.attribute',
         ];
 
         $data = $this->repository->paginateWithFilters($filters, $perPage, ['*'], $relations);
+
+        return new DataResult('Lấy danh sách thành công', 200, $data);
+    }
+
+    public function getParentProduct($perPage): DataResult
+    {
+        /** @var ProductRepositoryInterface $repo */
+        $repo = $this->repository;
+        $data = $repo->getParentProduct($perPage);
+
+        return new DataResult('Lấy danh sách thành công', 200, $data);
+    }
+
+    public function getChildProduct($parentId): DataResult
+    {
+        /** @var ProductRepositoryInterface $repo */
+        $repo = $this->repository;
+        $data = $repo->getChildProduct($parentId);
 
         return new DataResult('Lấy danh sách thành công', 200, $data);
     }
@@ -54,7 +71,7 @@ class ProductService extends BaseService
                 }
             }
 
-            //sinh tổ hợp biến thể
+            // sinh tổ hợp biến thể
             $combinations = [[]];
             foreach ($groups as $g) {
                 $tmp = [];
@@ -70,17 +87,49 @@ class ProductService extends BaseService
                 return new DataResult("Không tạo được tổ hợp biến thể", 422);
             }
 
-            //tạo sản phẩm gốc + biến thể
-            foreach ($combinations as $index => $combo) {
+            // tạo sản phẩm gốc
+            $mainProductData = [
+                'name'        => $data['name'],
+                'slug'        => Str::slug($data['name']),
+                'description' => $data['description'] ?? null,
+                'category_id' => $data['category_id'] ?? null,
+                'price'       => $data['price_main'] ?? 0,
+                'quantity'    => 0,
+                'status'      => 1,
+                'parent_id'   => 0
+            ];
 
-                //tạo sản phẩm gốc
+            if (!empty($data['image'])) {
+                $paths = [];
+                foreach ((array)$data['image'] as $img) {
+                    if ($img instanceof UploadedFile) {
+                        $paths[] = $img->store('images', 'public');
+                    }
+                }
+                $mainProductData['image'] = json_encode($paths);
+            }
+
+            $mainProduct = $repo->create($mainProductData);
+            if (!$mainProduct) {
+                return new DataResult("Tạo sản phẩm gốc thất bại", 500);
+            }
+
+            $createdMainProducts[] = $mainProduct->id;
+
+            //tạo biến thể
+            $totalVariantQuantity = 0;
+            foreach ($combinations as $index => $combo) {
+                $variantQuantity = $data['quantity'][$index] ?? 0;
+                $totalVariantQuantity += $variantQuantity;
                 $variantData = [
                     'name'        => $data['name'] . ' - ' . implode(", ", $combo),
-                    'slug'        => Str::slug($data['name'] . '-' . implode("-", $combo)),
+                    'slug'        => Str::slug($data['name'] . '-' . implode('-', $combo)),
                     'description' => null,
                     'category_id' => $data['category_id'] ?? null,
+                    'price'       => $data['price'][$index] ?? 0,
+                    'quantity'    => $data['quantity'][$index] ?? 0,
                     'status'      => 1,
-                    'parent_id'   => 0
+                    'parent_id'   => $mainProduct->id
                 ];
 
                 $variant = $repo->create($variantData);
@@ -104,42 +153,15 @@ class ProductService extends BaseService
                     $this->rollback($repo, $createdVariants, $createdMainProducts);
                     return new DataResult("Lỗi gán attribute values", 500);
                 }
-                //tạo biến thể
-                $mainProductData = [
-                    'name'        => $data['name'],
-                    'slug'        => Str::slug($data['name']) . '-' . $variant->id,
-                    'description' => $data['description'] ?? null,
-                    'category_id' => $data['category_id'] ?? null,
-                    'price'       => $data['price'][$index] ?? 0,
-                    'quantity'    => $data['quantity'][$index] ?? 0,
-                    'status'      => 1,
-                    'parent_id'   => $variant->id,
-                ];
-
-                // Upload ảnh
-                if (!empty($data['image'])) {
-                    $paths = [];
-                    foreach ((array)$data['image'] as $img) {
-                        if ($img instanceof UploadedFile) {
-                            $paths[] = $img->store('images', 'public');
-                        }
-                    }
-                    $mainProductData['image'] = json_encode($paths);
-                }
-
-                $mainProduct = $repo->create($mainProductData);
-
-                if (!$mainProduct) {
-                    $this->rollback($repo, $createdVariants, $createdMainProducts);
-                    return new DataResult("Tạo sản phẩm chính thất bại", 500);
-                }
-
-                $createdMainProducts[] = $mainProduct->id;
             }
 
-            return new DataResult("Tạo toàn bộ biến thể + sản phẩm chính thành công", 201, [
-                "variants" => $createdVariants,
-                "products" => $createdMainProducts
+            $repo->update($mainProduct->id, [
+                'quantity' => $totalVariantQuantity
+            ]);
+
+            return new DataResult("Tạo sản phẩm gốc + biến thể thành công", 201, [
+                "product_id" => $mainProduct->id,
+                "variants"   => $createdVariants
             ]);
 
         } catch (\Exception $e) {
@@ -147,6 +169,7 @@ class ProductService extends BaseService
             return new DataResult("Lỗi: " . $e->getMessage(), 500);
         }
     }
+
 
     private function rollback($repo, $variantIds, $productIds)
     {

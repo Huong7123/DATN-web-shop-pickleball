@@ -77,4 +77,26 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         return true;
     }
 
+    public function getParentProduct($perPage)
+    {
+        return $this->model
+            ->with([
+                'category',
+                'attributes.attributeValues',
+            ])
+            ->where('parent_id', 0)
+            ->paginate($perPage);
+    }
+
+    public function getChildProduct($parentId)
+    {
+        return $this->model
+            ->with([
+                'category',
+                'attributes.attributeValues',
+            ])
+            ->where('parent_id', $parentId)
+            ->get();
+    }
+
 }
