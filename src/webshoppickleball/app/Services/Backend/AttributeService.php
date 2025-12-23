@@ -14,6 +14,17 @@ class AttributeService extends BaseService
         parent::__construct($repository);
     }
 
+    public function paginateWithFilters(array $filters, int $perPage = 10): DataResult
+    {
+        $relations = [
+            'attributeValues',
+        ];
+
+        $data = $this->repository->paginateWithFilters($filters, $perPage, ['*'], $relations);
+
+        return new DataResult('Lấy danh sách thành công', 200, $data);
+    }
+
     public function create(array $data): DataResult
     {
         $user = JWTAuth::parseToken()->authenticate();

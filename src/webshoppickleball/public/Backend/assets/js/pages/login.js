@@ -40,7 +40,7 @@ function login() {
             if (userRole == 2) {
                 document.cookie = `admin_token=${response.data.access_token}; path=/; max-age=3600;`;
                 setTimeout(() => {
-                    window.location.href = "/admin/user";
+                    window.location.href = "/admin/quan-ly-san-pham";
                 }, 50);
             } else {
                 Swal.fire({

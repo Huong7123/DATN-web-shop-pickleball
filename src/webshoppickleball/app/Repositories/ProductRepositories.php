@@ -82,7 +82,8 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         return $this->model
             ->with([
                 'category',
-                'attributes.attributeValues',
+                'attributes',
+                'attributeValues',
             ])
             ->where('parent_id', 0)
             ->paginate($perPage);
@@ -93,10 +94,18 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         return $this->model
             ->with([
                 'category',
-                'attributes.attributeValues',
+                'attributes',
+                'attributeValues',
             ])
             ->where('parent_id', $parentId)
             ->get();
+    }
+
+    public function sumVariantQuantity(int $parentId): int
+    {
+        return $this->model
+            ->where('parent_id', $parentId)
+            ->sum('quantity');
     }
 
 }
