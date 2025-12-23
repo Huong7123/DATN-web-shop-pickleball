@@ -28,6 +28,8 @@ Route::get('/vnpay/return', [PaymentController::class, 'returnVnpay'])->name('vn
 Route::get('/vnpay/redirect', [PaymentController::class, 'redirectToVnpay'])->name('vnpay.redirect');
 
 
+Route::get('/category', [CategoryController::class, 'index']);
+Route::get('/attribute', [AttributeController::class, 'index']);
 Route::get('/product', [ProductController::class, 'getParentProduct']);
 Route::get('/product-child', [ProductController::class, 'getChildProduct']);
 Route::middleware('auth:api')->group(function () {
@@ -53,7 +55,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
     //quản lý danh mục
-    Route::get('/category', [CategoryController::class, 'index']);
+    // Route::get('/category', [CategoryController::class, 'index']);
     Route::post('/category', [CategoryController::class, 'store']);
     Route::post('/category/{id}', [CategoryController::class, 'update']);
     Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
@@ -84,7 +86,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/discount/{id}', [DiscountController::class, 'destroy']);
 
     // quản lý bộ thuộc tính
-    Route::get('/attribute', [AttributeController::class, 'index']);
+    // Route::get('/attribute', [AttributeController::class, 'index']);
     Route::post('/attribute', [AttributeController::class, 'store']);
     Route::post('/attribute/{id}', [AttributeController::class, 'update']);
     Route::delete('/attribute/{id}', [AttributeController::class, 'destroy']);

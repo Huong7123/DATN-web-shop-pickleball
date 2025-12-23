@@ -19,7 +19,7 @@
             <h1 class="text-text-main dark:text-white text-3xl font-black tracking-tight">Quản trị sản phẩm
             </h1>
         </div>
-        <button
+        <button id="btn_add_product"
             class="group flex items-center justify-center gap-2 rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-green-500/20 text-[#0d1b12] text-sm font-bold">
             <span class="material-symbols-outlined">add</span>
             <span>Thêm sản phẩm mới</span>
@@ -41,16 +41,12 @@
         <!-- Stock Status Filter -->
         <div class="relative min-w-[180px]">
             <select
-                class="appearance-none w-full pl-4 pr-10 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer">
+                class="w-full pl-4 pr-10 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer">
                 <option value="">Tất cả trạng thái</option>
                 <option value="in-stock">Còn hàng</option>
                 <option value="low-stock">Sắp hết hàng</option>
                 <option value="out-of-stock">Hết hàng</option>
             </select>
-            <div
-                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-secondary">
-                <span class="material-symbols-outlined">expand_more</span>
-            </div>
         </div>
     </div>
 </div>
@@ -94,6 +90,9 @@
     </div>
     @include('layouts.Admin.widget.__pagination')
 </div>
+<div id="modal_add_product" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark min-h-screen flex items-center justify-center p-4 hidden">
+    @include('layouts.Admin.widget.__modal_add_product')
+</div>
 
 <script>
     function getCookie(name) {
@@ -101,6 +100,16 @@
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';')[0];
         return null;
+    }
+
+    function formatPrice(price) {
+        if (!price) return '0';
+
+        // Ép về string → bỏ phần thập phân
+        const integerPart = price.toString().split('.')[0];
+
+        // Format dấu phẩy
+        return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
     function renderParentProduct(item){
@@ -137,7 +146,7 @@
                 </td>
                 <td class="p-4 text-sm text-text-main dark:text-gray-300 font-mono">${item.slug}</td>
                 <td class="p-4 text-sm text-text-main dark:text-gray-300">${item.category.name}</td>
-                <td class="p-4 text-sm text-text-main dark:text-gray-300 text-right font-bold">${item.price}</td>
+                <td class="p-4 text-sm text-text-main dark:text-gray-300 text-right font-bold">${formatPrice(item.price)}</td>
                 <td class="p-4 text-center">
                     <span
                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
@@ -161,7 +170,7 @@
                     <div class="flex items-center justify-end gap-2">
                         <button
                             class="p-1.5 rounded text-gray-400 hover:text-primary hover:bg-green-50 dark:hover:bg-gray-700 transition-colors">
-                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                            <span data-id="${item.id}" class="material-symbols-outlined text-[20px] btn-edit">edit</span>
                         </button>
                         <button
                             class="p-1.5 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-gray-700 transition-colors">
@@ -185,7 +194,7 @@
                                         Giá Riêng
                                     </th>
                                     <th
-                                        class="pl-4 py-2 text-[11px] font-semibold text-text-secondary uppercase text-center w-[15%]">
+                                        class="pl-4 py-2 text-[11px] font-semibold text-text-secondary uppercase text-right w-[15%]">
                                         Tồn kho
                                     </th>
                                     <th
@@ -247,17 +256,17 @@
                     </div>
                 </td>
                 <td class="pl-4 py-3 text-sm text-right text-gray-500">
-                    <input value="${item.price}" style="float:right; width:100px;padding-left:12px !important" class="block w-full pl-10 pr-3 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg leading-5 bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all" type="text">
+                    <input value="${formatPrice(item.price)}" style="float:right; width:100px;padding-left:12px !important" class="variant_price block w-full pl-10 pr-3 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg leading-5 bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all" type="text">
                 </td>
                 <td class="pl-4 py-3 text-center text-sm text-text-main dark:text-gray-300">
-                    <input value="${item.quantity}" style="float:right; width:100px;padding-left:12px !important" class="block w-full pl-10 pr-3 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg leading-5 bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all" type="number">
+                    <input value="${item.quantity}" style="float:right; width:100px;padding-left:12px !important" class="variant_quantity block w-full pl-10 pr-3 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg leading-5 bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all" type="number">
                 </td>
                 <td class="p-4 text-center">
                     ${renderStockStatus(item.quantity)}
                 </td>
                 <td class="pl-4 py-3 text-right pr-8">
-                    <button
-                        class="group flex items-center justify-center gap-2 rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-green-500/20 text-[#0d1b12] text-sm font-bold" style="float:right;height:20px;width:40px">Lưu
+                    <button data-id="${item.id}"
+                        class="btn-save-prdchild group flex items-center justify-center gap-2 rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-green-500/20 text-[#0d1b12] text-sm font-bold" style="float:right;height:20px;width:40px">Lưu
                     </button>
                 </td>
             </tr>
@@ -374,6 +383,34 @@
         });
     }
 
+    function updateVariant(id, price, quantity, callback){
+        const data = { price, quantity };
+        $.ajax({
+            url: '/api/product/' + id,
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('admin_token'),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(data),
+            success(res) {
+                Swal.close();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Cập nhật biến thể thành công',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                if (callback) callback();
+            },
+            error(err) {
+                console.error('❌ Lỗi cập nhật sản phẩm', err.responseJSON || err);
+            }
+        });
+    }
+
     $(document).ready(function () {
         getAllParentProduct();
     });
@@ -392,6 +429,43 @@
         if (variantRow.data('loaded')) return;
 
         getAllChildProduct(parentId, variantBody, variantRow);
+    });
+
+    $(document).on('click', '.btn-edit', function () {
+        const id = $(this).data('id');
+        //$('#modal_add_product').removeClass('hidden');
+    });
+
+    $(document).on('click', '.btn-save-prdchild', function() {
+        const $tr = $(this).closest('tr'); // row của biến thể
+        const id = $(this).data('id');
+        const price = parseInt($tr.find('.variant_price').val().replace(/,/g, ''), 10);
+        const quantity = parseInt($tr.find('.variant_quantity').val(), 10);
+
+        const variantRow = $tr.closest('tbody.variant_wraper_body'); // tbody chứa các biến thể
+        const parentRow = variantRow.closest('tr').prev(); // <tr> của sản phẩm cha
+
+        updateVariant(id, price, quantity, function() {
+            // --- cập nhật lại giá trị input của biến thể ---
+            $tr.find('.variant_price').val(formatPrice(price));
+            $tr.find('.variant_quantity').val(quantity);
+
+            // --- tính tổng quantity các biến thể và cập nhật sản phẩm cha ---
+            let totalQuantity = 0;
+            variantRow.find('.variant_quantity').each(function() {
+                totalQuantity += parseInt($(this).val(), 10) || 0;
+            });
+
+            parentRow.find('td:nth-child(7) span').text(totalQuantity);
+        });
+    });
+
+    $('#btn_add_product').on('click', function () {
+        $('#modal_add_product').removeClass('hidden');
+    });
+
+    $('#btn_close_modal').on('click', function () {
+        $('#modal_add_product').addClass('hidden');
     });
 
 </script>

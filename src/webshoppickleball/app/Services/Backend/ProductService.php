@@ -126,7 +126,7 @@ class ProductService extends BaseService
                     'slug'        => Str::slug($data['name'] . '-' . implode('-', $combo)),
                     'description' => null,
                     'category_id' => $data['category_id'] ?? null,
-                    'price'       => $data['price'][$index] ?? 0,
+                    'price'       => $data['price'][$index] ?? $data['price_main'] ?? 0,
                     'quantity'    => $data['quantity'][$index] ?? 0,
                     'status'      => 1,
                     'parent_id'   => $mainProduct->id
@@ -186,8 +186,6 @@ class ProductService extends BaseService
 
     public function update(int $id, array $data): DataResult
     {
-        $product = null;
-
         try {
             $user = JWTAuth::parseToken()->authenticate();
             if ($user->role != "2") {
@@ -197,27 +195,42 @@ class ProductService extends BaseService
             /** @var ProductRepositoryInterface $repo */
             $repo = $this->repository;
 
-            // Tìm sản phẩm
             $product = $repo->getById($id);
             if (!$product) {
                 return new DataResult('Sản phẩm không tồn tại', 404);
             }
 
-            // 1. Chuẩn bị dữ liệu update
+            //update giá, số lượng của sản phẩm biến thể
+            if ($product->parent_id != 0) {
+
+                $repo->update($id, [
+                    'price'    => $data['price'] ?? $product->price,
+                    'quantity' => $data['quantity'] ?? $product->quantity,
+                ]);
+
+                // 🔁 Cập nhật lại quantity sản phẩm cha
+                $parentId = $product->parent_id;
+                $repo->update($parentId, [
+                    'quantity' => $repo->sumVariantQuantity($parentId)
+                ]);
+
+                return new DataResult('Cập nhật biến thể thành công', 200);
+            }
+
+            //update sản phẩm cha
             $productData = [
                 'name'        => $data['name'] ?? $product->name,
                 'slug'        => Str::slug($data['name'] ?? $product->name),
                 'description' => $data['description'] ?? $product->description,
                 'category_id' => $data['category_id'] ?? $product->category_id,
                 'price'       => $data['price'] ?? $product->price,
-                'quantity'    => $data['quantity'] ?? $product->quantity,
-                'status'      => $data['status'] ?? $product->status,
             ];
 
-            // Upload ảnh mới nếu có
+            // 🖼️ Update ảnh
             if (!empty($data['image'])) {
                 $images = is_array($data['image']) ? $data['image'] : [$data['image']];
                 $paths = [];
+
                 foreach ($images as $img) {
                     if ($img instanceof UploadedFile) {
                         $paths[] = $img->store('images', 'public');
@@ -229,65 +242,62 @@ class ProductService extends BaseService
                 }
             }
 
-            // Update sản phẩm
-            $updatedProduct = $repo->update($id, $productData);
-            if (!$updatedProduct) {
-                return new DataResult('Cập nhật sản phẩm thất bại', 500);
-            }
+            $repo->update($id, $productData);
 
-            // 2. Update attributes
-            if (!empty($data['attribute_ids']) && is_array($data['attribute_ids'])) {
-                if (!$repo->attachAttributes($id, $data['attribute_ids'])) {
-                    return new DataResult('Cập nhật attributes thất bại', 500);
+            // xoá biến thể cũ và tạo lại nếu có thay đổi về thuộc tính
+            if (!empty($data['attribute_ids']) && !empty($data['attribute_value_ids'])) {
+
+                $variants = $repo->getChildProduct($id);
+
+                foreach ($variants as $variant) {
+                    $repo->detachAttributes($variant->id);
+                    $repo->detachAttributeValues($variant->id);
+                    $repo->delete($variant->id);
                 }
-            }
 
-            // 3. Update attribute values
-            if (!empty($data['attribute_value_ids']) && is_array($data['attribute_value_ids'])) {
-                if (!$repo->attachAttributeValues($id, $data['attribute_value_ids'])) {
-                    return new DataResult('Cập nhật attribute values thất bại', 500);
-                }
-            }
+                // Gán attributes mới cho sản phẩm cha
+                $repo->attachAttributes($id, $data['attribute_ids']);
 
-            // 4. Xóa tất cả variants cũ
-            foreach ($product->variants as $variant) {
-                $repo->deleteVariant($variant->id);
-            }
+                // 🔁 Sinh lại biến thể
+                $groups = $data['attribute_value_ids'];
+                $combinations = [[]];
 
-            // Tạo lại biến thể từ payload mới
-            if (!empty($data['variants']) && is_array($data['variants'])) {
-                foreach ($data['variants'] as $variantData) {
-
-                    // Tạo variant mới
-                    $variant = $repo->createVariant([
-                        'product_id' => $product->id,
-                        'sku'        => $variantData['sku'] ?? Str::uuid(),
-                        'price'      => $variantData['price'] ?? 0,
-                        'quantity'   => $variantData['quantity'] ?? 0,
-                        'status'     => $variantData['status'] ?? 1,
-                    ]);
-
-                    if (!$variant) {
-                        return new DataResult('Cập nhật variant thất bại', 500);
-                    }
-
-                    // Gán value cho variant
-                    if (!empty($variantData['value_ids']) && is_array($variantData['value_ids'])) {
-                        if (!$repo->attachVariantValues($variant->id, $variantData['value_ids'])) {
-                            $repo->deleteVariant($variant->id);
-                            return new DataResult('Gán giá trị cho variant thất bại', 500);
+                foreach ($groups as $g) {
+                    $tmp = [];
+                    foreach ($combinations as $partial) {
+                        foreach ($g as $valId) {
+                            $tmp[] = array_merge($partial, [$valId]);
                         }
                     }
+                    $combinations = $tmp;
                 }
+
+                foreach ($combinations as $combo) {
+                    $variant = $repo->create([
+                        'name'        => $productData['name'] . ' - ' . implode(', ', $combo),
+                        'slug'        => Str::slug($productData['name'] . '-' . implode('-', $combo)),
+                        'description' => null,
+                        'category_id' => $productData['category_id'],
+                        'price'       => $productData['price'],
+                        'quantity'    => 0,
+                        'status'      => 1,
+                        'parent_id'   => $id,
+                    ]);
+
+                    $repo->attachAttributeValues($variant->id, $combo);
+                }
+
+                // Update quantity cha
+                $repo->update($id, [
+                    'quantity' => $repo->sumVariantQuantity($id)
+                ]);
             }
 
-            return new DataResult('Cập nhật sản phẩm thành công', 200, $updatedProduct);
+            return new DataResult('Cập nhật sản phẩm cha thành công', 200);
 
         } catch (\Exception $e) {
-
             return new DataResult('Lỗi cập nhật: ' . $e->getMessage(), 500);
         }
     }
-
 
 }
