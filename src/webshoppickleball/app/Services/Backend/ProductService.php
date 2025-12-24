@@ -28,11 +28,20 @@ class ProductService extends BaseService
         return new DataResult('Lấy danh sách thành công', 200, $data);
     }
 
-    public function getParentProduct($perPage): DataResult
+    public function getById(int $id, array $columns = ['*']): DataResult
+    {
+        $item = $this->repository->getById($id, $columns, ['attributes', 'attributeValues']);
+        if (!$item) {
+            return new DataResult("Bản ghi với id $id không tồn tại", 404);
+        }
+        return new DataResult('Lấy dữ liệu thành công', 200, $item);
+    }
+
+    public function getParentProduct($perPage, $keyword, $status): DataResult
     {
         /** @var ProductRepositoryInterface $repo */
         $repo = $this->repository;
-        $data = $repo->getParentProduct($perPage);
+        $data = $repo->getParentProduct($perPage, $keyword, $status);
 
         return new DataResult('Lấy danh sách thành công', 200, $data);
     }
@@ -61,112 +70,82 @@ class ProductService extends BaseService
             $repo = $this->repository;
 
             $groups = $data['attribute_value_ids'] ?? [];
-            if (!is_array($groups) || empty($groups)) {
+            if (empty($groups)) {
                 return new DataResult('Thiếu giá trị thuộc tính', 422);
             }
 
-            foreach ($groups as $i => $g) {
-                if (!is_array($g)) {
-                    return new DataResult("attribute_value_ids[$i] phải là mảng con", 422);
-                }
-            }
+            // 1. Tạo product gốc
+            $mainProduct = $repo->create([
+                'name' => $data['name'],
+                'slug' => Str::slug($data['name']),
+                'description' => $data['description'] ?? null,
+                'category_id' => $data['category_id'] ?? null,
+                'price' => $data['price_main'] ?? 0,
+                'quantity' => 0,
+                'status' => 1,
+                'parent_id' => 0,
+            ]);
 
-            // sinh tổ hợp biến thể
+            $createdMainProducts[] = $mainProduct->id;
+
+            // 2. GÁN ATTRIBUTE + VALUE CHO PRODUCT GỐC
+            $repo->attachAttributes($mainProduct->id, $data['attribute_ids']);
+
+            $allValueIds = collect($groups)->flatten()->unique()->toArray();
+            $repo->attachAttributeValues($mainProduct->id, $allValueIds);
+
+            // 3. Sinh tổ hợp biến thể
             $combinations = [[]];
             foreach ($groups as $g) {
                 $tmp = [];
                 foreach ($combinations as $partial) {
-                    foreach ($g as $valId) {
-                        $tmp[] = array_merge($partial, [$valId]);
+                    foreach ($g as $val) {
+                        $tmp[] = array_merge($partial, [$val]);
                     }
                 }
                 $combinations = $tmp;
             }
 
-            if (empty($combinations)) {
-                return new DataResult("Không tạo được tổ hợp biến thể", 422);
-            }
+            // 4. Map tên attribute_value
+            $valueMap = \App\Models\AttributeValue::with('attribute')
+                ->whereIn('id', $allValueIds)
+                ->get()
+                ->keyBy('id');
 
-            // tạo sản phẩm gốc
-            $mainProductData = [
-                'name'        => $data['name'],
-                'slug'        => Str::slug($data['name']),
-                'description' => $data['description'] ?? null,
-                'category_id' => $data['category_id'] ?? null,
-                'price'       => $data['price_main'] ?? 0,
-                'quantity'    => 0,
-                'status'      => 1,
-                'parent_id'   => 0
-            ];
+            // 5. Tạo variant (chỉ giữ kho & giá)
+            $totalQty = 0;
+            foreach ($combinations as $i => $combo) {
 
-            if (!empty($data['image'])) {
-                $paths = [];
-                foreach ((array)$data['image'] as $img) {
-                    if ($img instanceof UploadedFile) {
-                        $paths[] = $img->store('images', 'public');
-                    }
+                $names = [];
+                foreach ($combo as $valId) {
+                    $names[] = $valueMap[$valId]->name;
                 }
-                $mainProductData['image'] = json_encode($paths);
-            }
 
-            $mainProduct = $repo->create($mainProductData);
-            if (!$mainProduct) {
-                return new DataResult("Tạo sản phẩm gốc thất bại", 500);
-            }
+                $variantName = $data['name'].' - '.implode(' - ', $names);
 
-            $createdMainProducts[] = $mainProduct->id;
-
-            //tạo biến thể
-            $totalVariantQuantity = 0;
-            foreach ($combinations as $index => $combo) {
-                $variantQuantity = $data['quantity'][$index] ?? 0;
-                $totalVariantQuantity += $variantQuantity;
-                $variantData = [
-                    'name'        => $data['name'] . ' - ' . implode(", ", $combo),
-                    'slug'        => Str::slug($data['name'] . '-' . implode('-', $combo)),
-                    'description' => null,
-                    'category_id' => $data['category_id'] ?? null,
-                    'price'       => $data['price'][$index] ?? $data['price_main'] ?? 0,
-                    'quantity'    => $data['quantity'][$index] ?? 0,
-                    'status'      => 1,
-                    'parent_id'   => $mainProduct->id
-                ];
-
-                $variant = $repo->create($variantData);
-                if (!$variant) {
-                    $this->rollback($repo, $createdVariants, $createdMainProducts);
-                    return new DataResult("Tạo biến thể thất bại", 500);
-                }
+                $variant = $repo->create([
+                    'name' => $variantName,
+                    'slug' => Str::slug($variantName).'-'.Str::random(4),
+                    'price' => $data['price'][$i] ?? $data['price_main'],
+                    'quantity' => $data['quantity'][$i] ?? 0,
+                    'status' => 1,
+                    'parent_id' => $mainProduct->id,
+                ]);
 
                 $createdVariants[] = $variant->id;
-
-                // Gán attributes
-                if (!empty($data['attribute_ids'])) {
-                    if (!$repo->attachAttributes($variant->id, $data['attribute_ids'])) {
-                        $this->rollback($repo, $createdVariants, $createdMainProducts);
-                        return new DataResult("Lỗi gán attributes", 500);
-                    }
-                }
-
-                // Gán attribute values
-                if (!$repo->attachAttributeValues($variant->id, $combo)) {
-                    $this->rollback($repo, $createdVariants, $createdMainProducts);
-                    return new DataResult("Lỗi gán attribute values", 500);
-                }
+                $totalQty += $variant->quantity;
             }
 
-            $repo->update($mainProduct->id, [
-                'quantity' => $totalVariantQuantity
-            ]);
+            $repo->update($mainProduct->id, ['quantity' => $totalQty]);
 
-            return new DataResult("Tạo sản phẩm gốc + biến thể thành công", 201, [
-                "product_id" => $mainProduct->id,
-                "variants"   => $createdVariants
+            return new DataResult("Tạo sản phẩm + biến thể thành công", 201, [
+                'product_id' => $mainProduct->id,
+                'variants' => $createdVariants
             ]);
 
         } catch (\Exception $e) {
             $this->rollback($repo, $createdVariants, $createdMainProducts);
-            return new DataResult("Lỗi: " . $e->getMessage(), 500);
+            return new DataResult("Lỗi: ".$e->getMessage(), 500);
         }
     }
 

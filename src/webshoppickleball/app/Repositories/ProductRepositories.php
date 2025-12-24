@@ -77,7 +77,7 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         return true;
     }
 
-    public function getParentProduct($perPage)
+    public function getParentProduct($perPage, $keyword, $status)
     {
         return $this->model
             ->with([
@@ -86,6 +86,22 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
                 'attributeValues',
             ])
             ->where('parent_id', 0)
+            ->when($keyword, function ($q) use ($keyword) {
+                $q->where('name', 'LIKE', '%' . $keyword . '%');
+            })
+            ->when($status != -1, function ($q) use ($status) {
+                if ($status == 0) {
+                    $q->where('quantity', 0);
+                }
+
+                if ($status == 1) {
+                    $q->whereBetween('quantity', [1, 5]);
+                }
+
+                if ($status == 2) {
+                    $q->where('quantity', '>', 5);
+                }
+            })
             ->paginate($perPage);
     }
 

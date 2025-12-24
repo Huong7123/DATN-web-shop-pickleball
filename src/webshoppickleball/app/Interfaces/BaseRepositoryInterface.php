@@ -6,7 +6,7 @@ interface BaseRepositoryInterface
 {
     public function getAll(array $columns = ['*']);
     
-    public function getById(int $id, array $columns = ['*']);
+    public function getById(int $id, array $columns = ['*'], array $with = []);
     
     public function create(array $data);
     

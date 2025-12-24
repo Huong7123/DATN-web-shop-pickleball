@@ -5,11 +5,11 @@
     <div
         class="flex items-center justify-between px-6 py-4 border-b border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark sticky top-0 z-10">
         <div>
-            <h2 class="text-xl font-bold tracking-tight">Thêm Sản phẩm Mới</h2>
+            <h2 class="text-xl font-bold tracking-tight">Chỉnh sửa sản phẩm</h2>
         </div>
         <button
             class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-colors text-gray-500 dark:text-gray-400">
-            <span class="btn_close_modal material-symbols-outlined">close</span>
+            <span class="btn_close_edit_modal material-symbols-outlined">close</span>
         </button>
     </div>
     <!-- Scrollable Body -->
@@ -23,14 +23,14 @@
             <!-- Input file (ẩn) -->
             <input
                 type="file"
-                id="image_input"
+                id="image_input_edit"
                 multiple
                 accept="image/png,image/jpeg,image/webp"
                 class="hidden"
             />
             <!-- Upload box -->
             <div
-                id="upload_box"
+                id="upload_box_edit"
                 class="flex flex-col items-center justify-center gap-4 rounded-xl
                     border-2 border-dashed border-primary/30 dark:border-primary/20
                     bg-background-light dark:bg-background-dark/50
@@ -56,7 +56,7 @@
             </div>
             <!-- Preview -->
             <div
-                id="image_preview"
+                id="image_preview_edit"
                 class="flex gap-4 mt-4 overflow-x-auto pb-2">
             </div>
         </section>
@@ -73,7 +73,7 @@
             <div class="col-span-1 md:col-span-2">
                 <label class="block text-sm font-medium mb-2 text-text-light dark:text-text-dark">Tên sản phẩm <span
                         class="text-red-500">*</span></label>
-                <input id="product_name"
+                <input id="product_name_edit"
                     class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-gray-400 dark:placeholder:text-gray-600 transition-shadow"
                     placeholder="Ví dụ: Vợt Pickleball Carbon Pro X1" type="text" />
             </div>
@@ -82,7 +82,7 @@
                 <label class="block text-sm font-medium mb-2 text-text-light dark:text-text-dark">Danh mục <span
                         class="text-red-500">*</span></label>
                 <div class="relative">
-                    <select id="category_select"
+                    <select id="category_select_edit"
                         class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-shadow pr-10">
                         <option disabled="" selected="" value="">Chọn danh mục</option>
                     </select>
@@ -93,7 +93,7 @@
                     <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-sm">₫</span>
-                    <input id="price_main"
+                    <input id="price_main_edit"
                         class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark pl-8 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-gray-400 dark:placeholder:text-gray-600 transition-shadow"
                         placeholder="0" type="text" />
                 </div>
@@ -103,7 +103,7 @@
                 <label class="block text-sm font-medium mb-2 text-text-light dark:text-text-dark">Mô tả sản
                     phẩm</label>
                 <div class="relative">
-                    <textarea id="product_description"
+                    <textarea id="product_description_edit"
                         class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-gray-400 dark:placeholder:text-gray-600 min-h-[140px] resize-y transition-shadow"
                         placeholder="Nhập chi tiết về thông số kỹ thuật, chất liệu..."></textarea>
                 </div>
@@ -116,7 +116,7 @@
                 <span class="material-symbols-outlined text-primary">category</span>
                 Thuộc tính &amp; Biến thể
             </h3>
-            <div id="attribute_wrapper" class="space-y-4">
+            <div id="attribute_wrapper_edit" class="space-y-4">
                 
             </div>
         </section>
@@ -125,21 +125,23 @@
     <div
         class="px-6 py-4 border-t border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark flex justify-end gap-3 sticky bottom-0 z-10">
         <button
-            class="btn_close_modal px-6 py-2.5 rounded-lg border border-border-light dark:border-border-dark text-text-light dark:text-text-dark font-semibold text-sm hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+            class="btn_close_edit_modal px-6 py-2.5 rounded-lg border border-border-light dark:border-border-dark text-text-light dark:text-text-dark font-semibold text-sm hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
             Hủy bỏ
         </button>
-        <button id="btn_save_product"
+        <button id="btn_save_product_edit"
             class="px-6 py-2.5 rounded-lg bg-primary hover:bg-primary-dark text-black font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2">
             <span class="material-symbols-outlined text-[18px]">save</span>
             Lưu sản phẩm
         </button>
     </div>
 </div>
-
 <script>
-    let productImages = [];
+    $('.btn_close_edit_modal').on('click', function(){
+        $('#modal_edit_product').addClass('hidden');
+    });
+    let productImageEdit = [];
     /* Click upload */
-    $('#upload_box').on('click', function () {
+    $('#upload_box_edit').on('click', function () {
         $('#image_input').click();
     });
 
@@ -151,20 +153,20 @@
             if (!file.type.startsWith('image/')) return;
             if (file.size > 5 * 1024 * 1024) return;
 
-            addImage(file);
+            addImageEdit(file);
         });
 
         this.value = '';
     });
 
     /* Thêm ảnh */
-    function addImage(file) {
-        const index = productImages.length;
-        productImages.push(file);
+    function addImageEdit(file) {
+        const index = productImageEdit.length;
+        productImageEdit.push(file);
 
         const url = URL.createObjectURL(file);
 
-        $('#image_preview').append(`
+        $('#image_preview_edit').append(`
             <div
                 class="relative w-24 h-24 rounded-lg overflow-hidden
                     border border-border-light dark:border-border-dark
@@ -188,29 +190,29 @@
     }
 
     /* Xoá ảnh */
-    function removeImage(el) {
+    function removeImageEdit(el) {
         const item = el.closest('[data-index]');
         const index = Number(item.dataset.index);
 
         productImages.splice(index, 1);
         item.remove();
 
-        reIndexImages();
+        reIndexImagesEdit();
 
         console.log('Ảnh còn lại:', productImages);
     }
 
-    function reIndexImages() {
-        $('#image_preview [data-index]').each(function (i) {
+    function reIndexImagesEdit() {
+        $('#image_preview_edit [data-index]').each(function (i) {
             $(this).attr('data-index', i);
         });
     }
 
-    function getSelectedAttributes() {
+    function getSelectedAttributesEdit() {
         let attribute_ids = [];
         let attribute_value_ids = [];
 
-        $('#attribute_wrapper .attribute-block').each(function () {
+        $('#attribute_wrapper_edit .attribute-block').each(function () {
             const attributeId = $(this).data('attribute-id');
 
             const values = [];
@@ -230,8 +232,8 @@
         };
     }
 
-    function renderAttributeCheckbox(attributes) {
-        const wrapper = $('#attribute_wrapper');
+    function renderAttributeCheckboxEdit(attributes) {
+        const wrapper = $('#attribute_wrapper_edit');
         wrapper.empty();
 
         attributes.forEach(attribute => {
@@ -266,7 +268,7 @@
         });
     }
 
-    function getAllAttribute() {
+    function getAllAttributeEdit() {
         $.ajax({
             url: '/api/attribute?per_page=20&page=1',
             method: 'GET',
@@ -276,7 +278,7 @@
             success: function (res) {
                 const attributes = res.data?.data || [];
 
-                renderAttributeCheckbox(attributes);
+                renderAttributeCheckboxEdit(attributes);
             },
             error: function (err) {
                 console.error('Không thể tải thuộc tính:', err);
@@ -284,7 +286,7 @@
         });
     }
 
-    function getAllCategory(){
+    function getAllCategoryEdit(){
         $.ajax({
             url: '/api/category?per_page=20&page=1',
             method: 'GET',
@@ -293,7 +295,7 @@
                 'Authorization': 'Bearer ' + getCookie('admin_token')
             },
             success: function(res) {
-                const $select = $('#category_select');
+                const $select = $('#category_select_edit');
                 // reset option
                 $select.html('<option value="" disabled selected>Chọn danh mục</option>');
 
@@ -314,104 +316,8 @@
         });
     }
 
-    function resetAddProductForm() {
-        // Reset input text / textarea
-        $('#product_name').val('');
-        $('#product_description').val('');
-        $('#price_main').val('');
-
-        // Reset select
-        $('#category_select').prop('selectedIndex', 0);
-
-        // Reset images
-        productImages = [];
-        $('#image_preview').empty();
-        $('#image_input').val('');
-
-        // Reset attributes
-        $('#attribute_wrapper input[type="checkbox"]').prop('checked', false);
-    }
-
-
-    function submitProduct() {
-        const formData = new FormData();
-
-        formData.append('name', $('#product_name').val());
-        formData.append('description', $('#product_description').val());
-        formData.append('category_id', $('#category_select').val());
-        formData.append('price_main', $('#price_main').val());
-
-        // images[]
-        productImages.forEach((file, index) => {
-            formData.append('image[]', file);
-        });
-
-        // attributes
-        const attrs = getSelectedAttributes();
-
-        attrs.attribute_ids.forEach(id => {
-            formData.append('attribute_ids[]', id);
-        });
-
-        attrs.attribute_value_ids.forEach((group, i) => {
-            group.forEach(valueId => {
-                formData.append(`attribute_value_ids[${i}][]`, valueId);
-            });
-        });
-
-        console.log('📦 FORM DATA PREVIEW');
-        for (let pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
-        }
-
-        Swal.fire({
-            title: 'Đang xử lý...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            onOpen: () => Swal.showLoading()
-        });
-        $.ajax({
-            url: '/api/product',
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + getCookie('admin_token')
-            },
-            data: formData,
-            processData: false,
-            contentType: false,
-            success(res) {
-                Swal.close();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công',
-                    text: 'Sản phẩm đã được tạo thành công',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-
-                setTimeout(() => {
-                    $('#modal_add_product').addClass('hidden');
-                    resetAddProductForm();
-                    getAllParentProduct();
-                }, 1500);
-            },
-            error(err) {
-                console.error('❌ Lỗi tạo sản phẩm', err.responseJSON || err);
-            }
-        });
-    }
-
-    $('#btn_save_product').on('click', function(){
-        submitProduct();
-    });
-
-    $('.btn_close_modal').on('click', function(){
-        $('#modal_add_product').addClass('hidden');
-    });
-
     $(document).ready(function(){
-        getAllAttribute();
-        getAllCategory();
+        getAllAttributeEdit();
+        getAllCategoryEdit();
     });
 </script>

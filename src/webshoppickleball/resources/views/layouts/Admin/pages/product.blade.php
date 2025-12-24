@@ -34,18 +34,18 @@
                 <span
                     class="material-symbols-outlined text-text-secondary group-focus-within:text-primary transition-colors">search</span>
             </div>
-            <input
+            <input id="search_product"
                 class="block w-full pl-10 pr-3 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg leading-5 bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all"
-                placeholder="Tìm kiếm theo tên sản phẩm, SKU..." type="search" />
+                placeholder="Tìm kiếm theo tên sản phẩm" type="search" />
         </label>
         <!-- Stock Status Filter -->
         <div class="relative min-w-[180px]">
-            <select
+            <select id="filter_status"
                 class="w-full pl-4 pr-10 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer">
-                <option value="">Tất cả trạng thái</option>
-                <option value="in-stock">Còn hàng</option>
-                <option value="low-stock">Sắp hết hàng</option>
-                <option value="out-of-stock">Hết hàng</option>
+                <option value="-1">Tất cả trạng thái</option>
+                <option value="0">Hết hàng</option>
+                <option value="1">Sắp hết hàng</option>
+                <option value="2">Còn hàng</option>
             </select>
         </div>
     </div>
@@ -93,7 +93,9 @@
 <div id="modal_add_product" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark min-h-screen flex items-center justify-center p-4 hidden">
     @include('layouts.Admin.widget.__modal_add_product')
 </div>
-
+<div id="modal_edit_product" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark min-h-screen flex items-center justify-center p-4 hidden">
+    @include('layouts.Admin.widget.__modal_edit_product')
+</div>
 <script>
     function getCookie(name) {
         const value = `; ${document.cookie}`;
@@ -148,10 +150,17 @@
                 <td class="p-4 text-sm text-text-main dark:text-gray-300">${item.category.name}</td>
                 <td class="p-4 text-sm text-text-main dark:text-gray-300 text-right font-bold">${formatPrice(item.price)}</td>
                 <td class="p-4 text-center">
-                    <span
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                        ${item.quantity}
-                    </span>
+                    ${
+                        item.quantity === 0
+                            ? `<span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                                    ${item.quantity}
+                            </span>`
+                            : `<span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                    ${item.quantity}
+                            </span>`
+                    }
                 </td>
                 <td class="p-4 text-center">
                     ${
@@ -306,28 +315,27 @@
     // click số trang
     $(document).on('click', '.page-btn', function () {
         const page = $(this).data('page');
-        if (page !== currentPage) {
-            getAllParentProduct(page);
-        }
+        const keyword = $('#search_product').val();
+        const status = $('#filter_status').val();
+
+        getAllParentProduct(page, keyword, status);
     });
 
-    // prev
     $('#btn_prev').on('click', function () {
-        if (currentPage > 1) {
-            getAllParentProduct(currentPage - 1);
-        }
+        const keyword = $('#search_product').val();
+        const status = $('#filter_status').val();
+        getAllParentProduct(currentPage - 1, keyword, status);
     });
 
-    // next
     $('#btn_next').on('click', function () {
-        if (currentPage < lastPage) {
-            getAllParentProduct(currentPage + 1);
-        }
+        const keyword = $('#search_product').val();
+        const status = $('#filter_status').val();
+        getAllParentProduct(currentPage + 1, keyword, status);
     });
 
     let currentPage = 1;
     let lastPage = 1;
-    function getAllParentProduct(page = 1){
+    function getAllParentProduct(page = 1, keyword = '', status = -1) {
         Swal.fire({
             title: 'Đang xử lý...',
             allowOutsideClick: false,
@@ -337,9 +345,13 @@
         });
 
         $.ajax({
-            url: '/api/product?page=' + page,
+            url: '/api/product',
             method: 'GET',
-            contentType: 'application/json',
+            data: {
+                page: page,
+                keyword: keyword,
+                status: status
+            },
             headers: {
                 'Authorization': 'Bearer ' + getCookie('admin_token')
             },
@@ -433,7 +445,7 @@
 
     $(document).on('click', '.btn-edit', function () {
         const id = $(this).data('id');
-        //$('#modal_add_product').removeClass('hidden');
+        $('#modal_edit_product').removeClass('hidden');
     });
 
     $(document).on('click', '.btn-save-prdchild', function() {
@@ -467,6 +479,27 @@
     $('#btn_close_modal').on('click', function () {
         $('#modal_add_product').addClass('hidden');
     });
+
+    let typingTimer = null;
+    $('#search_product').on('keyup', function () {
+        clearTimeout(typingTimer);
+
+        const keyword = $(this).val();
+        const status = $('#filter_status').val();
+
+        typingTimer = setTimeout(function () {
+            getAllParentProduct(1, keyword, status);
+        }, 400);
+    });
+
+    $('#filter_status').on('change', function () {
+        const keyword = $('#search_product').val();
+        const status = $(this).val();
+
+        getAllParentProduct(1, keyword, status);
+    });
+
+
 
 </script>
 @endsection

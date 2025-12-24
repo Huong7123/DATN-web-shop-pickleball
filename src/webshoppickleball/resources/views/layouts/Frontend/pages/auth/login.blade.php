@@ -89,16 +89,21 @@
             data: JSON.stringify(data),
             success: function (response) {
                 sessionStorage.setItem('email', response.data.user.email);
+                sessionStorage.setItem('name', response.data.user.name);
+                sessionStorage.setItem('avatar', response.data.user.avatar);
                 sessionStorage.setItem('id', response.data.user.id);
-                document.cookie = `user_token=${response.data.access_token}; path=/; max-age=10800;`;
                 if(response.data.user.role == 1){
+                    document.cookie = `user_token=${response.data.access_token}; path=/; max-age=10800;`;
                     Swal.close();
                     setTimeout(() => {
                         window.location.href = "/";
                     }, 200);
                 } else{
+                    document.cookie = `admin_token=${response.data.access_token}; path=/; max-age=10800;`;
                     Swal.close();
-                    $('#email_error').text('Tài khoản không tồn tại!');
+                    setTimeout(() => {
+                        window.location.href = "/admin/quan-ly-san-pham";
+                    }, 200);
                 }  
             },
             error: function (xhr, status, error) {

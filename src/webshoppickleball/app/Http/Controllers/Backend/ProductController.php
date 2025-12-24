@@ -19,11 +19,12 @@ class ProductController extends BaseController
     public function getParentProduct(Request $request): JsonResponse
     {
         $perPage = (int) $request->get('per_page', 10);
+        $keyword = (string) $request->get('keyword', '');
+        $status = (int) $request->get('status', -1);
         /** @var \App\Services\Backend\ProductService $productService */
         $productService = $this->service;
 
-        $result = $productService->getParentProduct($perPage);
-
+        $result = $productService->getParentProduct($perPage, $keyword, $status);
         return response()->json($result, $result->http_code);
     }
 

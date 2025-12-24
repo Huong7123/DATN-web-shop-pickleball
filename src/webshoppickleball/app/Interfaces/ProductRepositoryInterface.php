@@ -39,7 +39,7 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
      */
     public function detachAttributeValues(int $productId): bool;
 
-    public function getParentProduct($perPage);
+    public function getParentProduct($perPage, $keyword, $status);
     public function getChildProduct($parentId);
     public function sumVariantQuantity(int $parentId): int;
 

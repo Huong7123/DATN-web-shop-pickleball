@@ -31,6 +31,7 @@ Route::get('/vnpay/redirect', [PaymentController::class, 'redirectToVnpay'])->na
 Route::get('/category', [CategoryController::class, 'index']);
 Route::get('/attribute', [AttributeController::class, 'index']);
 Route::get('/product', [ProductController::class, 'getParentProduct']);
+Route::get('/product/{id}', [ProductController::class, 'show']);
 Route::get('/product-child', [ProductController::class, 'getChildProduct']);
 Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
