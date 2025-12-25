@@ -21,6 +21,7 @@
                 Hình ảnh sản phẩm
             </h3>
             <!-- Input file (ẩn) -->
+            <input type="hidden" id="product_id_edit" />
             <input
                 type="file"
                 id="image_input_edit"
@@ -142,11 +143,11 @@
     let productImageEdit = [];
     /* Click upload */
     $('#upload_box_edit').on('click', function () {
-        $('#image_input').click();
+        $('#image_input_edit').click();
     });
 
     /* Chọn ảnh */
-    $('#image_input').on('change', function (e) {
+    $('#image_input_edit').on('change', function (e) {
         const files = Array.from(e.target.files);
 
         files.forEach(file => {
@@ -161,49 +162,39 @@
 
     /* Thêm ảnh */
     function addImageEdit(file) {
-        const index = productImageEdit.length;
         productImageEdit.push(file);
-
         const url = URL.createObjectURL(file);
+        const index = $('#image_preview_edit > div').length; // index tổng thể
 
         $('#image_preview_edit').append(`
-            <div
-                class="relative w-24 h-24 rounded-lg overflow-hidden
-                    border border-border-light dark:border-border-dark
-                    shrink-0 group"
-                data-index="${index}">
-
-                <div
-                    class="absolute top-1 right-1 w-6 h-6
-                        flex items-center justify-center
-                        bg-black/60 text-white
-                        rounded-full cursor-pointer"
-                    onclick="removeImage(this)">
+            <div class="relative w-24 h-24 rounded-lg overflow-hidden border border-border-light dark:border-border-dark shrink-0 group" data-index="${index}" data-type="new">
+                <div class="absolute top-1 right-1 w-6 h-6 flex items-center justify-center bg-black/60 text-white rounded-full cursor-pointer" onclick="removeImageEdit(this)">
                     <span class="material-symbols-outlined text-[16px]">close</span>
                 </div>
-
                 <img src="${url}" class="w-full h-full object-cover"/>
             </div>
         `);
-
-        console.log('Ảnh đã chọn:', productImages);
     }
 
-    /* Xoá ảnh */
+    // xoá ảnh
     function removeImageEdit(el) {
         const item = el.closest('[data-index]');
+        const type = item.dataset.type;
         const index = Number(item.dataset.index);
 
-        productImages.splice(index, 1);
+        if(type === 'new') {
+            productImageEdit.splice(index, 1);
+        } else {
+            productImageOld.splice(index, 1);
+        }
+
         item.remove();
-
         reIndexImagesEdit();
-
-        console.log('Ảnh còn lại:', productImages);
     }
 
+    // cập nhật lại index
     function reIndexImagesEdit() {
-        $('#image_preview_edit [data-index]').each(function (i) {
+        $('#image_preview_edit > div').each(function(i){
             $(this).attr('data-index', i);
         });
     }
@@ -315,6 +306,133 @@
             }
         });
     }
+
+    function fillProductEditModal(product) {
+        $('#product_id_edit').val(product.id);
+        $('#product_name_edit').val(product.name);
+        $('#price_main_edit').val(product.price);
+        $('#product_description_edit').val(product.description || '');
+        $('#category_select_edit').val(product.category_id);
+
+        // reset
+        $('#image_preview_edit').empty();
+        productImageEdit = [];
+        productImageOld = [];
+
+        // ảnh cũ
+        const images = JSON.parse(product.image || '[]');
+        images.forEach(imgPath => {
+            productImageOld.push(imgPath);
+            const index = $('#image_preview_edit > div').length;
+
+            $('#image_preview_edit').append(`
+                <div class="relative w-24 h-24 rounded-lg overflow-hidden border border-border-light dark:border-border-dark shrink-0 group" data-index="${index}" data-type="old">
+                    <div class="absolute top-1 right-1 w-6 h-6 flex items-center justify-center bg-black/60 text-white rounded-full cursor-pointer" onclick="removeImageEdit(this)">
+                        <span class="material-symbols-outlined text-[16px]">close</span>
+                    </div>
+                    <img src="/storage/${imgPath}" class="w-full h-full object-cover"/>
+                </div>
+            `);
+        });
+
+        // check attribute
+        $('#attribute_wrapper_edit .attribute-block').each(function() {
+            const attributeId = $(this).data('attribute-id');
+            $(this).find('input[type="checkbox"]').each(function() {
+                const valueId = Number($(this).val());
+                const found = product.attribute_values.some(v => v.id === valueId && v.attribute_id === attributeId);
+                $(this).prop('checked', found);
+            });
+        });
+    }
+
+    $(document).on('click', '.btn-edit', function () {
+        const id = $(this).data('id');
+        $.ajax({
+            url: '/api/product/' + id,
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('admin_token')
+            },
+            success: function(res) {
+                const product = res.data;
+                fillProductEditModal(product);
+                $('#modal_edit_product').removeClass('hidden');
+            }
+        });
+    });
+
+    function submitProductEdit() {
+        const formData = new FormData();
+
+        formData.append('name', $('#product_name_edit').val());
+        formData.append('description', $('#product_description_edit').val());
+        formData.append('category_id', $('#category_select_edit').val());
+        formData.append('price_main', $('#price_main_edit').val());
+
+        // images[]
+        productImageEdit.forEach((file, index) => {
+            formData.append('image[]', file);
+        });
+
+        // attributes
+        const attrs = getSelectedAttributesEdit();
+
+        attrs.attribute_ids.forEach(id => {
+            formData.append('attribute_ids[]', id);
+        });
+
+        attrs.attribute_value_ids.forEach((group, i) => {
+            group.forEach(valueId => {
+                formData.append(`attribute_value_ids[${i}][]`, valueId);
+            });
+        });
+
+        // console.log('📦 FORM DATA PREVIEW');
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0], pair[1]);
+        // }
+
+        Swal.fire({
+            title: 'Đang xử lý...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            onOpen: () => Swal.showLoading()
+        });
+        $.ajax({
+            url: '/api/product/' + $('#product_id_edit').val(),
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('admin_token')
+            },
+            data: formData,
+            processData: false,
+            contentType: false,
+            success(res) {
+                Swal.close();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Cập nhật sản phẩm thành công!',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                setTimeout(() => {
+                    $('#modal_edit_product').addClass('hidden');
+                    getAllParentProduct();
+                }, 1500);
+            },
+            error(err) {
+                console.error('❌ Lỗi cập nhật sản phẩm', err.responseJSON || err);
+            }
+        });
+    }
+
+    $('#btn_save_product_edit').on('click', function() {
+        submitProductEdit();
+    });
 
     $(document).ready(function(){
         getAllAttributeEdit();
