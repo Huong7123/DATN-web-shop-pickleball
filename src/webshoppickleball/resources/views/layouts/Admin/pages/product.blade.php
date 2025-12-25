@@ -443,11 +443,6 @@
         getAllChildProduct(parentId, variantBody, variantRow);
     });
 
-    $(document).on('click', '.btn-edit', function () {
-        const id = $(this).data('id');
-        $('#modal_edit_product').removeClass('hidden');
-    });
-
     $(document).on('click', '.btn-save-prdchild', function() {
         const $tr = $(this).closest('tr'); // row của biến thể
         const id = $(this).data('id');

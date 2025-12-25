@@ -179,15 +179,14 @@ class ProductService extends BaseService
                 return new DataResult('Sản phẩm không tồn tại', 404);
             }
 
-            //update giá, số lượng của sản phẩm biến thể
+            // Nếu là biến thể, chỉ update giá & quantity
             if ($product->parent_id != 0) {
-
                 $repo->update($id, [
                     'price'    => $data['price'] ?? $product->price,
                     'quantity' => $data['quantity'] ?? $product->quantity,
                 ]);
 
-                // 🔁 Cập nhật lại quantity sản phẩm cha
+                // Cập nhật quantity sản phẩm cha
                 $parentId = $product->parent_id;
                 $repo->update($parentId, [
                     'quantity' => $repo->sumVariantQuantity($parentId)
@@ -196,16 +195,16 @@ class ProductService extends BaseService
                 return new DataResult('Cập nhật biến thể thành công', 200);
             }
 
-            //update sản phẩm cha
+            // Cập nhật sản phẩm cha
             $productData = [
                 'name'        => $data['name'] ?? $product->name,
                 'slug'        => Str::slug($data['name'] ?? $product->name),
                 'description' => $data['description'] ?? $product->description,
                 'category_id' => $data['category_id'] ?? $product->category_id,
-                'price'       => $data['price'] ?? $product->price,
+                'price'       => $data['price_main'] ?? $product->price,
             ];
 
-            // 🖼️ Update ảnh
+            // Cập nhật ảnh
             if (!empty($data['image'])) {
                 $images = is_array($data['image']) ? $data['image'] : [$data['image']];
                 $paths = [];
@@ -223,11 +222,12 @@ class ProductService extends BaseService
 
             $repo->update($id, $productData);
 
-            // xoá biến thể cũ và tạo lại nếu có thay đổi về thuộc tính
+            // Nếu có thay đổi thuộc tính, xoá biến thể cũ và tạo lại
             if (!empty($data['attribute_ids']) && !empty($data['attribute_value_ids'])) {
 
                 $variants = $repo->getChildProduct($id);
 
+                // Xoá biến thể cũ
                 foreach ($variants as $variant) {
                     $repo->detachAttributes($variant->id);
                     $repo->detachAttributeValues($variant->id);
@@ -237,10 +237,18 @@ class ProductService extends BaseService
                 // Gán attributes mới cho sản phẩm cha
                 $repo->attachAttributes($id, $data['attribute_ids']);
 
-                // 🔁 Sinh lại biến thể
                 $groups = $data['attribute_value_ids'];
-                $combinations = [[]];
+                $allValueIds = collect($groups)->flatten()->unique()->toArray();
+                $repo->attachAttributeValues($id, $allValueIds);
 
+                // Map giá trị attribute_value
+                $valueMap = \App\Models\AttributeValue::with('attribute')
+                    ->whereIn('id', $allValueIds)
+                    ->get()
+                    ->keyBy('id');
+
+                // Sinh tổ hợp biến thể
+                $combinations = [[]];
                 foreach ($groups as $g) {
                     $tmp = [];
                     foreach ($combinations as $partial) {
@@ -251,25 +259,37 @@ class ProductService extends BaseService
                     $combinations = $tmp;
                 }
 
-                foreach ($combinations as $combo) {
+                // Tạo biến thể mới với tên giống hàm create
+                $createdVariants = [];
+                $totalQty = 0;
+
+                foreach ($combinations as $i => $combo) {
+                    $names = [];
+                    foreach ($combo as $valId) {
+                        $names[] = $valueMap[$valId]->name;
+                    }
+
+                    $variantName = $productData['name'] . ' - ' . implode(' - ', $names);
+
                     $variant = $repo->create([
-                        'name'        => $productData['name'] . ' - ' . implode(', ', $combo),
-                        'slug'        => Str::slug($productData['name'] . '-' . implode('-', $combo)),
-                        'description' => null,
-                        'category_id' => $productData['category_id'],
-                        'price'       => $productData['price'],
-                        'quantity'    => 0,
+                        'name'        => $variantName,
+                        'slug'        => Str::slug($variantName) . '-' . Str::random(4),
+                        'price'       => $data['price'][$i] ?? $productData['price'],
+                        'quantity'    => $data['quantity'][$i] ?? 0,
                         'status'      => 1,
                         'parent_id'   => $id,
+                        'description' => null,
+                        'category_id' => $productData['category_id'],
                     ]);
 
                     $repo->attachAttributeValues($variant->id, $combo);
+
+                    $createdVariants[] = $variant->id;
+                    $totalQty += $variant->quantity;
                 }
 
-                // Update quantity cha
-                $repo->update($id, [
-                    'quantity' => $repo->sumVariantQuantity($id)
-                ]);
+                // Update quantity sản phẩm cha
+                $repo->update($id, ['quantity' => $totalQty]);
             }
 
             return new DataResult('Cập nhật sản phẩm cha thành công', 200);
@@ -278,5 +298,6 @@ class ProductService extends BaseService
             return new DataResult('Lỗi cập nhật: ' . $e->getMessage(), 500);
         }
     }
+
 
 }
