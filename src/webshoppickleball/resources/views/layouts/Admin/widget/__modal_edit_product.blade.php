@@ -362,7 +362,7 @@
         });
     });
 
-    function submitProductEdit() {
+    async function submitProductEdit() {
         const formData = new FormData();
 
         formData.append('name', $('#product_name_edit').val());
@@ -370,28 +370,33 @@
         formData.append('category_id', $('#category_select_edit').val());
         formData.append('price_main', $('#price_main_edit').val());
 
-        // images[]
-        productImageEdit.forEach((file, index) => {
+        // 1. Ảnh mới (file đã chọn)
+        productImageEdit.forEach((file) => {
             formData.append('image[]', file);
         });
 
+        // 2. Ảnh cũ: convert từ path thành File để gửi
+        for (let i = 0; i < productImageOld.length; i++) {
+            const imgPath = productImageOld[i];
+            try {
+                const response = await fetch('/storage/' + imgPath);
+                const blob = await response.blob();
+                const fileName = imgPath.split('/').pop(); // lấy tên file
+                const file = new File([blob], fileName, { type: blob.type });
+                formData.append('image[]', file);
+            } catch (err) {
+                console.error('❌ Lỗi lấy ảnh cũ:', imgPath, err);
+            }
+        }
+
         // attributes
         const attrs = getSelectedAttributesEdit();
-
-        attrs.attribute_ids.forEach(id => {
-            formData.append('attribute_ids[]', id);
-        });
-
+        attrs.attribute_ids.forEach(id => formData.append('attribute_ids[]', id));
         attrs.attribute_value_ids.forEach((group, i) => {
             group.forEach(valueId => {
                 formData.append(`attribute_value_ids[${i}][]`, valueId);
             });
         });
-
-        // console.log('📦 FORM DATA PREVIEW');
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0], pair[1]);
-        // }
 
         Swal.fire({
             title: 'Đang xử lý...',
@@ -400,6 +405,7 @@
             showConfirmButton: false,
             onOpen: () => Swal.showLoading()
         });
+
         $.ajax({
             url: '/api/product/' + $('#product_id_edit').val(),
             method: 'POST',
@@ -418,7 +424,6 @@
                     timer: 1500,
                     showConfirmButton: false
                 });
-
                 setTimeout(() => {
                     $('#modal_edit_product').addClass('hidden');
                     getAllParentProduct();

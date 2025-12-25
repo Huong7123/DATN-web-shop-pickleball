@@ -124,4 +124,17 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
             ->sum('quantity');
     }
 
+    public function delete(int $id)
+    {
+        $record = $this->getById($id);
+        if (!$record) {
+            return false;
+        }
+        $this->model
+            ->where('parent_id', $id)
+            ->delete();
+
+        return $record->delete();
+    }
+
 }
