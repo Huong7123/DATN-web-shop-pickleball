@@ -359,11 +359,6 @@
             });
         });
 
-        console.log('📦 FORM DATA PREVIEW');
-        for (let pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
-        }
-
         Swal.fire({
             title: 'Đang xử lý...',
             allowOutsideClick: false,

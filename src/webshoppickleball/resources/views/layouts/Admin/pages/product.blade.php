@@ -177,12 +177,12 @@
                 </td>
                 <td class="p-4 text-right">
                     <div class="flex items-center justify-end gap-2">
-                        <button
-                            class="p-1.5 rounded text-gray-400 hover:text-primary hover:bg-green-50 dark:hover:bg-gray-700 transition-colors">
-                            <span data-id="${item.id}" class="material-symbols-outlined text-[20px] btn-edit">edit</span>
+                        <button data-id="${item.id}"
+                            class="btn-edit p-1.5 rounded text-gray-400 hover:text-primary hover:bg-green-50 dark:hover:bg-gray-700 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">edit</span>
                         </button>
-                        <button
-                            class="p-1.5 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-gray-700 transition-colors">
+                        <button data-id="${item.id}"
+                            class="btn-delete p-1.5 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-gray-700 transition-colors">
                             <span class="material-symbols-outlined text-[20px]">delete</span>
                         </button>
                     </div>
@@ -494,7 +494,49 @@
         getAllParentProduct(1, keyword, status);
     });
 
+    $(document).on('click', '.btn-delete', function () {
+        const id = $(this).data('id');
+        Swal.fire({
+            title: 'Bạn có chắc muốn xóa?',
+            text: "Hành động này sẽ xóa cả sản phẩm và các biến thể con!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/product/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('admin_token')
+                    },
+                    success: function(res) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công',
+                            text: 'Xoá sản phẩm thành công',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
 
+                        setTimeout(() => {
+                            getAllParentProduct();
+                        }, 1500);
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            'Lỗi!',
+                            xhr.responseJSON?.message || 'Xảy ra lỗi khi xóa sản phẩm.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
 
 </script>
 @endsection
