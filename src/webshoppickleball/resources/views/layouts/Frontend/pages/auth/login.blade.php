@@ -88,17 +88,21 @@
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function (response) {
-                sessionStorage.setItem('email', response.data.user.email);
-                sessionStorage.setItem('name', response.data.user.name);
-                sessionStorage.setItem('avatar', response.data.user.avatar);
-                sessionStorage.setItem('id', response.data.user.id);
                 if(response.data.user.role == 1){
+                    sessionStorage.setItem('email', response.data.user.email);
+                    sessionStorage.setItem('name', response.data.user.name);
+                    sessionStorage.setItem('avatar', response.data.user.avatar);
+                    sessionStorage.setItem('id', response.data.user.id);
                     document.cookie = `user_token=${response.data.access_token}; path=/; max-age=10800;`;
                     Swal.close();
                     setTimeout(() => {
                         window.location.href = "/";
                     }, 200);
                 } else{
+                    sessionStorage.setItem('admin_email', response.data.user.email);
+                    sessionStorage.setItem('admin_name', response.data.user.name);
+                    sessionStorage.setItem('admin_avatar', response.data.user.avatar);
+                    sessionStorage.setItem('admin_id', response.data.user.id);
                     document.cookie = `admin_token=${response.data.access_token}; path=/; max-age=10800;`;
                     Swal.close();
                     setTimeout(() => {
