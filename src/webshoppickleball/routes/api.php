@@ -28,18 +28,20 @@ Route::get('/vnpay/return', [PaymentController::class, 'returnVnpay'])->name('vn
 Route::get('/vnpay/redirect', [PaymentController::class, 'redirectToVnpay'])->name('vnpay.redirect');
 
 
-// Route::get('/category', [CategoryController::class, 'index']);
-// Route::get('/attribute', [AttributeController::class, 'index']);
-// Route::get('/product', [ProductController::class, 'getParentProduct']);
-// Route::get('/product/{id}', [ProductController::class, 'show']);
-// Route::get('/product-child', [ProductController::class, 'getChildProduct']);
+Route::get('/attribute', [AttributeController::class, 'index']);
+Route::get('/attribute-value', [AttributeValueController::class, 'index']);
+Route::get('/category', [CategoryController::class, 'index']);
+Route::get('/product', [ProductController::class, 'getParentProduct']);
+Route::get('/product/{id}', [ProductController::class, 'show']);
+Route::get('/product-child', [ProductController::class, 'getChildProduct']);
+Route::get('/address', [AddressController::class, 'index']);
+
 Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     //quản lý sổ địa chỉ
-    Route::get('/address', [AddressController::class, 'index']);
     Route::post('/address', [AddressController::class, 'store']);
     Route::post('/address/{id}', [AddressController::class, 'update']);
     Route::delete('/address/{id}', [AddressController::class, 'destroy']);
@@ -56,15 +58,11 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
     //quản lý danh mục
-    Route::get('/category', [CategoryController::class, 'index']);
     Route::post('/category', [CategoryController::class, 'store']);
     Route::post('/category/{id}', [CategoryController::class, 'update']);
     Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
 
     //quản lý sản phẩm
-    Route::get('/product', [ProductController::class, 'getParentProduct']);
-    Route::get('/product/{id}', [ProductController::class, 'show']);
-    Route::get('/product-child', [ProductController::class, 'getChildProduct']);
     Route::post('/product', [ProductController::class, 'store']);
     Route::post('/product/{id}', [ProductController::class, 'update']);
     Route::delete('/product/{id}', [ProductController::class, 'destroy']);
@@ -88,13 +86,11 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/discount/{id}', [DiscountController::class, 'destroy']);
 
     // quản lý bộ thuộc tính
-    Route::get('/attribute', [AttributeController::class, 'index']);
     Route::post('/attribute', [AttributeController::class, 'store']);
     Route::post('/attribute/{id}', [AttributeController::class, 'update']);
     Route::delete('/attribute/{id}', [AttributeController::class, 'destroy']);
 
     // quản lý giá trị bộ thuộc tính
-    Route::get('/attribute-value', [AttributeValueController::class, 'index']);
     Route::post('/attribute-value', [AttributeValueController::class, 'store']);
     Route::post('/attribute-value/{id}', [AttributeValueController::class, 'update']);
     Route::delete('/attribute-value/{id}', [AttributeValueController::class, 'destroy']);
