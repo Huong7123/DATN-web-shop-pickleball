@@ -55,6 +55,22 @@ class ProductService extends BaseService
         return new DataResult('Lấy danh sách thành công', 200, $data);
     }
 
+    public function getProductBySlug($slug): DataResult
+    {
+        /** @var ProductRepositoryInterface $repo */
+        $repo = $this->repository;
+        $data = $repo->getProductBySlug($slug);
+        return new DataResult('Lấy danh sách thành công', 200, $data);
+    }
+
+    public function getProductByCategory($categoryId, $productId): DataResult
+    {
+        /** @var ProductRepositoryInterface $repo */
+        $repo = $this->repository;
+        $data = $repo->getProductByCategory($categoryId, $productId);
+        return new DataResult('Lấy danh sách thành công', 200, $data);
+    }
+
     public function create(array $data): DataResult
     {
         $createdVariants = [];

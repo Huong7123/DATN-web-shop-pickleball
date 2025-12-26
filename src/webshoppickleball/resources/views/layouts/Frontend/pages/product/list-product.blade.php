@@ -151,8 +151,9 @@
         ? `<span class="absolute top-3 right-3 bg-primary text-background-dark text-xs font-bold px-2 py-1 rounded-full">Mới</span>`
         : '';
         return `
+        <a href="/san-pham/${item.slug}">
             <div
-                class="flex flex-col overflow-hidden rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark group">
+                class="flex flex-col overflow-hidden rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark group" style="cursor: pointer;">
                 <div class="relative overflow-hidden">
                     <img class="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         data-alt="A green and black pickleball paddle leaning against a net."
@@ -175,6 +176,7 @@
                     </button>
                 </div>
             </div>
+        </a>
         `
     }
     function renderCategory(item){
