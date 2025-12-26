@@ -39,4 +39,22 @@ class ProductController extends BaseController
         return response()->json($result, $result->http_code);
     }
     
+    public function getProductBySlug($slug)
+    {
+        /** @var \App\Services\Backend\ProductService $productService */
+        $productService = $this->service;
+
+        $result = $productService->getProductBySlug($slug);
+        return view("layouts.Frontend.pages.product.detail-product", ['data' => $result->data, 'title' => 'Chi tiết sản phẩm']);
+    }
+
+    public function getProductByCategory($categoryId, $productId): JsonResponse
+    {
+        /** @var \App\Services\Backend\ProductService $productService */
+        $productService = $this->service;
+
+        $result = $productService->getProductByCategory($categoryId, $productId);
+        return response()->json($result, $result->http_code);
+    }
+
 }

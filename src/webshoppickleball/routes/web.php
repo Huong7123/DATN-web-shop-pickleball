@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -62,9 +63,12 @@ Route::get('/dia-chi-giao-hang', function () {
 Route::get('/san-pham', function () {
     return view('layouts.Frontend.pages.product.list-product',['title' => 'Sản phẩm']);
 });
-Route::get('/chi-tiet-san-pham', function () {
-    return view('layouts.Frontend.pages.product.detail-product',['title' => 'Chi tiết sản phẩm']);
-});
+Route::get('/san-pham/{slug}', [ProductController::class, 'getProductBySlug']);
+
+// Route::get('/san-pham/{slug}', function () {
+    
+//     return view('layouts.Frontend.pages.product.detail-product',['title' => 'Chi tiết sản phẩm']);
+// });
 Route::get('/gio-hang', function () {
     return view('layouts.Frontend.pages.cart.cart',['title' => 'Giỏ hàng của bạn']);
 });

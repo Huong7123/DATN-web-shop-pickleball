@@ -41,6 +41,8 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
 
     public function getParentProduct($perPage, $keyword, $status);
     public function getChildProduct($parentId);
+    public function getProductBySlug($slug);
+    public function getProductByCategory($categoryId, $productId);
     public function sumVariantQuantity(int $parentId): int;
 
     

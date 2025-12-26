@@ -33,6 +33,7 @@ Route::get('/attribute-value', [AttributeValueController::class, 'index']);
 Route::get('/category', [CategoryController::class, 'index']);
 Route::get('/product', [ProductController::class, 'getParentProduct']);
 Route::get('/product/{id}', [ProductController::class, 'show']);
+Route::get('/products/related/{categoryId}/{productId}', [ProductController::class, 'getProductByCategory']);
 Route::get('/product-child', [ProductController::class, 'getChildProduct']);
 Route::get('/address', [AddressController::class, 'index']);
 

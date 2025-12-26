@@ -117,6 +117,28 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
             ->get();
     }
 
+    public function getProductBySlug($slug)
+    {
+        return $this->model
+            ->with([
+                'category',
+                'attributes',
+                'attributeValues',
+            ])
+            ->where('slug', $slug)
+            ->first();
+    }
+
+    public function getProductByCategory($categoryId, $productId)
+    {
+        return $this->model
+            ->where('parent_id', 0)
+            ->where('category_id', $categoryId)
+            ->where('id', '!=', $productId)
+            ->limit(4)
+            ->get();
+    }
+
     public function sumVariantQuantity(int $parentId): int
     {
         return $this->model
