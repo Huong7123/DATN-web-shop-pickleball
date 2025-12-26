@@ -31,59 +31,54 @@ class CartService extends BaseService
             /** @var CartRepositoryInterface $cartRepo */
             $cartRepo = $this->repository;
 
-            // 1. Lấy giỏ hàng hiện tại hoặc tạo mới
+            // 1. Lấy hoặc tạo cart
             $cart = $cartRepo->getByUserId($user->id);
+            $isNewCart = false;
+
             if (!$cart) {
                 $cart = $cartRepo->create(['user_id' => $user->id]);
-
-                if (!$cart) {
-                    return new DataResult('Tạo giỏ hàng thất bại', 500);
-                }
+                $isNewCart = true;
             }
 
-            // 2. Thêm / cập nhật sản phẩm vào giỏ
-            foreach ($data['items'] as $itemData) {
+            // 2. Thêm từng item
+            foreach ($data['items'] as $item) {
 
-                $product = $this->productRepository->getById($itemData['product_id']);
+                $parentId = $item['parent_id'];
+                $selectedValueIds = $item['attribute_value_ids'];
+                $quantity = $item['quantity'];
 
-                if (!$product || $product->status != 1) {
-                    return new DataResult(
-                        "Sản phẩm {$itemData['product_id']} không khả dụng",
-                        400
-                    );
+                // 3. Map đúng variant
+                $variant = $this->cartItemRepository->findVariant($parentId, $selectedValueIds);
+
+                if (!$variant || $variant->status != 1) {
+                    if ($isNewCart) $this->repository->delete($cart->id);
+                    return new DataResult('Biến thể không tồn tại hoặc đã ngưng bán', 400);
                 }
 
-                $quantity = $itemData['quantity'];
-                $price    = $product->price; // giá tại thời điểm thêm giỏ
-
-                // Kiểm tra xem đã tồn tại trong giỏ chưa
+                // 4. Đã có trong cart chưa
                 $existingItem = $this->cartItemRepository
-                    ->getByCartAndProduct($cart->id, $product->id);
+                    ->getByCartAndProduct($cart->id, $variant->id);
 
                 if ($existingItem) {
-                    // Cộng dồn số lượng
                     $this->cartItemRepository->update($existingItem->id, [
                         'quantity' => $existingItem->quantity + $quantity,
                     ]);
                 } else {
-                    // Tạo mới cart item
                     $this->cartItemRepository->create([
                         'cart_id'    => $cart->id,
-                        'product_id' => $product->id,
+                        'product_id' => $variant->id,
                         'quantity'   => $quantity,
-                        'price'      => $price,
+                        'price'      => $variant->price,
                     ]);
                 }
             }
 
-            // Load items trả về đầy đủ
-            $cart->load('items.product');
+            $cart->load('items.product.attributeValues');
 
-            return new DataResult('Thêm giỏ hàng thành công', 201, $cart);
+            return new DataResult('Thêm vào giỏ hàng thành công', 201, $cart);
 
         } catch (\Exception $e) {
 
-            // rollback: nếu giỏ hàng mới tạo bị lỗi thì xoá
             if (!empty($cart->id ?? null)) {
                 $this->repository->delete($cart->id);
             }
@@ -91,7 +86,6 @@ class CartService extends BaseService
             return new DataResult('Lỗi: ' . $e->getMessage(), 500);
         }
     }
-
 
     public function update(int $cartId, array $data): DataResult
     {
@@ -102,20 +96,40 @@ class CartService extends BaseService
             }
 
             if (!empty($data['items'])) {
-                foreach ($data['items'] as $itemData) {
 
+                foreach ($data['items'] as $item) {
+
+                    $parentId = $item['parent_id'];
+                    $selectedValueIds = $item['attribute_value_ids'];
+                    $quantity = $item['quantity'];
+
+                    // 1. Map đúng variant giống create()
+                    $variant = $this->cartItemRepository->findVariant($parentId, $selectedValueIds);
+
+                    if (!$variant || $variant->status != 1) {
+                        return new DataResult('Biến thể không tồn tại hoặc đã ngưng bán', 400);
+                    }
+
+                    // 2. Tìm item trong cart theo variant
                     $cartItem = $this->cartItemRepository
-                        ->getByCartAndProduct($cartId, $itemData['product_id']);
+                        ->getByCartAndProduct($cartId, $variant->id);
 
-                    if ($cartItem) {
+                    if (!$cartItem) {
+                        return new DataResult('Không tìm thấy sản phẩm trong giỏ', 404);
+                    }
+
+                    // 3. Update quantity
+                    if ($quantity <= 0) {
+                        $this->cartItemRepository->delete($cartItem->id); // xoá nếu = 0
+                    } else {
                         $this->cartItemRepository->update($cartItem->id, [
-                            'quantity' => $itemData['quantity'],
+                            'quantity' => $quantity,
                         ]);
                     }
                 }
             }
 
-            $cart->load('items.product');
+            $cart->load('items.product.attributeValues');
 
             return new DataResult('Cập nhật giỏ hàng thành công', 200, $cart);
 
@@ -124,40 +138,13 @@ class CartService extends BaseService
         }
     }
 
-
-    public function deleteItems(array $productIds): DataResult
+    public function deleteItems(int $id): DataResult
     {
-        try {
-            $user = JWTAuth::parseToken()->authenticate();
-
-            /** @var CartRepositoryInterface $cartRepo */
-            $cartRepo = $this->repository;
-
-            $cart = $cartRepo->getByUserId($user->id);
-
-            if (!$cart) {
-                return new DataResult('Giỏ hàng không tồn tại', 404);
-            }
-
-            if (empty($productIds)) {
-                return new DataResult('Không có sản phẩm để xóa', 400);
-            }
-
-            foreach ($productIds as $productId) {
-                $cartItem = $this->cartItemRepository
-                    ->getByCartAndProduct($cart->id, $productId);
-
-                if ($cartItem) {
-                    $this->cartItemRepository->delete($cartItem->id);
-                }
-            }
-
-            $cart->load('items.product');
-
-            return new DataResult('Xóa sản phẩm thành công', 200, $cart);
-
-        } catch (\Exception $e) {
-            return new DataResult('Xóa sản phẩm thất bại: ' . $e->getMessage(), 500);
+        $deleted = $this->cartItemRepository->deleteItems($id);
+        if (!$deleted) {
+            return new DataResult("Xóa thất bại, id $id không tồn tại", 404);
         }
+        return new DataResult('Xóa thành công', 200, null);
     }
+
 }
