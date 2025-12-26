@@ -16,15 +16,12 @@ class CartController extends BaseController
         $this->storeRequest = CartRequest::class;
     }
 
-    public function deleteItems(Request $request): JsonResponse
+    public function deleteItems(int $id): JsonResponse
     {
-        $productIds = $request->input('product_ids', []);
-
-        /** @var \App\Services\Backend\CartService $cartService */
+        /** @var CartService $cartService */
         $cartService = $this->service;
 
-        $result = $cartService->deleteItems($productIds);
-
+        $result = $cartService->deleteItems($id);
         return response()->json($result, $result->http_code);
     }
     

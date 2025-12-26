@@ -18,22 +18,25 @@ class CartRequest extends FormRequest
         return [
             'items' => 'required|array|min:1',
 
-            'items.*.product_id' => 'required|integer|exists:products,id',
-            'items.*.quantity'   => 'required|integer|min:1',
+            'items.*.parent_id' => 'required|integer|exists:products,id',
+            'items.*.attribute_value_ids' => 'required|array|min:1',
+            'items.*.attribute_value_ids.*' => 'integer|exists:attribute_values,id',
+
+            'items.*.quantity' => 'required|integer|min:1',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'items.required'  => 'Danh sách sản phẩm không được để trống',
-            'items.array'     => 'Danh sách sản phẩm phải là mảng',
+            'items.*.parent_id.required' => 'Sản phẩm không hợp lệ',
+            'items.*.parent_id.exists'   => 'Sản phẩm không tồn tại',
 
-            'items.*.product_id.required' => 'Sản phẩm không được để trống',
-            'items.*.product_id.exists'   => 'Sản phẩm không tồn tại',
+            'items.*.attribute_value_ids.required' => 'Vui lòng chọn thuộc tính',
+            'items.*.attribute_value_ids.array'    => 'Thuộc tính không hợp lệ',
+            'items.*.attribute_value_ids.min'      => 'Phải chọn ít nhất 1 thuộc tính',
 
-            'items.*.quantity.required' => 'Số lượng không được để trống',
-            'items.*.quantity.integer'  => 'Số lượng phải là số nguyên',
+            'items.*.quantity.required' => 'Vui lòng nhập số lượng',
             'items.*.quantity.min'      => 'Số lượng phải lớn hơn 0',
         ];
     }
