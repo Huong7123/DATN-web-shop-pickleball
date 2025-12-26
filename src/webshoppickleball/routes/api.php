@@ -78,7 +78,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart', [CartController::class, 'store']);
     Route::post('/cart/{id}', [CartController::class, 'update']);
-    Route::delete('/cart', [CartController::class, 'deleteItems']);
+    Route::delete('/cart/{id}', [CartController::class, 'deleteItems']);
 
     // quản lý mã giảm giá
     Route::get('/discount', [DiscountController::class, 'index']);
