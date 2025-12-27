@@ -146,6 +146,25 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
             ->sum('quantity');
     }
 
+    function findVariant(int $parentId, array $selectedValueIds)
+    {
+        $count = count($selectedValueIds);
+
+        return Product::query()
+            ->where('parent_id', $parentId)
+            ->whereIn('id', function ($q) use ($selectedValueIds, $count) {
+                $q->select('product_id')
+                    ->from('product_attribute_values')
+                    ->groupBy('product_id')
+                    ->havingRaw('COUNT(DISTINCT attribute_value_id) = ?', [$count]) // tổng attribute của variant
+                    ->havingRaw(
+                        'SUM(attribute_value_id IN (' . implode(',', $selectedValueIds) . ')) = ?',
+                        [$count]
+                    );
+            })
+            ->first();
+    }
+
     public function delete(int $id)
     {
         $record = $this->getById($id);

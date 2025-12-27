@@ -57,4 +57,19 @@ class ProductController extends BaseController
         return response()->json($result, $result->http_code);
     }
 
+    public function getVariant(Request $request, int $id): JsonResponse
+    {
+        $request->validate([
+            'attribute_value_ids' => 'required|array|min:1',
+            'attribute_value_ids.*' => 'integer|distinct',
+        ]);
+
+        $selectedValues = $request->input('attribute_value_ids');
+
+        /** @var \App\Services\Backend\ProductService $productService */
+        $productService = $this->service;
+        $variant = $productService->getVariant($id, $selectedValues);
+        return response()->json($variant, $variant->http_code);
+    }
+
 }

@@ -48,8 +48,6 @@
                 <p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Vợt Carbon Fiber Pro
                 </p>
                 <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">₫2,500,000</p>
-                <a class="text-primary text-sm font-medium leading-normal hover:underline" href="#">Thêm vào giỏ
-                    hàng</a>
             </div>
         </div>
         <div class="flex flex-col gap-3 pb-3 group">
@@ -62,8 +60,6 @@
                 <p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Bóng Pickleball X-40
                 </p>
                 <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">₫350,000</p>
-                <a class="text-primary text-sm font-medium leading-normal hover:underline" href="#">Thêm vào giỏ
-                    hàng</a>
             </div>
         </div>
         <div class="flex flex-col gap-3 pb-3 group">
@@ -75,8 +71,6 @@
             <div>
                 <p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Giày Court Supreme</p>
                 <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">₫1,800,000</p>
-                <a class="text-primary text-sm font-medium leading-normal hover:underline" href="#">Thêm vào giỏ
-                    hàng</a>
             </div>
         </div>
         <div class="flex flex-col gap-3 pb-3 group">
@@ -89,8 +83,6 @@
                 <p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Túi Đựng Vợt Pro Gear
                 </p>
                 <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">₫1,200,000</p>
-                <a class="text-primary text-sm font-medium leading-normal hover:underline" href="#">Thêm vào giỏ
-                    hàng</a>
             </div>
         </div>
     </div>
