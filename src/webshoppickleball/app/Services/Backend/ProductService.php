@@ -71,6 +71,14 @@ class ProductService extends BaseService
         return new DataResult('Lấy danh sách thành công', 200, $data);
     }
 
+    public function getVariant(int $parentId, array $selectedValueIds): DataResult
+    {
+        /** @var ProductRepositoryInterface $repo */
+        $repo = $this->repository;
+        $data = $repo->findVariant($parentId, $selectedValueIds);
+        return new DataResult('Lấy danh sách thành công', 200, $data);
+    }
+
     public function create(array $data): DataResult
     {
         $createdVariants = [];
