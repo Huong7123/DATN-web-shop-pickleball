@@ -85,7 +85,7 @@
                 </div>
                 <div
                     class="p-6 pt-4 bg-white dark:bg-background-dark border-t border-slate-50 dark:border-slate-800/50 sticky bottom-0 z-10">
-                    <button
+                    <button id="btn_add_cart_confirm"
                         class="w-full flex items-center justify-center h-12 rounded-xl bg-primary text-[#0d1b12] font-bold text-base tracking-wide hover:bg-[#10d652] transition-all shadow-lg shadow-primary/25 cursor-pointer group">
                         <span class="material-symbols-outlined text-[20px] mr-2">shopping_cart</span>
                         Thêm vào giỏ hàng

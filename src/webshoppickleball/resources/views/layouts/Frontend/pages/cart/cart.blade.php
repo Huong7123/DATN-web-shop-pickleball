@@ -21,89 +21,16 @@
                 <div class="w-full @container">
                     <div
                         class="flex overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-background-light dark:bg-background-dark">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-100/50 dark:bg-gray-900/50">
-                                <tr>
-                                    <th
-                                        class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
-                                        Sản phẩm</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
-                                        Giá</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
-                                        Số lượng</th>
-                                    <th
-                                        class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
-                                        Tạm tính</th>
-                                    <th class="px-6 py-4 text-right"></th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
-                                <tr class="">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center gap-4">
-                                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg w-16 h-16"
-                                                data-alt="Vợt Pickleball màu xanh"
-                                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6zpExrVq3ye4RmbuQKGJeDcUQ0FIpZRDCKapcCceux364FdS7pc5vfZOeFrWLCsN8jHxF09Qz2XqQ3uxVQ2AL-zopYfw8wZVG0gz06h-0HQ-BguwrWHMCd5-q3FB16B0TOMcCPjzlXx-OcpkIEheqltYgWo3GHJNqup7FiTX8ApOB230Q189kFhbZE37s9EDTiH87iyZ97XOKKU1aI3OxeF_wOYIR1Obv70oOvE27u4CqIjbsCk1zqWStAZjpkn4AHwqAPoFXjfr");'>
-                                            </div>
-                                            <div>
-                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">Vợt Pickleball Pro Carbon
-                                                </p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Màu: Xanh Navy</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm font-medium">₫2,500,000</td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center border border-gray-300 dark:border-gray-700 rounded-md w-28">
-                                            <button
-                                                class="px-2 py-1 text-lg font-medium text-gray-600 dark:text-gray-400 hover:text-primary">-</button>
-                                            <input class="w-full text-center border-0 bg-transparent focus:ring-0 text-sm" type="text"
-                                                value="1" />
-                                            <button
-                                                class="px-2 py-1 text-lg font-medium text-gray-600 dark:text-gray-400 hover:text-primary">+</button>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">₫2,500,000</td>
-                                    <td class="px-6 py-4 text-right">
-                                        <button class="text-gray-500 hover:text-red-500 transition-colors">
-                                            <span class="material-symbols-outlined">delete</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center gap-4">
-                                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg w-16 h-16"
-                                                data-alt="Bóng Pickleball màu vàng"
-                                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCDfM9FtRde8T3NStQBr9SJHHw8jicFTSp5fR4Q6oGC4gDIeqeFPvJu-Id25nKeg3AAqYELpeQoJ7lE86HpeP8-aFjxl2cK2zOJDFJ6xPAc_TLWcymOsi-BQD31Em75yjJ5iTW91SS12W6o3CZwP-IVHXiTFSOM2HO2o_6RsGAZGwPYHjy74sER7XViLtyV2c_yUMp8qn7u0XU4e1GJ-NyfB3SuAelX0ev6aSWCtpirbwp9ZrCyv-lNEqkehbYb3iUqo0nspRxEJLLO");'>
-                                            </div>
-                                            <div>
-                                                <p class="text-sm font-semibold text-gray-900 dark:text-white">Bóng Outdoor (Bộ 6 quả)</p>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Màu: Vàng chanh</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm font-medium">₫150,000</td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center border border-gray-300 dark:border-gray-700 rounded-md w-28">
-                                            <button
-                                                class="px-2 py-1 text-lg font-medium text-gray-600 dark:text-gray-400 hover:text-primary">-</button>
-                                            <input class="w-full text-center border-0 bg-transparent focus:ring-0 text-sm" type="text"
-                                                value="2" />
-                                            <button
-                                                class="px-2 py-1 text-lg font-medium text-gray-600 dark:text-gray-400 hover:text-primary">+</button>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white">₫300,000</td>
-                                    <td class="px-6 py-4 text-right">
-                                        <button class="text-gray-500 hover:text-red-500 transition-colors">
-                                            <span class="material-symbols-outlined">delete</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                        <div id="cart_empty"
+                            class="hidden w-full min-h-[300px] flex flex-col items-center justify-center gap-3 text-center">
+                            <span class="material-symbols-outlined text-5xl text-gray-300">shopping_cart</span>
+                            <p class="text-gray-500">Giỏ hàng của bạn đang trống</p>
+                            <a href="/san-pham" class="text-primary hover:underline text-sm">
+                                Tiếp tục mua sắm
+                            </a>
+                        </div>
+                        <table id="cart_table" class="w-full text-left">
+                            
                         </table>
                     </div>
                 </div>
@@ -153,5 +80,178 @@
     $('#btn_buy_order').on('click', function () {
         window.location.href = '/thanh-toan';
     });
+
+    function formatPrice(price) {
+        if (!price) return '0';
+
+        // Ép về string → bỏ phần thập phân
+        const integerPart = price.toString().split('.')[0];
+
+        // Format dấu phẩy
+        return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function loadCart() {
+        const token = getCookie('user_token');
+        const userId = sessionStorage.getItem('id');
+        if (!token || !userId) return;
+
+        $.ajax({
+            url: '/api/cart/' + userId,
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            },
+            success(res) {
+                const table = $('#cart_table');
+                const emptyBox = $('#cart_empty');
+
+                table.html('');
+
+                // ===== GIỎ RỖNG =====
+                if (!res.data || res.data.length === 0) {
+                    table.hide();
+                    emptyBox.removeClass('hidden');
+                    $('#cart_total').text('₫0');
+                    return;
+                }
+
+                // ===== CÓ SẢN PHẨM =====
+                table.show();
+                emptyBox.addClass('hidden');
+
+                let totalCart = 0;
+
+                res.data.forEach(item => {
+                    const product = item.product;
+                    const qty = item.quantity;
+                    const price = item.price;
+                    const subTotal = qty * price;
+                    totalCart += subTotal;
+
+                    const attrs = product.attribute_values.map(a => a.name).join(' - ');
+
+                    const image = product.image 
+                        ? '/storage/' + JSON.parse(product.image)[0] 
+                        : '/images/no-image.png';
+
+                    table.append(`
+                        <thead class="bg-gray-100/50 dark:bg-gray-900/50">
+                            <tr>
+                                <th
+                                    class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
+                                    Sản phẩm</th>
+                                <th
+                                    class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
+                                    Giá</th>
+                                <th
+                                    class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
+                                    Số lượng</th>
+                                <th
+                                    class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
+                                    Tạm tính</th>
+                                <th class="px-6 py-4 text-right"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+                            <tr data-id="${item.id}">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-cover rounded-lg w-16 h-16"
+                                            style="background-image:url('${image}')"></div>
+                                        <div>
+                                            <p class="font-semibold">${product.name}</p>
+                                            <p class="text-xs text-gray-500">${attrs}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-sm font-medium">
+                                    ₫${formatPrice(price)}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center border rounded-md w-28">
+                                        <button class="w-9 h-9 flex items-center justify-center hover:bg-slate-100 cart-decrease"
+                                            data-id="${item.id}">
+                                            <span class="material-symbols-outlined text-[18px]">remove</span>
+                                        </button>
+                                        <input type="number" readonly value="${qty}"
+                                            class="cart-qty w-12 text-center bg-transparent text-sm font-bold text-[#0d1b12] dark:text-white
+                                    border-none focus:ring-0 p-0 [&::-webkit-inner-spin-button]:appearance-none">
+                                        <button class="w-9 h-9 flex items-center justify-center hover:bg-slate-100 cart-increase"
+                                            data-id="${item.id}">
+                                            <span class="material-symbols-outlined text-[18px]">add</span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-bold text-primary cart-subtotal" data-price="${price}">
+                                    ₫${formatPrice(subTotal)}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button class="btn-remove text-gray-500 hover:text-red-500"
+                                        data-id="${item.id}">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    `);
+                });
+
+                $('#cart_total').text('₫' + totalCart.toLocaleString());
+            }
+        });
+    }
+
+    $(document).on('click', '.cart-increase', function () {
+        const row = $(this).closest('tr');
+        const input = row.find('.cart-qty');
+        const subtotalCell = row.find('.cart-subtotal');
+        const price = parseInt(subtotalCell.data('price'));
+        const id = row.data('id');
+
+        let qty = parseInt(input.val()) + 1;
+        input.val(qty);
+
+        // Update subtotal dòng
+        subtotalCell.text('₫' + formatPrice(price * qty));
+
+        recalcCartTotal();
+
+        updateCartQty(id, qty);
+    });
+
+    $(document).on('click', '.cart-decrease', function () {
+        const row = $(this).closest('tr');
+        const input = row.find('.cart-qty');
+        const subtotalCell = row.find('.cart-subtotal');
+        const price = parseInt(subtotalCell.data('price'));
+        const id = row.data('id');
+
+        let qty = parseInt(input.val());
+        if (qty <= 1) return;
+
+        qty--;
+        input.val(qty);
+
+        subtotalCell.text('₫' + formatPrice(price * qty));
+
+        recalcCartTotal();
+
+        updateCartQty(id, qty);
+    });
+
+    function recalcCartTotal() {
+        let total = 0;
+        $('.cart-subtotal').each(function () {
+            total += parseInt($(this).text().replace(/[^\d]/g, ''));
+        });
+        $('#cart_total').text('₫' + formatPrice(total));
+    }
+
+    $(document).ready(function () {
+        loadCart();
+    });
+
 </script>
 @endsection

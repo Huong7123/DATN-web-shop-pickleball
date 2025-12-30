@@ -29,13 +29,10 @@ class CartItemRepositories extends BaseRepositories implements CartItemRepositor
             ->where('parent_id', $parentId)
             ->whereIn('id', function ($q) use ($selectedValueIds, $count) {
                 $q->select('product_id')
-                    ->from('product_attribute_values')
-                    ->groupBy('product_id')
-                    ->havingRaw('COUNT(DISTINCT attribute_value_id) = ?', [$count]) // tổng attribute của variant
-                    ->havingRaw(
-                        'SUM(attribute_value_id IN (' . implode(',', $selectedValueIds) . ')) = ?',
-                        [$count]
-                    );
+                ->from('product_attribute_values')
+                ->whereIn('attribute_value_id', $selectedValueIds)
+                ->groupBy('product_id')
+                ->havingRaw('COUNT(DISTINCT attribute_value_id) = ?', [$count]);
             })
             ->first();
     }

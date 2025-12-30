@@ -372,19 +372,26 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Số lượng</label>
                     <div class="flex items-center gap-4">
-                        <div class="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-transparent p-0.5 w-fit modal-qty-wrapper ${item.quantity === 0 ? 'opacity-50' : ''}">
-                            <button class="w-9 h-9 flex items-center justify-center rounded hover:bg-slate-100 dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors modal-decrease ${item.quantity === 0 ? 'opacity-50' : ''} ${item.quantity != 0 ? 'cursor-pointer' : ''}" ${item.quantity === 0 ? 'disabled' : ''}>
+                        <div class="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-transparent p-0.5 w-fit modal-qty-wrapper">
+                            <button class="w-9 h-9 flex items-center justify-center rounded
+                                hover:bg-slate-100 dark:hover:bg-surface-dark
+                                text-slate-500 dark:text-slate-400 transition-colors modal-decrease cursor-pointer">
                                 <span class="material-symbols-outlined text-[18px]">remove</span>
                             </button>
-                            <input class="w-12 text-center bg-transparent text-sm font-bold text-[#0d1b12] dark:text-white border-none focus:ring-0 p-0 [&::-webkit-inner-spin-button]:appearance-none modal-qty"
-                                type="number" value="1" min="1" ${item.quantity === 0 ? 'disabled' : ''} readonly />
-                            <button class="w-9 h-9 flex items-center justify-center rounded hover:bg-slate-100 dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors modal-increase ${item.quantity === 0 ? 'opacity-50' : ''} ${item.quantity !== 0 ? 'cursor-pointer' : ''}" ${item.quantity === 0 ? 'disabled' : ''}>
+
+                            <input class="w-12 text-center bg-transparent text-sm font-bold text-[#0d1b12] dark:text-white
+                                border-none focus:ring-0 p-0 [&::-webkit-inner-spin-button]:appearance-none modal-qty"
+                                type="number" value="1" min="1" readonly />
+
+                            <button class="w-9 h-9 flex items-center justify-center rounded
+                                hover:bg-slate-100 dark:hover:bg-surface-dark
+                                text-slate-500 dark:text-slate-400 transition-colors modal-increase cursor-pointer">
                                 <span class="material-symbols-outlined text-[18px]">add</span>
                             </button>
                         </div>
                         <div class="text-xs font-medium flex items-center gap-1">
                             <span class="material-symbols-outlined text-[14px]">inventory_2</span>
-                            <p class="modal-stock ${item.quantity > 0 ? 'text-primary' : 'text-red-500'} m-0">
+                            <p class="modal-stock m-0 ${item.quantity > 0 ? 'text-primary' : 'text-red-500'}">
                                 ${item.quantity > 0 ? `Còn ${item.quantity} sản phẩm` : 'Hết hàng'}
                             </p>
                         </div>
@@ -439,61 +446,88 @@
                     modal.find('.modal-price').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(variant.price));
 
                     // Cập nhật quantity và trạng thái nút
-                    const qtyInput = modal.find('.modal-qty');
-                    const decreaseBtn = modal.find('.modal-decrease');
-                    const increaseBtn = modal.find('.modal-increase');
-                    const wrapper = modal.find('.modal-qty-wrapper');
                     const stockText = modal.find('.modal-stock');
-
                     if (variant.quantity > 0) {
-                        qtyInput.prop('disabled', false).val(1).attr({ min: 1, max: variant.quantity });
-                        decreaseBtn.prop('disabled', false).css({ 'opacity': 1, 'pointer-events': '', 'cursor': 'pointer' });
-                        increaseBtn.prop('disabled', false).css({ 'opacity': 1, 'pointer-events': '', 'cursor': 'pointer' });
-                        wrapper.removeClass('opacity-50');
-                        stockText.text(`Còn ${variant.quantity} sản phẩm`).removeClass('text-red-500').addClass('text-primary');
+                        stockText.text(`Còn ${variant.quantity} sản phẩm`)
+                                .removeClass('text-red-500')
+                                .addClass('text-primary');
                     } else {
-                        qtyInput.prop('disabled', true).val(1);
-                        decreaseBtn.prop('disabled', true).css({ 'opacity': 0.5, 'pointer-events': 'none', 'cursor': 'not-allowed' });
-                        increaseBtn.prop('disabled', true).css({ 'opacity': 0.5, 'pointer-events': 'none', 'cursor': 'not-allowed' });
-                        wrapper.addClass('opacity-50');
-                        stockText.text('Hết hàng').removeClass('text-primary').addClass('text-red-500');
+                        stockText.text('Hết hàng')
+                                .removeClass('text-primary')
+                                .addClass('text-red-500');
                     }
+
+                    modal.find('.modal-qty').val(1);
                 }
             });
         }
     });
 
     // Khi click nút giảm
-    $(document).on('click', '.modal-decrease', function() {
-        const wrapper = $(this).closest('.modal-qty-wrapper');
-        const input = wrapper.find('.modal-qty');
-        let current = parseInt(input.val()) || 1;
-        const min = parseInt(input.attr('min')) || 1;
-
-        if (current > min) {
-            input.val(current - 1);
-        }
-    });
-
-    // Khi click nút tăng
     $(document).on('click', '.modal-increase', function() {
-        const wrapper = $(this).closest('.modal-qty-wrapper');
-        const input = wrapper.find('.modal-qty');
-        let current = parseInt(input.val()) || 1;
-        const max = parseInt(input.attr('max')) || 999;
-
-        if (current < max) {
-            input.val(current + 1);
-        }
+        const input = $(this).closest('.modal-qty-wrapper').find('.modal-qty');
+        input.val((parseInt(input.val()) || 1) + 1);
     });
 
+    $(document).on('click', '.modal-decrease', function() {
+        const input = $(this).closest('.modal-qty-wrapper').find('.modal-qty');
+        let val = parseInt(input.val()) || 1;
+        if (val > 1) input.val(val - 1);
+    });
 
     $('#btn_close_modal').on('click', function () {
         $('#modal_add_cart').addClass('hidden');
     });
 
-    $(document).on('click', '.btn-add-to-cart', function () {
+    $(document).on('click', '#btn_add_cart_confirm', function () {
+        const modal = $('#modal_add_to_cart_content');
+        const parentId = modal.data('product-id');
 
+        // Lấy attribute_value_ids đã chọn
+        const attributeValueIds = [];
+        modal.find('.variant-radio:checked').each(function () {
+            attributeValueIds.push(Number($(this).val()));
+        });
+
+        const totalAttrs = modal.find('.flex.flex-wrap.gap-2').length;
+        if (attributeValueIds.length !== totalAttrs) {
+            Swal.fire('Thiếu thuộc tính', 'Vui lòng chọn đầy đủ thuộc tính!', 'warning');
+            return;
+        }
+
+        const qty = parseInt(modal.find('.modal-qty').val()) || 1;
+
+        $.ajax({
+            url: '/api/cart',
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token'),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                items: [
+                    {
+                        parent_id: parentId,
+                        attribute_value_ids: attributeValueIds,
+                        quantity: qty
+                    }
+                ]
+            }),
+            success(res) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đã thêm vào giỏ hàng',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                $('#modal_add_cart').addClass('hidden');
+                loadCartBadge();
+            },
+            error(xhr) {
+                Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể thêm vào giỏ', 'error');
+            }
+        });
     });
 </script>
 @endsection
