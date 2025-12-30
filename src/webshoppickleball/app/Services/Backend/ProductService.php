@@ -98,6 +98,15 @@ class ProductService extends BaseService
                 return new DataResult('Thiếu giá trị thuộc tính', 422);
             }
 
+            $images = [];
+            if (!empty($data['image']) && is_array($data['image'])) {
+                foreach ($data['image'] as $file) {
+                    if ($file instanceof \Illuminate\Http\UploadedFile) {
+                        $images[] = $file->store('images', 'public');
+                    }
+                }
+            }
+
             // 1. Tạo product gốc
             $mainProduct = $repo->create([
                 'name' => $data['name'],
@@ -108,6 +117,7 @@ class ProductService extends BaseService
                 'quantity' => 0,
                 'status' => 1,
                 'parent_id' => 0,
+                'image'     => json_encode($images),
             ]);
 
             $createdMainProducts[] = $mainProduct->id;
@@ -136,8 +146,9 @@ class ProductService extends BaseService
                 ->get()
                 ->keyBy('id');
 
-            // 5. Tạo variant (chỉ giữ kho & giá)
+            // 5. Tạo variant + gắn attribute_value cho từng biến thể
             $totalQty = 0;
+
             foreach ($combinations as $i => $combo) {
 
                 $names = [];
@@ -148,13 +159,17 @@ class ProductService extends BaseService
                 $variantName = $data['name'].' - '.implode(' - ', $names);
 
                 $variant = $repo->create([
-                    'name' => $variantName,
-                    'slug' => Str::slug($variantName).'-'.Str::random(4),
-                    'price' => $data['price'][$i] ?? $data['price_main'],
-                    'quantity' => $data['quantity'][$i] ?? 0,
-                    'status' => 1,
+                    'name'      => $variantName,
+                    'slug'      => Str::slug($variantName).'-'.Str::random(4),
+                    'price'     => $data['price'][$i] ?? $data['price_main'],
+                    'quantity'  => $data['quantity'][$i] ?? 0,
+                    'status'    => 1,
                     'parent_id' => $mainProduct->id,
+                    'image'     => $mainProduct->image,
                 ]);
+
+                // 👇 GẮN ATTRIBUTE_VALUE CHO VARIANT
+                $repo->attachAttributeValues($variant->id, $combo);
 
                 $createdVariants[] = $variant->id;
                 $totalQty += $variant->quantity;
@@ -172,7 +187,6 @@ class ProductService extends BaseService
             return new DataResult("Lỗi: ".$e->getMessage(), 500);
         }
     }
-
 
     private function rollback($repo, $variantIds, $productIds)
     {

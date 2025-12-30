@@ -76,7 +76,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/order/{id}', [OrderController::class, 'destroy']);
 
     //quản lý giỏ hàng
-    Route::get('/cart', [CartController::class, 'index']);
+    Route::get('/cart/{userId}', [CartController::class, 'getCartItems']);
     Route::post('/cart', [CartController::class, 'store']);
     Route::post('/cart/{id}', [CartController::class, 'update']);
     Route::delete('/cart/{id}', [CartController::class, 'deleteItems']);

@@ -46,10 +46,8 @@ class CartService extends BaseService
                 $parentId = $item['parent_id'];
                 $selectedValueIds = $item['attribute_value_ids'];
                 $quantity = $item['quantity'];
-
                 // 3. Map đúng variant
                 $variant = $this->cartItemRepository->findVariant($parentId, $selectedValueIds);
-
                 if (!$variant || $variant->status != 1) {
                     if ($isNewCart) $this->repository->delete($cart->id);
                     return new DataResult('Biến thể không tồn tại hoặc đã ngưng bán', 400);
@@ -145,6 +143,15 @@ class CartService extends BaseService
             return new DataResult("Xóa thất bại, id $id không tồn tại", 404);
         }
         return new DataResult('Xóa thành công', 200, null);
+    }
+
+    public function getCartItems(int $userId): DataResult
+    {
+        /** @var CartRepositoryInterface $cartRepo */
+        $cartRepo = $this->repository;
+        $data = $cartRepo->getCartItems($userId);
+
+        return new DataResult('Lấy danh sách thành công',200,$data);
     }
 
 }
