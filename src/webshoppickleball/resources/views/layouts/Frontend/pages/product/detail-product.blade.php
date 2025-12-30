@@ -2,7 +2,7 @@
 @section('title', $title)
 @section('content')
 <div class="@container px-4 sm:px-6 lg:px-10 py-8">
-    <div class="layout-content-container flex flex-col w-full">
+    <div class="layout-content-container flex flex-col w-full" id="product_detail" data-product-id="{{ $data->id }}">
         <!-- Breadcrumbs -->
         <div class="flex flex-wrap gap-2 px-0 py-4">
             <a class="text-primary text-sm font-medium leading-normal hover:underline" href="#">Trang chủ</a>
@@ -65,7 +65,7 @@
                 </div>
                 <!-- Price -->
                 <div class="flex items-baseline gap-4">
-                    <p class="text-4xl font-bold leading-tight text-primary">{{ $data->price }}₫</p>
+                    <p class="text-4xl font-bold leading-tight text-primary" id="product_price">{{ $data->price }}₫</p>
                     <!-- <p class="text-xl font-normal leading-normal text-gray-400 dark:text-gray-500 line-through">3.200.000₫</p>
                     <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">-22%</span> -->
                 </div>
@@ -84,22 +84,18 @@
 
                             <div class="flex flex-wrap gap-2">
                                 @foreach($values as $variant)
-                                    <label class="cursor-pointer">
+                                    <label class="cursor-pointer relative">
                                         <input
                                             type="radio"
                                             name="attribute_{{ $attribute->id }}"
                                             value="{{ $variant->id }}"
-                                            class="hidden peer">
+                                            class="hidden peer peer absolute opacity-0 pointer-events-none">
 
                                         <div
-                                            class="px-4 py-2 rounded-lg
-                                                border-2 border-primary/40
-                                                bg-primary/10 dark:bg-primary/20
-                                                text-sm font-semibold
-                                                peer-checked:border-primary
-                                                peer-checked:bg-primary
-                                                peer-checked:text-white
-                                                transition">
+                                            class="px-4 py-2 rounded-lg border-2 border-border-light
+                                                    bg-background-light text-sm font-medium
+                                                    peer-checked:bg-primary/20
+                                                    peer-checked:border-primary transition-colors">
                                             {{ $variant->name }}
                                         </div>
                                     </label>
@@ -113,34 +109,53 @@
                 <div class="flex flex-col gap-4 pt-4 border-t border-primary/10">
                     <div class="flex items-center gap-4">
                         <p class="text-base font-bold">Số lượng</p>
-                        <div class="flex items-center rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden">
-                            <button type="button" id="qty-minus"
-                                class="w-10 h-10 flex items-center justify-center text-lg font-bold hover:bg-primary/10 select-none">
-                                −
+                        <div class="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-transparent p-0.5 w-fit modal-qty-wrapper">
+                            <button
+                                id="qty-minus"
+                                class="w-9 h-9 flex items-center justify-center rounded
+                                    hover:bg-slate-100 dark:hover:bg-surface-dark
+                                    text-slate-500 dark:text-slate-400 transition-colors
+                                    modal-decrease cursor-pointer">
+                                <span class="material-symbols-outlined text-[18px]">remove</span>
                             </button>
+
                             <input
                                 id="qty-input"
                                 type="number"
                                 min="1"
                                 value="1"
                                 readonly
-                                class="w-14 text-center bg-transparent border-x border-gray-300 dark:border-gray-600 focus:outline-none">
-
-                            <button type="button" id="qty-plus"
-                                class="w-10 h-10 flex items-center justify-center text-lg font-bold hover:bg-primary/10 select-none">
-                                +
+                                class="w-12 text-center bg-transparent text-sm font-bold text-[#0d1b12] dark:text-white
+                                    border-none focus:ring-0 p-0
+                                    [&::-webkit-inner-spin-button]:appearance-none modal-qty">
+                            <button
+                                id="qty-plus"
+                                class="w-9 h-9 flex items-center justify-center rounded
+                                    hover:bg-slate-100 dark:hover:bg-surface-dark
+                                    text-slate-500 dark:text-slate-400 transition-colors
+                                    modal-increase cursor-pointer">
+                                <span class="material-symbols-outlined text-[18px]">add</span>
                             </button>
                         </div>
+                        <div class="text-xs font-medium flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">inventory_2</span>
+                            <p id="product_stock" class="modal-stock m-0 {{ $data->quantity > 0 ? 'text-primary' : 'text-red-500' }}">
+                                @if($data->quantity > 0)
+                                    Còn {{ $data->quantity }} sản phẩm
+                                @else
+                                    Hết hàng
+                                @endif
+                            </p>
+                        </div>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <button
                             class="flex w-full cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-lg h-12 bg-primary text-[#0d1b12] text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-all">
-                            <span class="material-symbols-outlined">add_shopping_cart</span> Thêm vào giỏ hàng
-                        </button>
-                        <button
-                            class="flex w-full cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-lg h-12 bg-primary/20 dark:bg-primary/30 text-[#0d1b12] dark:text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/30 dark:hover:bg-primary/40 transition-all">
                             Mua ngay
+                        </button>
+                        <button id="btn_add_cart"
+                            class="flex w-full cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-lg h-12 bg-primary/20 dark:bg-primary/30 text-[#0d1b12] dark:text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/30 dark:hover:bg-primary/40 transition-all">
+                            <span class="material-symbols-outlined">add_shopping_cart</span> Thêm vào giỏ hàng
                         </button>
                     </div>
                 </div>
@@ -320,6 +335,111 @@
 
     $(document).ready(function() {
         getProductRecommend();
+    });
+
+    $(document).on('change', 'input[type=radio][name^="attribute_"]', function () {
+
+        const productId = $('#product_detail').data('product-id');
+
+        // Lấy tất cả attribute đã chọn
+        const selected = [];
+        $('input[type=radio][name^="attribute_"]:checked').each(function () {
+            selected.push(Number($(this).val()));
+        });
+
+        // Tổng số nhóm thuộc tính
+        const totalAttrs = $('.options > div').length || $('input[type=radio][name^="attribute_"]').map(function () {
+            return $(this).attr('name');
+        }).get().filter((v, i, a) => a.indexOf(v) === i).length;
+
+        if (selected.length !== totalAttrs) return;
+
+        $.ajax({
+            url: '/api/product-variant/' + productId,
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token'),
+                'Accept': 'application/json'
+            },
+            data: { attribute_value_ids: selected },
+            success(res) {
+                const variant = res.data;
+                if (!variant) return;
+
+                // Update giá
+                $('#product_price').text(
+                    new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(variant.price)
+                );
+
+                // Update tồn kho
+                if (variant.quantity > 0) {
+                    $('#product_stock')
+                        .text(`Còn ${variant.quantity} sản phẩm`)
+                        .removeClass('text-red-500')
+                        .addClass('text-primary');
+                } else {
+                    $('#product_stock')
+                        .text('Hết hàng')
+                        .removeClass('text-primary')
+                        .addClass('text-red-500');
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#btn_add_cart', function () {
+        const wrapper = $('#product_detail');
+        const parentId = wrapper.data('product-id');
+
+        // Lấy các attribute_value_id đã chọn
+        const attributeValueIds = [];
+        wrapper.find('input[type=radio][name^="attribute_"]:checked').each(function () {
+            attributeValueIds.push(Number($(this).val()));
+        });
+
+        // Tổng số nhóm thuộc tính
+        const totalAttrs = new Set(
+            wrapper.find('input[type=radio][name^="attribute_"]').map(function () {
+                return $(this).attr('name');
+            }).get()
+        ).size;
+
+        if (attributeValueIds.length !== totalAttrs) {
+            Swal.fire('Thiếu thuộc tính', 'Vui lòng chọn đầy đủ thuộc tính!', 'warning');
+            return;
+        }
+
+        const qty = parseInt($('#qty-input').val()) || 1;
+
+        $.ajax({
+            url: '/api/cart',
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token'),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                items: [
+                    {
+                        parent_id: parentId,
+                        attribute_value_ids: attributeValueIds,
+                        quantity: qty
+                    }
+                ]
+            }),
+            success(res) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đã thêm vào giỏ hàng',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                loadCartBadge();
+            },
+            error(xhr) {
+                Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể thêm vào giỏ', 'error');
+            }
+        });
     });
 
 

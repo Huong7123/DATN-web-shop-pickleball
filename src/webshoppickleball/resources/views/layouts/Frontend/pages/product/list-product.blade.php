@@ -70,6 +70,8 @@
             @include('layouts.Admin.widget.__pagination')
         </div>
     </div>
+
+    @include('layouts.Frontend.widget.__modal_add_to_cart')
 </div>
 
 <script>
@@ -169,11 +171,17 @@
                     <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary mb-2">${item.category.name}
                     </p>
                     <p class="text-lg font-extrabold text-primary mt-auto">${formatPrice(item.price)}</p>
-                    <button data-id="${item.id}"
-                        class="mt-3 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-primary/20 text-text-light-primary dark:text-text-dark-primary gap-2 text-sm font-bold leading-normal tracking-wide hover:bg-primary/30 dark:hover:bg-primary/30 transition-colors">
-                        <span class="material-symbols-outlined text-base">add_shopping_cart</span>
-                        Thêm vào giỏ
-                    </button>
+                    <div class="flex gap-2 mt-3">
+                        <button data-id="${item.id}" 
+                            class="flex-1 flex items-center gap-2 justify-center h-10 rounded-lg bg-primary text-[#0d1b12] font-bold text-base tracking-wide hover:bg-[#10d652] transition-all shadow-lg shadow-primary/25 cursor-pointer group">
+                            <span class="material-symbols-outlined text-base">shopping_bag</span>
+                            Mua ngay
+                        </button>
+                        <button data-id="${item.id}" 
+                            class="btn-add-to-cart flex items-center justify-center w-10 h-10 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors">
+                            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </a>
@@ -307,6 +315,219 @@
     $(document).ready(function () {
         getAllCategory();
         getAllProduct();
+    });
+
+    function fillProductAddCartModal(item) {
+        const firstImage = item.image ? `/storage/${JSON.parse(item.image)[0]}` : '/images/no-image.png';
+        const price = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price);
+
+        // HTML cho các thuộc tính
+        let attributesHTML = '';
+        item.attributes.forEach(attr => {
+            const values = item.attribute_values.filter(v => v.attribute_id === attr.id);
+
+            let valuesHTML = '';
+            values.forEach(v => {
+                valuesHTML += `
+                    <label class="cursor-pointer relative">
+                        <input type="radio" name="attribute_${attr.id}" value="${v.id}" class="variant-radio peer absolute opacity-0 pointer-events-none">
+                        <span class="px-4 py-2 rounded-lg border-2 border-border-light
+                            bg-background-light text-sm font-medium
+                            peer-checked:bg-primary/20
+                            peer-checked:border-primary transition-colors">
+                            ${v.name}
+                        </span>
+                    </label>
+                `;
+            });
+
+            attributesHTML += `
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">${attr.name}</label>
+                    <div class="flex flex-wrap gap-2">
+                        ${valuesHTML}
+                    </div>
+                </div>
+            `;
+        });
+
+        // Full modal HTML
+        return `
+            <div class="shrink-0 w-full sm:w-48">
+                <div class="aspect-square w-full rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 relative bg-background-light dark:bg-surface-dark group">
+                    <div class="absolute inset-0 bg-center bg-cover bg-no-repeat transition-transform duration-500 group-hover:scale-105"
+                        style='background-image: url("${firstImage}");'>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1 space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-[#0d1b12] dark:text-white leading-snug">${item.name}</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                        <p class="text-xl font-bold text-primary modal-price">${price}</p>
+                    </div>
+                </div>
+                <div class="h-px w-full bg-slate-100 dark:bg-slate-800"></div>
+                ${attributesHTML}
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Số lượng</label>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-transparent p-0.5 w-fit modal-qty-wrapper">
+                            <button class="w-9 h-9 flex items-center justify-center rounded
+                                hover:bg-slate-100 dark:hover:bg-surface-dark
+                                text-slate-500 dark:text-slate-400 transition-colors modal-decrease cursor-pointer">
+                                <span class="material-symbols-outlined text-[18px]">remove</span>
+                            </button>
+
+                            <input class="w-12 text-center bg-transparent text-sm font-bold text-[#0d1b12] dark:text-white
+                                border-none focus:ring-0 p-0 [&::-webkit-inner-spin-button]:appearance-none modal-qty"
+                                type="number" value="1" min="1" readonly />
+
+                            <button class="w-9 h-9 flex items-center justify-center rounded
+                                hover:bg-slate-100 dark:hover:bg-surface-dark
+                                text-slate-500 dark:text-slate-400 transition-colors modal-increase cursor-pointer">
+                                <span class="material-symbols-outlined text-[18px]">add</span>
+                            </button>
+                        </div>
+                        <div class="text-xs font-medium flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">inventory_2</span>
+                            <p class="modal-stock m-0 ${item.quantity > 0 ? 'text-primary' : 'text-red-500'}">
+                                ${item.quantity > 0 ? `Còn ${item.quantity} sản phẩm` : 'Hết hàng'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Mở modal
+    $(document).on('click', '.btn-add-to-cart', function (e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        $.ajax({
+            url: '/api/product/' + id,
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('admin_token')
+            },
+            success: function(res) {
+                const product = res.data;
+                $('#modal_add_to_cart_content').html(fillProductAddCartModal(product));
+                $('#modal_add_to_cart_content').data('product-id', product.id);
+                $('#modal_add_cart').removeClass('hidden');
+            }
+        });
+    });
+
+    // Khi chọn thuộc tính
+    $(document).on('change', '.variant-radio', function() {
+        const modal = $('#modal_add_to_cart_content');
+        const productId = modal.data('product-id');
+
+        const selectedValues = [];
+        modal.find('.variant-radio:checked').each(function() {
+            selectedValues.push(Number($(this).val()));
+        });
+
+        // Chỉ gọi API nếu đã chọn đủ attributes
+        const totalAttrs = modal.find('.flex.flex-wrap.gap-2').length;
+        if (selectedValues.length === totalAttrs) {
+            $.ajax({
+                url: `/api/product-variant/${productId}`,
+                method: 'POST',
+                data: { attribute_value_ids: selectedValues },
+                headers: { 'Authorization': 'Bearer ' + getCookie('admin_token') },
+                success: function(res) {
+                    const variant = res.data;
+                    if (!variant) return;
+
+                    // Cập nhật giá
+                    modal.find('.modal-price').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(variant.price));
+
+                    // Cập nhật quantity và trạng thái nút
+                    const stockText = modal.find('.modal-stock');
+                    if (variant.quantity > 0) {
+                        stockText.text(`Còn ${variant.quantity} sản phẩm`)
+                                .removeClass('text-red-500')
+                                .addClass('text-primary');
+                    } else {
+                        stockText.text('Hết hàng')
+                                .removeClass('text-primary')
+                                .addClass('text-red-500');
+                    }
+
+                    modal.find('.modal-qty').val(1);
+                }
+            });
+        }
+    });
+
+    // Khi click nút giảm
+    $(document).on('click', '.modal-increase', function() {
+        const input = $(this).closest('.modal-qty-wrapper').find('.modal-qty');
+        input.val((parseInt(input.val()) || 1) + 1);
+    });
+
+    $(document).on('click', '.modal-decrease', function() {
+        const input = $(this).closest('.modal-qty-wrapper').find('.modal-qty');
+        let val = parseInt(input.val()) || 1;
+        if (val > 1) input.val(val - 1);
+    });
+
+    $('#btn_close_modal').on('click', function () {
+        $('#modal_add_cart').addClass('hidden');
+    });
+
+    $(document).on('click', '#btn_add_cart_confirm', function () {
+        const modal = $('#modal_add_to_cart_content');
+        const parentId = modal.data('product-id');
+
+        // Lấy attribute_value_ids đã chọn
+        const attributeValueIds = [];
+        modal.find('.variant-radio:checked').each(function () {
+            attributeValueIds.push(Number($(this).val()));
+        });
+
+        const totalAttrs = modal.find('.flex.flex-wrap.gap-2').length;
+        if (attributeValueIds.length !== totalAttrs) {
+            Swal.fire('Thiếu thuộc tính', 'Vui lòng chọn đầy đủ thuộc tính!', 'warning');
+            return;
+        }
+
+        const qty = parseInt(modal.find('.modal-qty').val()) || 1;
+
+        $.ajax({
+            url: '/api/cart',
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token'),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                items: [
+                    {
+                        parent_id: parentId,
+                        attribute_value_ids: attributeValueIds,
+                        quantity: qty
+                    }
+                ]
+            }),
+            success(res) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đã thêm vào giỏ hàng',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                $('#modal_add_cart').addClass('hidden');
+                loadCartBadge();
+            },
+            error(xhr) {
+                Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể thêm vào giỏ', 'error');
+            }
+        });
     });
 </script>
 @endsection

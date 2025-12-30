@@ -24,5 +24,14 @@ class CartController extends BaseController
         $result = $cartService->deleteItems($id);
         return response()->json($result, $result->http_code);
     }
+
+    public function getCartItems(Request $request, int $userId): JsonResponse
+    {
+        /** @var CartService $cartService */
+        $cartService = $this->service;
+        $result = $cartService->getCartItems($userId);
+
+        return response()->json($result, $result->http_code);
+    }
     
 }

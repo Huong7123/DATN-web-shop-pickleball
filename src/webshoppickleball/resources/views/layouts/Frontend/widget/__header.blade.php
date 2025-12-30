@@ -24,9 +24,24 @@
             <!-- <button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-primary/10 dark:bg-primary/20 text-[#0d1b12] dark:text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
                 <span class="material-symbols-outlined">favorite</span>
             </button> -->
-            <button id="icon_cart" class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-primary/10 dark:bg-primary/20 text-[#0d1b12] dark:text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
-                <span class="material-symbols-outlined">shopping_cart</span>
-            </button>
+            <div class="relative">
+                <button id="icon_cart"
+                    class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10
+                    bg-primary/10 dark:bg-primary/20 text-[#0d1b12] dark:text-white gap-2 text-sm font-bold leading-normal
+                    tracking-[0.015em] min-w-0 px-2.5 hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
+    
+                    <span class="material-symbols-outlined">shopping_cart</span>
+    
+                    <!-- Badge -->
+                </button>
+                <span id="cart_badge"
+                    class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1
+                    bg-red-500 text-white text-[11px] font-bold rounded-full
+                    flex items-center justify-center">
+                    0
+                </span>
+
+            </div>
             <div class="relative group">
                 <button id="icon_avatar" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark ring-transparent group-hover:ring-primary transition-all"
                     data-alt="User avatar of a smiling man"
@@ -76,7 +91,7 @@
                             </a>
                         </div>
                         <div class="h-px bg-border-light dark:bg-border-dark my-2" style="background-color: rgb(19 236 91 / var(--tw-text-opacity, 1));"></div>
-                        <a class="flex items-center gap-4 hover:bg-red-500/10 px-4 min-h-14 justify-between rounded-lg transition-colors group/logout"
+                        <a id="btn_logout" class="flex items-center gap-4 hover:bg-red-500/10 px-4 min-h-14 justify-between rounded-lg transition-colors group/logout"
                             href="/dang-xuat">
                             <div class="flex items-center gap-4">
                                 <div
@@ -161,10 +176,91 @@
             $("#menu_not_logged_in").hide();
             $("#menu_logged_in").show();
         }
+        loadCartBadge();
     });
 
-    const avatarUrl = sessionStorage.getItem('avatar') || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBOPMRqzj2TK2odwqlKZtaoybrgxYwKm5dgUqik3SiXkliT1RQuIdHryMaJoOwXdq3O1HcpT-nXJsDZDx06QymUnO1UvS5nfMK_XtGlP6fR5fzcm27yQN7a1iY4XviSTvPiCZUAmTFZjXkx1WaPWTMkVAo3QDUG8Jth3LjiWMtaQJA_Dt6kjYxwIBkbSA0gSPdH6Iw3mFJEtXPrHkw2Hayq38R-SenjEPGjPxpgrzkZ7ug5HhJrde4Y43XkoTZauwI6ti0_4RD3Gdco';
+    const avatarUrl = sessionStorage.getItem('avatar');
     const avatarBtn = document.getElementById('icon_avatar');
-    avatarBtn.style.backgroundImage = `url("/storage/${avatarUrl}")`;
+
+    const defaultAvatar = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBOPMRqzj2TK2odwqlKZtaoybrgxYwKm5dgUqik3SiXkliT1RQuIdHryMaJoOwXdq3O1HcpT-nXJsDZDx06QymUnO1UvS5nfMK_XtGlP6fR5fzcm27yQN7a1iY4XviSTvPiCZUAmTFZjXkx1WaPWTMkVAo3QDUG8Jth3LjiWMtaQJA_Dt6kjYxwIBkbSA0gSPdH6Iw3mFJEtXPrHkw2Hayq38R-SenjEPGjPxpgrzkZ7ug5HhJrde4Y43XkoTZauwI6ti0_4RD3Gdco';
+
+    const finalAvatar = avatarUrl 
+        ? `/storage/${avatarUrl}` 
+        : defaultAvatar;
+
+    avatarBtn.style.backgroundImage = `url("${finalAvatar}")`;
+
+
+    function clearClientAuth() {
+        // Xoá toàn bộ cookie
+        document.cookie.split(";").forEach(cookie => {
+            const name = cookie.split("=")[0].trim();
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=' + location.hostname;
+        });
+
+        // Xoá storage
+        sessionStorage.clear();
+        localStorage.clear();
+
+        // Chuyển về login
+        window.location.href = '/dang-xuat';
+    }
+
+    function logout() {
+        $.ajax({
+            url: '/api/logout',
+            type: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token'),
+                'Accept': 'application/json'
+            },
+            success() {
+                clearClientAuth();
+            },
+            error() {
+                // Dù lỗi vẫn clear client để tránh kẹt token
+                clearClientAuth();
+            }
+        });
+    }
+
+    $('#btn_logout').on('click', function (e) {
+        e.preventDefault();
+        logout();
+    });
+
+    function loadCartBadge() {
+        const token = getCookie('user_token');
+        const userId = sessionStorage.getItem('id');
+
+        if (!token || !userId) {
+            $('#cart_badge').addClass('hidden');
+            return;
+        }
+
+        $.ajax({
+            url: '/api/cart/' + userId,
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            },
+            success(res) {
+                // res.data là mảng sản phẩm trong giỏ
+                const total = res.data.length;
+
+                if (total > 0) {
+                    $('#cart_badge').removeClass('hidden').text(total);
+                } else {
+                    $('#cart_badge').addClass('hidden');
+                }
+            },
+            error() {
+                $('#cart_badge').addClass('hidden');
+            }
+        });
+    }
+
 
 </script>

@@ -18,4 +18,16 @@ class CartRepositories extends BaseRepositories implements CartRepositoryInterfa
             ->first();
     }
 
+    public function getCartItems(int $userId)
+    {
+        $cart = $this->model->where('user_id', $userId)
+            ->first();
+
+        if (!$cart) {
+            return [];
+        }
+
+        return $cart->items()->with(['product', 'product.attributeValues'])->get();
+    }
+
 }
