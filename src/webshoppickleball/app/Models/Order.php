@@ -17,7 +17,12 @@ class Order extends Model
         'user_phone',     // số điện thoại người nhận
         'description',    // mô tả đơn hàng
         'address',        // địa chỉ nhận hàng
+        'shipping_method',
+        'shipping_fee',
+        'discount',
         'total',          // tổng tiền
+        'payment_method',
+        'payment_status',
         'status',         // trạng thái đơn hàng
     ];
 

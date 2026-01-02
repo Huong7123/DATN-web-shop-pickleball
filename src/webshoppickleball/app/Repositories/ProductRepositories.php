@@ -178,4 +178,22 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         return $record->delete();
     }
 
+    // trừ kho
+    public function decrementStock(int $productId, int $qty): bool
+    {
+        return $this->model
+            ->where('id', $productId)
+            ->where('quantity', '>=', $qty)
+            ->decrement('quantity', $qty) > 0;
+    }
+
+    // hoàn kho
+    public function increment(int $productId, string $field, int $qty)
+    {
+        return $this->model
+            ->where('id', $productId)
+            ->increment($field, $qty);
+    }
+
+
 }

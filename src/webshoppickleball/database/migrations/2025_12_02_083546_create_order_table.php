@@ -18,8 +18,18 @@ return new class extends Migration
             $table->string('user_phone');
             $table->string('description')->nullable();
             $table->string('address');
+            $table->tinyInteger('shipping_method'); // 0: free | 1: express
+            $table->decimal('shipping_fee', 15, 2)->default(0);
+            $table->decimal('discount', 15, 2);
             $table->decimal('total', 15, 2)->default(0);
-            $table->string('status')->default('pending');
+            $table->string('payment_method'); 
+            // cod | momo | vnpay | zalopay | bank
+
+            $table->string('payment_status'); 
+            // unpaid | paid
+
+            $table->string('status')->default('pending'); 
+            // pending | confirmed | shipping | completed | canceled
             $table->timestamps();
         });
     }

@@ -16,8 +16,6 @@
         <div class="w-full lg:w-3/5">
             <div class="mb-8">
                 <p class="text-4xl font-black tracking-tighter">Thanh toán</p>
-                <p class="text-subtle-light dark:text-subtle-dark mt-2">Vui lòng hoàn tất các thông tin dưới đây để đặt
-                    hàng.</p>
             </div>
             <div class="space-y-10">
                 <!-- Shipping Information -->
@@ -48,25 +46,8 @@
                                 class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
                                 placeholder="Số nhà, tên đường" type="text" />
                         </div>
-                        <div>
-                            <label class="mb-2 block text-sm font-medium">Tỉnh/Thành phố</label>
-                            <input
-                                class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
-                                placeholder="e.g. TP. Hồ Chí Minh" type="text" />
-                        </div>
-                        <div>
-                            <label class="mb-2 block text-sm font-medium">Quận/Huyện</label>
-                            <input
-                                class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
-                                placeholder="e.g. Quận 1" type="text" />
-                        </div>
                     </div>
-                    <div class="mt-6 flex items-center">
-                        <input
-                            class="form-checkbox h-4 w-4 rounded border-border-light text-primary focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark"
-                            id="save-info" type="checkbox" />
-                        <label class="ml-2 text-sm" for="save-info">Lưu thông tin cho lần mua hàng sau</label>
-                    </div>
+                    
                 </section>
                 <!-- Shipping Method -->
                 <section>
@@ -74,7 +55,18 @@
                     <div class="mt-6 space-y-4">
                         <label
                             class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
-                            <input checked="" class="form-radio h-5 w-5 text-primary" name="shipping" type="radio" />
+                            <input checked class="form-radio h-5 w-5 text-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="shipping" type="radio" />
+                            <div class="ml-4 flex flex-grow items-center justify-between">
+                                <div>
+                                    <p class="font-medium">Giao hàng tiêu chuẩn</p>
+                                    <p class="text-sm text-subtle-light dark:text-subtle-dark">Dự kiến 3-5 ngày</p>
+                                </div>
+                                <p class="font-semibold">0đ</p>
+                            </div>
+                        </label>
+                        <label
+                            class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
+                            <input class="form-radio h-5 w-5 text-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="shipping" type="radio" />
                             <div class="ml-4 flex flex-grow items-center justify-between">
                                 <div>
                                     <p class="font-medium">Giao hàng nhanh</p>
@@ -83,75 +75,21 @@
                                 <p class="font-semibold">30.000đ</p>
                             </div>
                         </label>
-                        <label
-                            class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
-                            <input class="form-radio h-5 w-5 text-primary" name="shipping" type="radio" />
-                            <div class="ml-4 flex flex-grow items-center justify-between">
-                                <div>
-                                    <p class="font-medium">Giao hàng tiêu chuẩn</p>
-                                    <p class="text-sm text-subtle-light dark:text-subtle-dark">Dự kiến 3-5 ngày</p>
-                                </div>
-                                <p class="font-semibold">15.000đ</p>
-                            </div>
-                        </label>
                     </div>
                 </section>
                 <!-- Payment Method -->
                 <section>
                     <h2 class="text-2xl font-bold tracking-tight">3. Phương thức thanh toán</h2>
                     <div class="mt-6 space-y-4">
-                        <div class="rounded-lg border border-border-light dark:border-border-dark">
-                            <label class="flex cursor-pointer items-center p-4">
-                                <input checked="" class="form-radio h-5 w-5 text-primary" name="payment" type="radio" />
-                                <span class="ml-4 font-medium">Thẻ tín dụng / Ghi nợ</span>
-                            </label>
-                            <div
-                                class="border-t border-border-light bg-background-light p-4 dark:border-border-dark dark:bg-background-dark/50">
-                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                    <div>
-                                        <label class="mb-2 block text-sm">Số thẻ</label>
-                                        <input
-                                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light p-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark"
-                                            placeholder="•••• •••• •••• ••••" />
-                                    </div>
-                                    <div>
-                                        <label class="mb-2 block text-sm">Họ tên trên thẻ</label>
-                                        <input
-                                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light p-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark"
-                                            placeholder="NGUYEN VAN A" />
-                                    </div>
-                                    <div>
-                                        <label class="mb-2 block text-sm">Ngày hết hạn (MM/YY)</label>
-                                        <input
-                                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light p-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark"
-                                            placeholder="MM/YY" />
-                                    </div>
-                                    <div>
-                                        <label class="mb-2 block text-sm">Mã bảo mật (CVV)</label>
-                                        <input
-                                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light p-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark"
-                                            placeholder="•••" />
-                                    </div>
-                                </div>
-                                <div class="mt-4 flex items-center justify-end gap-2">
-                                    <img alt="Visa" class="h-6"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFPKUTQ40K1cFjcTfG--z6pyOWhi9CNHlHwkrH3hWzm0s8VdSDOLwV0vemFbQ2QM73DF-n4VdgNv-E8tNZmkkMbakLZlyGki6xSzWA4Lz4kgUl3IzL8flPKVsQRiLyPmWJeJc3hyOqmT6RAtHJ8pNAm1yaAwWTin3-V3S_Ygl84PrQv2TNLa_Q4eQI4ZIkHz2Or0gDNtL_l88M9W5i3Gj8f4bNwLitLFDgEhu-7gEGMRKOGHAUXgvhKXXbsaqDYU8dRtB7ZF23ilOi" />
-                                    <img alt="Mastercard" class="h-6"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5EcCET8W_tJjXROt9Tfr1kjXJPNL1fUrtG9CWIf0UOu3WU7g1MfV5RB4u85K1kAmIUq7vTLBZDjlD5IBDbXaErSSn2hylznfqokAcjApE8wezwQoBaUp6liqteB4LF8Lw8gLSak3TCJJlSH2lJM4xS1agGLm6inYRMNcf9fDjEPmyc1xfPlxb-5WiILhJcpuCrnvvYxVpl8bKknf0sNWF3qm2nMDfrmK67-lC9LQREVq2oSM7qRjJxXzkh99h0VsICzclTUw98HQX" />
-                                    <img alt="JCB" class="h-6"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiPY0w3EiveqWTd1gXIyd-Hvr1bpMK8VVlwI_bi7RdFMeHujf6GmyvUKLiYZrjHFezapL4FZ-3YjYNpJ44hwsVevLKNUtmG263tssUVt3DdkwuCfbY816AC5S3yHbejna_73pT3YW9n5tYW99y3TfxZWyQP8JlMgOCid71trd2rO4sHtm7Wc0UbCr1HyWXLmSKDzaSxGdGz6Sg6TSCdZL9E4czrBeNoqr8epIOT7gFUqsjRJ7tntWXWjYZbawaT7IF7S0jJoPUe8he" />
-                                </div>
-                            </div>
-                        </div>
                         <label
                             class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
-                            <input class="form-radio h-5 w-5 text-primary" name="payment" type="radio" />
-                            <span class="ml-4 font-medium">Ví điện tử (Momo, ZaloPay)</span>
+                            <input checked class="form-radio h-5 w-5 text-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="payment" type="radio" />
+                            <span class="ml-4 font-medium">Thanh toán khi nhận hàng</span>
                         </label>
                         <label
                             class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
-                            <input class="form-radio h-5 w-5 text-primary" name="payment" type="radio" />
-                            <span class="ml-4 font-medium">Chuyển khoản ngân hàng</span>
+                            <input class="form-radio h-5 w-5 text-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="payment" type="radio" />
+                            <span class="ml-4 font-medium">VNPay</span>
                         </label>
                     </div>
                 </section>
