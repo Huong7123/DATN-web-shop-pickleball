@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\CartItemRepositoryInterface;
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 
@@ -46,5 +47,16 @@ class CartItemRepositories extends BaseRepositories implements CartItemRepositor
         return false;
     }
 
+    public function deleteCartItemsByUserAndProduct(int $userId, array $productIds): int
+    {
+        // Lấy cart của user
+        $cart = Cart::where('user_id', $userId)->first();
 
+        if (!$cart) return 0; // user chưa có giỏ hàng
+
+        // Xoá các cart_item theo cart_id và product_id
+        return CartItem::where('cart_id', $cart->id)
+            ->whereIn('product_id', $productIds)
+            ->delete();
+    }
 }

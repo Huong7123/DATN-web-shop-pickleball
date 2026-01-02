@@ -16,8 +16,6 @@
         <div class="w-full lg:w-3/5">
             <div class="mb-8">
                 <p class="text-4xl font-black tracking-tighter">Thanh toán</p>
-                <p class="text-subtle-light dark:text-subtle-dark mt-2">Vui lòng hoàn tất các thông tin dưới đây để đặt
-                    hàng.</p>
             </div>
             <div class="space-y-10">
                 <!-- Shipping Information -->
@@ -26,132 +24,74 @@
                     <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div>
                             <label class="mb-2 block text-sm font-medium">Họ và tên</label>
-                            <input
+                            <input id="user_name"
                                 class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
                                 placeholder="Nguyễn Văn A" type="text" />
                         </div>
                         <div>
                             <label class="mb-2 block text-sm font-medium">Số điện thoại</label>
-                            <input
+                            <input id="user_phone"
                                 class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
                                 placeholder="090 xxx xxxx" type="tel" />
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="mb-2 block text-sm font-medium">Email</label>
-                            <input
-                                class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
-                                placeholder="your.email@example.com" type="email" />
-                        </div>
-                        <div class="sm:col-span-2">
                             <label class="mb-2 block text-sm font-medium">Địa chỉ</label>
-                            <input
+                            <input id="address"
                                 class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
                                 placeholder="Số nhà, tên đường" type="text" />
                         </div>
-                        <div>
-                            <label class="mb-2 block text-sm font-medium">Tỉnh/Thành phố</label>
-                            <input
+                        <div class="sm:col-span-2">
+                            <label class="mb-2 block text-sm font-medium">Ghi chú</label>
+                            <input id="description"
                                 class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
-                                placeholder="e.g. TP. Hồ Chí Minh" type="text" />
-                        </div>
-                        <div>
-                            <label class="mb-2 block text-sm font-medium">Quận/Huyện</label>
-                            <input
-                                class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
-                                placeholder="e.g. Quận 1" type="text" />
+                                placeholder="Ghi chú đơn hàng" type="text" />
                         </div>
                     </div>
-                    <div class="mt-6 flex items-center">
-                        <input
-                            class="form-checkbox h-4 w-4 rounded border-border-light text-primary focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark"
-                            id="save-info" type="checkbox" />
-                        <label class="ml-2 text-sm" for="save-info">Lưu thông tin cho lần mua hàng sau</label>
-                    </div>
+                    
                 </section>
                 <!-- Shipping Method -->
                 <section>
                     <h2 class="text-2xl font-bold tracking-tight">2. Phương thức vận chuyển</h2>
                     <div class="mt-6 space-y-4">
-                        <label
-                            class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
-                            <input checked="" class="form-radio h-5 w-5 text-primary" name="shipping" type="radio" />
+                        <label data-fee="0" class="shipping-option flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+                            <input checked name="shipping" type="radio"
+                                class="form-radio h-5 w-5 text-primary focus:outline-none focus:ring-0 focus:ring-offset-0">
+                            <div class="ml-4 flex flex-grow items-center justify-between">
+                                <div>
+                                    <p class="font-medium">Giao hàng tiêu chuẩn</p>
+                                    <p class="text-sm text-subtle-light">Dự kiến 3-5 ngày</p>
+                                </div>
+                                <p class="font-semibold">0đ</p>
+                            </div>
+                        </label>
+
+                        <label data-fee="30000" class="shipping-option flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+                            <input name="shipping" type="radio"
+                                class="form-radio h-5 w-5 text-primary focus:outline-none focus:ring-0 focus:ring-offset-0">
                             <div class="ml-4 flex flex-grow items-center justify-between">
                                 <div>
                                     <p class="font-medium">Giao hàng nhanh</p>
-                                    <p class="text-sm text-subtle-light dark:text-subtle-dark">Dự kiến 1-2 ngày</p>
+                                    <p class="text-sm text-subtle-light">Dự kiến 1-2 ngày</p>
                                 </div>
                                 <p class="font-semibold">30.000đ</p>
                             </div>
                         </label>
-                        <label
-                            class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
-                            <input class="form-radio h-5 w-5 text-primary" name="shipping" type="radio" />
-                            <div class="ml-4 flex flex-grow items-center justify-between">
-                                <div>
-                                    <p class="font-medium">Giao hàng tiêu chuẩn</p>
-                                    <p class="text-sm text-subtle-light dark:text-subtle-dark">Dự kiến 3-5 ngày</p>
-                                </div>
-                                <p class="font-semibold">15.000đ</p>
-                            </div>
-                        </label>
+
                     </div>
                 </section>
                 <!-- Payment Method -->
                 <section>
                     <h2 class="text-2xl font-bold tracking-tight">3. Phương thức thanh toán</h2>
                     <div class="mt-6 space-y-4">
-                        <div class="rounded-lg border border-border-light dark:border-border-dark">
-                            <label class="flex cursor-pointer items-center p-4">
-                                <input checked="" class="form-radio h-5 w-5 text-primary" name="payment" type="radio" />
-                                <span class="ml-4 font-medium">Thẻ tín dụng / Ghi nợ</span>
-                            </label>
-                            <div
-                                class="border-t border-border-light bg-background-light p-4 dark:border-border-dark dark:bg-background-dark/50">
-                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                    <div>
-                                        <label class="mb-2 block text-sm">Số thẻ</label>
-                                        <input
-                                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light p-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark"
-                                            placeholder="•••• •••• •••• ••••" />
-                                    </div>
-                                    <div>
-                                        <label class="mb-2 block text-sm">Họ tên trên thẻ</label>
-                                        <input
-                                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light p-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark"
-                                            placeholder="NGUYEN VAN A" />
-                                    </div>
-                                    <div>
-                                        <label class="mb-2 block text-sm">Ngày hết hạn (MM/YY)</label>
-                                        <input
-                                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light p-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark"
-                                            placeholder="MM/YY" />
-                                    </div>
-                                    <div>
-                                        <label class="mb-2 block text-sm">Mã bảo mật (CVV)</label>
-                                        <input
-                                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light p-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark"
-                                            placeholder="•••" />
-                                    </div>
-                                </div>
-                                <div class="mt-4 flex items-center justify-end gap-2">
-                                    <img alt="Visa" class="h-6"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFPKUTQ40K1cFjcTfG--z6pyOWhi9CNHlHwkrH3hWzm0s8VdSDOLwV0vemFbQ2QM73DF-n4VdgNv-E8tNZmkkMbakLZlyGki6xSzWA4Lz4kgUl3IzL8flPKVsQRiLyPmWJeJc3hyOqmT6RAtHJ8pNAm1yaAwWTin3-V3S_Ygl84PrQv2TNLa_Q4eQI4ZIkHz2Or0gDNtL_l88M9W5i3Gj8f4bNwLitLFDgEhu-7gEGMRKOGHAUXgvhKXXbsaqDYU8dRtB7ZF23ilOi" />
-                                    <img alt="Mastercard" class="h-6"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5EcCET8W_tJjXROt9Tfr1kjXJPNL1fUrtG9CWIf0UOu3WU7g1MfV5RB4u85K1kAmIUq7vTLBZDjlD5IBDbXaErSSn2hylznfqokAcjApE8wezwQoBaUp6liqteB4LF8Lw8gLSak3TCJJlSH2lJM4xS1agGLm6inYRMNcf9fDjEPmyc1xfPlxb-5WiILhJcpuCrnvvYxVpl8bKknf0sNWF3qm2nMDfrmK67-lC9LQREVq2oSM7qRjJxXzkh99h0VsICzclTUw98HQX" />
-                                    <img alt="JCB" class="h-6"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiPY0w3EiveqWTd1gXIyd-Hvr1bpMK8VVlwI_bi7RdFMeHujf6GmyvUKLiYZrjHFezapL4FZ-3YjYNpJ44hwsVevLKNUtmG263tssUVt3DdkwuCfbY816AC5S3yHbejna_73pT3YW9n5tYW99y3TfxZWyQP8JlMgOCid71trd2rO4sHtm7Wc0UbCr1HyWXLmSKDzaSxGdGz6Sg6TSCdZL9E4czrBeNoqr8epIOT7gFUqsjRJ7tntWXWjYZbawaT7IF7S0jJoPUe8he" />
-                                </div>
-                            </div>
-                        </div>
                         <label
                             class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
-                            <input class="form-radio h-5 w-5 text-primary" name="payment" type="radio" />
-                            <span class="ml-4 font-medium">Ví điện tử (Momo, ZaloPay)</span>
+                            <input checked class="form-radio h-5 w-5 text-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="payment" type="radio" />
+                            <span class="ml-4 font-medium">Thanh toán khi nhận hàng</span>
                         </label>
                         <label
                             class="flex cursor-pointer items-center rounded-lg border border-border-light p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/10 dark:border-border-dark dark:has-[:checked]:border-primary">
-                            <input class="form-radio h-5 w-5 text-primary" name="payment" type="radio" />
-                            <span class="ml-4 font-medium">Chuyển khoản ngân hàng</span>
+                            <input class="form-radio h-5 w-5 text-primary focus:outline-none focus:ring-0 focus:ring-offset-0" name="payment" type="radio" />
+                            <span class="ml-4 font-medium">VNPay</span>
                         </label>
                     </div>
                 </section>
@@ -162,33 +102,8 @@
             <div
                 class="sticky top-24 rounded-lg border border-border-light bg-white p-6 shadow-sm dark:border-border-dark dark:bg-background-dark">
                 <h2 class="text-2xl font-bold tracking-tight">Đơn hàng của bạn</h2>
-                <div class="mt-6 space-y-4">
-                    <div class="flex items-center gap-4">
-                        <div class="relative h-20 w-20 flex-shrink-0">
-                            <img class="h-full w-full rounded-lg object-cover"
-                                data-alt="A yellow pickleball paddle against a green background."
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNjo9cGfFMeoemnAvfsda-aOFqtu2TY9Krs3CpmkTdsrntQxAcFS67-ccgAC0Nr1A3jATo52AiMKpRqvEEYg_BexgkEjGhn0dZkA5-2ib5Mq0Jfz6hNkUrX9BmEHewJ2EFAF5r4lvr1xU_XkMPbUkn3GGvzfVobXcQEl4xNAyjKt0HQl4I5-wY2OIPR0RAzAUx-1xij08BJOiSlxTZUU2rxnDdv_eRXjin_fpY3J9vUr517KgFH4WjQPu8uJ6hKXyPly4VZCdzeQtf" />
-                            <span
-                                class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-background-dark">2</span>
-                        </div>
-                        <div class="flex-grow">
-                            <p class="font-medium">Vợt Pickleball Pro-X</p>
-                            <p class="text-sm text-subtle-light dark:text-subtle-dark">Màu: Xanh lá</p>
-                        </div>
-                        <p class="font-semibold">2.400.000đ</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="relative h-20 w-20 flex-shrink-0">
-                            <img class="h-full w-full rounded-lg object-cover" data-alt="A close-up of a bright green pickleball."
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXoP81sIxWSp21GyCcFYetGMtWf65jc1gguVbUNWHbWIgDnwmdGFVflSxiMLbgDtVKFGaCvxhhddhnx-3qHgGjP_4SnaWXiTkeBm_XXUH8N6pZEfSDDaOpUqGqeoZJfucAUpmTiQrmfjbmrYmbrELZKGMJfykkzCcf815vKdGwI6wN47iHZ0j9uxxG2b_DYjwq-ft45jSlp3JBeYsSMjcFS92nhdBiqD8OBG-ru-roXe4iriOaSLbS0WUfyC3-jqQJN_fDfpzzNbRv" />
-                            <span
-                                class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-background-dark">1</span>
-                        </div>
-                        <div class="flex-grow">
-                            <p class="font-medium">Bộ 3 Bóng PicklePro</p>
-                        </div>
-                        <p class="font-semibold">150.000đ</p>
-                    </div>
+                <div id="checkout_products" class="mt-6 space-y-4">
+                    
                 </div>
                 <div class="my-6 border-t border-border-light dark:border-border-dark"></div>
                 <div class="flex items-end gap-3">
@@ -203,25 +118,10 @@
                         dụng</button>
                 </div>
                 <div class="my-6 border-t border-border-light dark:border-border-dark"></div>
-                <div class="space-y-3">
-                    <div class="flex justify-between">
-                        <span class="text-subtle-light dark:text-subtle-dark">Tạm tính</span>
-                        <span>2.550.000đ</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-subtle-light dark:text-subtle-dark">Phí vận chuyển</span>
-                        <span>30.000đ</span>
-                    </div>
-                    <div class="flex justify-between font-medium text-primary">
-                        <span class="text-primary">Giảm giá</span>
-                        <span>-50.000đ</span>
-                    </div>
-                    <div class="flex justify-between text-lg font-bold">
-                        <span>Tổng cộng</span>
-                        <span>2.530.000đ</span>
-                    </div>
+                <div id="checkout_summary" class="space-y-3">
+
                 </div>
-                <button
+                <button id="btn_place_order"
                     class="mt-8 h-14 w-full rounded-lg bg-primary text-lg font-bold text-background-dark shadow-lg shadow-primary/20">
                     Hoàn tất đơn hàng
                 </button>
@@ -229,4 +129,170 @@
         </div>
     </div>
 </div>
+
+<script>
+    let shippingFee = 0;
+
+    function getShippingFee() {
+        return parseInt(
+            $('input[name="shipping"]:checked')
+                .closest('.shipping-option')
+                .data('fee')
+        ) || 0;
+    }
+
+    function formatVnd(n) {
+        return n.toLocaleString('vi-VN') + 'đ';
+    }
+
+    const checkoutItems = JSON.parse(sessionStorage.getItem('checkout_items') || '[]');
+
+    function renderCheckoutProducts() {
+        $('#checkout_products').html('');
+
+        checkoutItems.forEach(item => {
+            const rowTotal = item.price * item.quantity;
+
+            $('#checkout_products').append(`
+                <div class="flex items-center gap-4">
+                    <div class="relative h-20 w-20 flex-shrink-0">
+                        <img src="${item.image}" class="h-full w-full rounded-lg object-cover">
+                        <span class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-background-dark">
+                            ${item.quantity}
+                        </span>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="font-medium">${item.name}</p>
+                        ${item.attrs ? `<p class="text-sm text-subtle-light">${item.attrs}</p>` : ''}
+                    </div>
+                    <p class="font-semibold">${formatVnd(rowTotal)}</p>
+                </div>
+            `);
+        });
+    }
+
+    function renderCheckoutSummary() {
+        let subTotal = 0;
+
+        checkoutItems.forEach(i => {
+            subTotal += i.price * i.quantity;
+        });
+
+        const discount = 0;
+        const grandTotal = Math.max(0, subTotal + shippingFee - discount);
+
+        $('#checkout_summary').html(`
+            <div class="flex justify-between">
+                <span>Tạm tính</span>
+                <span>${formatVnd(subTotal)}</span>
+            </div>
+
+            <div class="flex justify-between">
+                <span>Phí vận chuyển</span>
+                <span>${formatVnd(shippingFee)}</span>
+            </div>
+
+            <div id="discount" data-discount="${discount}" class="flex justify-between font-medium text-primary">
+                <span>Giảm giá</span>
+                <span>- ${formatVnd(discount)}</span>
+            </div>
+
+            <div class="flex justify-between text-lg font-bold">
+                <span>Tổng cộng</span>
+                <span>${formatVnd(grandTotal)}</span>
+            </div>
+        `);
+    }
+
+    $(document).on('change', 'input[name="shipping"]', function () {
+        shippingFee = getShippingFee();
+        renderCheckoutSummary();
+    });
+
+    $(document).ready(function () {
+        shippingFee = getShippingFee();
+        renderCheckoutProducts();
+        renderCheckoutSummary();
+    });
+
+    $('#btn_place_order').click(function () {
+        const token = getCookie('user_token');
+
+        if (!checkoutItems.length) {
+            Swal.fire('Lỗi', 'Không có sản phẩm để thanh toán', 'error');
+            return;
+        }
+
+        // Lấy thông tin giảm giá
+        const discount = parseInt($('#discount').data('discount')) || 0;
+
+        // Phương thức vận chuyển: 0 = tiêu chuẩn, 1 = nhanh
+        const shippingMethod = $('input[name="shipping"]:checked')
+            .closest('.shipping-option')
+            .data('fee') == 30000 ? 1 : 0;
+
+        // Phương thức thanh toán: 'cod' hoặc 'vnpay'
+        const paymentMethod = $('input[name="payment"]:checked')
+            .next()
+            .text()
+            .includes('VNPay') ? 'vnpay' : 'cod';
+
+        // Chuẩn hóa payload cho API
+        const data = {
+            user_name: $('#user_name').val(),
+            user_phone: $('#user_phone').val(),
+            address: $('#address').val(),
+            description: $('#description').val(),
+            payment_method: paymentMethod,
+            shipping_method: shippingMethod,
+            discount: discount,
+            items: checkoutItems.map(i => ({
+                parent_id: i.parent_id,
+                attribute_value_ids: i.attribute_value_ids, // đây là array số
+                quantity: i.quantity
+            }))
+        };
+
+        $.ajax({
+            url: '/api/order',
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(data),
+            success(res) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đặt hàng thành công',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    willClose: () => {
+                        sessionStorage.removeItem('checkout_items');
+                        window.location.href = '/lich-su-don-hang';
+                    }
+                });
+            },
+            error(err) {
+                if (err.status === 422 && err.responseJSON?.errors) {
+                    // Lấy field đầu tiên
+                    const firstField = Object.keys(err.responseJSON.errors)[0];
+                    // Lấy message đầu tiên của field đó
+                    const firstMessage = err.responseJSON.errors[firstField][0];
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi xác thực',
+                        text: firstMessage
+                    });
+                } else {
+                    Swal.fire('Lỗi', err.responseJSON?.message || 'Đặt hàng thất bại', 'error');
+                }
+            }
+        });
+    });
+
+
+</script>
 @endsection
