@@ -3,6 +3,7 @@
 namespace App\Services\Backend;
 
 use App\DTO\DataResult;
+use App\Interfaces\CartItemRepositoryInterface;
 use App\Interfaces\OrderItemRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
@@ -13,15 +14,18 @@ class OrderService extends BaseService
 {
     protected OrderItemRepositoryInterface $orderItemRepository;
     protected ProductRepositoryInterface $productRepository;
+    protected CartItemRepositoryInterface $cartItemRepository;
 
     public function __construct(
         OrderRepositoryInterface $repository,
         OrderItemRepositoryInterface $orderItemRepository,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        CartItemRepositoryInterface $cartItemRepository,
     ){
         parent::__construct($repository);
         $this->orderItemRepository = $orderItemRepository;
         $this->productRepository = $productRepository;
+        $this->cartItemRepository = $cartItemRepository;
     }
 
     public function create(array $data): DataResult
@@ -32,21 +36,18 @@ class OrderService extends BaseService
             $shippingFee = $data['shipping_method'] == 1 ? 30000 : 0;
             $discount    = max(0, (int)($data['discount'] ?? 0));
 
-            // 1. Tạo order trước
+            // 1. Tạo order
             $order = $this->repository->create([
                 'user_id'         => $user->id,
                 'user_name'       => $data['user_name'],
                 'user_phone'      => $data['user_phone'],
                 'address'         => $data['address'],
                 'description'     => $data['description'] ?? null,
-
                 'payment_method'  => $data['payment_method'],
                 'payment_status'  => 'unpaid',
-
                 'shipping_method' => $data['shipping_method'],
                 'shipping_fee'    => $shippingFee,
                 'discount'        => $discount,
-
                 'total'           => 0,
                 'status'          => 'pending',
             ]);
@@ -54,10 +55,10 @@ class OrderService extends BaseService
             if (!$order) return new DataResult('Tạo đơn hàng thất bại', 500);
 
             $productTotal = 0;
+            $productIds = []; // lưu product_id vừa đặt
 
-            // 2. Trừ kho ATOMIC
+            // 2. Trừ kho và tạo order items
             foreach ($data['items'] as $item) {
-
                 $variant = $this->productRepository->findVariant(
                     $item['parent_id'],
                     $item['attribute_value_ids']
@@ -69,7 +70,6 @@ class OrderService extends BaseService
                 }
 
                 $ok = $this->productRepository->decrementStock($variant->id, $item['quantity']);
-
                 if (!$ok) {
                     $this->rollbackOrder($order->id);
                     throw new \Exception("Sản phẩm {$variant->id} không đủ tồn kho");
@@ -83,16 +83,18 @@ class OrderService extends BaseService
                 ]);
 
                 $productTotal += $variant->price * $item['quantity'];
+                $productIds[] = $variant->id;
             }
 
-            // 3. Tổng tiền cuối cùng
+            // 3. Cập nhật tổng tiền
             $grandTotal = max(0, $productTotal + $shippingFee - $discount);
-
-            $this->repository->update($order->id, [
-                'total' => $grandTotal
-            ]);
-
+            $this->repository->update($order->id, ['total' => $grandTotal]);
             $order->total = $grandTotal;
+
+            // 4. Xoá sản phẩm khỏi giỏ hàng qua repository
+            if (!empty($productIds)) {
+                $this->cartItemRepository->deleteCartItemsByUserAndProduct($user->id, $productIds);
+            }
 
             return new DataResult('Đặt hàng thành công', 201, $order);
 
@@ -103,6 +105,7 @@ class OrderService extends BaseService
             return new DataResult('Tạo đơn hàng thất bại: ' . $e->getMessage(), 500);
         }
     }
+
 
     private function rollbackOrder($orderId)
     {
