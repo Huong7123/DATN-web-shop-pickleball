@@ -2,7 +2,17 @@
 @section('title', $title)
 @section('content')
 <div class="@container px-4 sm:px-6 lg:px-10 py-8">
-    <div class="layout-content-container flex flex-col w-full" id="product_detail" data-product-id="{{ $data->id }}">
+    @php
+        $image = json_decode($data->image, true) ?? [];
+        $urlImage = '/storage/' . ($image[0] ?? 'images/no-image.png');
+    @endphp
+    <div class="layout-content-container flex flex-col w-full" id="product_detail" 
+            data-product-id="{{ $data->id }}"
+            data-parent-id="{{ $data->id }}"
+            data-name="{{ $data->name }}"
+            data-price="{{ $data->price }}"
+            data-image="{{ $urlImage ?? '' }}"
+            data-attrs="">
         <!-- Breadcrumbs -->
         <div class="flex flex-wrap gap-2 px-0 py-4">
             <a class="text-primary text-sm font-medium leading-normal hover:underline" href="#">Trang chủ</a>
@@ -149,7 +159,7 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <button
+                        <button id="btn_buy_now"
                             class="flex w-full cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-lg h-12 bg-primary text-[#0d1b12] text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-all">
                             Mua ngay
                         </button>
@@ -183,8 +193,8 @@
                     <a aria-current="page"
                         class="whitespace-nowrap py-4 px-1 border-b-2 font-bold text-base text-primary border-primary"
                         href="#">Mô tả sản phẩm</a>
-                    <a class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-base text-gray-500 hover:text-primary hover:border-primary dark:text-gray-400 dark:hover:text-primary dark:hover:border-primary"
-                        href="#" id="reviews">Đánh giá của khách hàng (125)</a>
+                    <!-- <a class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-base text-gray-500 hover:text-primary hover:border-primary dark:text-gray-400 dark:hover:text-primary dark:hover:border-primary"
+                        href="#" id="reviews">Đánh giá của khách hàng (125)</a> -->
                 </nav>
             </div>
             <div class="py-8">
@@ -440,6 +450,47 @@
                 Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể thêm vào giỏ', 'error');
             }
         });
+    });
+
+    $('#btn_buy_now').click(function() {
+        const wrapper = $('#product_detail');
+
+        const parentId = wrapper.data('parent-id');
+        const name      = wrapper.data('name');
+        const image     = wrapper.data('image');
+        const price     = parseInt(wrapper.data('price')) || 0;
+
+        const attributeValueIds = [];
+        let attrs = [];
+
+        // Lấy các attribute đã chọn
+        wrapper.find('input[type=radio][name^="attribute_"]:checked').each(function () {
+            attributeValueIds.push(Number($(this).val()));
+            attrs.push($(this).next().text().trim()); // push text vào mảng
+        });
+
+        const attrsText = attrs.join(' - '); // nối bằng dấu " - "
+
+        const qty = parseInt($('#qty-input').val()) || 1;
+
+        const item = {
+            parent_id: parentId,
+            name: `${name} - ${attrsText}`,
+            image: image,
+            price: price,
+            attrs: attrsText,
+            attribute_value_ids: attributeValueIds,
+            quantity: qty
+        };
+
+        // Xoá session cũ
+        sessionStorage.removeItem('checkout_items');
+
+        // Tạo session mới chỉ với sản phẩm này
+        const checkoutItems = [item];
+        sessionStorage.setItem('checkout_items', JSON.stringify(checkoutItems));
+        // Chuyển đến trang thanh toán
+        window.location.href = '/thanh-toan';
     });
 
 
