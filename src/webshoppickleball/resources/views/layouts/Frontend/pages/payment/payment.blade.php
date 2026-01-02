@@ -4,9 +4,9 @@
 <div class="@container px-4 sm:px-6 lg:px-10 py-8">
     <div class="mb-8">
         <div class="flex flex-wrap items-center gap-2 text-sm">
-            <a class="text-subtle-light dark:text-subtle-dark font-medium" href="#">Trang chủ</a>
+            <a class="text-primary text-sm font-medium leading-normal hover:underline" href="/">Trang chủ</a>
             <span class="text-subtle-light dark:text-subtle-dark">/</span>
-            <a class="text-subtle-light dark:text-subtle-dark font-medium" href="#">Giỏ hàng</a>
+            <a class="text-primary text-sm font-medium leading-normal hover:underline" href="/gio-hang">Giỏ hàng</a>
             <span class="text-subtle-light dark:text-subtle-dark">/</span>
             <span class="font-medium">Thanh toán</span>
         </div>

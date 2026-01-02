@@ -43,16 +43,17 @@
                     <div class="bg-gray-100/50 dark:bg-gray-900/50 rounded-xl p-6 space-y-4">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-600 dark:text-gray-400">Tạm tính</p>
-                            <p class="text-sm font-medium">₫2,800,000</p>
+                            <p class="text-sm font-medium" id="summary_subtotal">₫0</p>
                         </div>
+
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-600 dark:text-gray-400">Phí vận chuyển</p>
-                            <p class="text-sm font-medium">Miễn phí</p>
+                            <p class="text-sm font-medium" id="summary_shipping">Miễn phí</p>
                         </div>
-                        <div class="border-t border-gray-200 dark:border-gray-800 my-4"></div>
+
                         <div class="flex justify-between items-center">
                             <p class="text-base font-bold text-gray-900 dark:text-white">Tổng cộng</p>
-                            <p class="text-xl font-bold text-gray-900 dark:text-white">₫2,800,000</p>
+                            <p class="text-xl font-bold text-gray-900 dark:text-white" id="summary_total">₫0</p>
                         </div>
                         <button id="btn_buy_order"
                             class="w-full mt-4 flex items-center justify-center rounded-lg h-12 bg-primary text-black text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-all">
@@ -94,7 +95,18 @@
     function loadCart() {
         const token = getCookie('user_token');
         const userId = sessionStorage.getItem('id');
-        if (!token || !userId) return;
+        const table = $('#cart_table');
+        const emptyBox = $('#cart_empty');
+        if (!token || !userId){
+            table.hide();
+            emptyBox.removeClass('hidden');
+            $('#cart_total').text('₫0');
+            $('#cart_total').text('₫0');
+            $('#summary_subtotal').text('₫0');
+            $('#summary_total').text('₫0');
+            $('#btn_buy_order').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
+            return;
+        }
 
         $.ajax({
             url: '/api/cart/' + userId,
@@ -104,9 +116,6 @@
                 'Accept': 'application/json'
             },
             success(res) {
-                const table = $('#cart_table');
-                const emptyBox = $('#cart_empty');
-
                 table.html('');
 
                 // ===== GIỎ RỖNG =====
@@ -114,6 +123,10 @@
                     table.hide();
                     emptyBox.removeClass('hidden');
                     $('#cart_total').text('₫0');
+                    $('#cart_total').text('₫0');
+                    $('#summary_subtotal').text('₫0');
+                    $('#summary_total').text('₫0');
+                    $('#btn_buy_order').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
                     return;
                 }
 
@@ -199,6 +212,9 @@
                 });
 
                 $('#cart_total').text('₫' + totalCart.toLocaleString());
+                const shippingFee = 0;
+                $('#summary_subtotal').text('₫' + totalCart.toLocaleString());
+                $('#summary_total').text('₫' + (totalCart + shippingFee).toLocaleString());
             }
         });
     }
@@ -217,8 +233,6 @@
         subtotalCell.text('₫' + formatPrice(price * qty));
 
         recalcCartTotal();
-
-        updateCartQty(id, qty);
     });
 
     $(document).on('click', '.cart-decrease', function () {
@@ -237,21 +251,77 @@
         subtotalCell.text('₫' + formatPrice(price * qty));
 
         recalcCartTotal();
-
-        updateCartQty(id, qty);
     });
 
     function recalcCartTotal() {
         let total = 0;
+
         $('.cart-subtotal').each(function () {
             total += parseInt($(this).text().replace(/[^\d]/g, ''));
         });
+
+        // Tổng trong bảng
         $('#cart_total').text('₫' + formatPrice(total));
+
+        // ====== TÓM TẮT ĐƠN HÀNG ======
+        const shipping = 0;
+        $('#summary_subtotal').text('₫' + formatPrice(total));
+        $('#summary_total').text('₫' + formatPrice(total + shipping));
+
+        // Disable checkout nếu giỏ rỗng
+        if (total <= 0) {
+            $('#btn_buy_order').prop('disabled', true)
+                .addClass('opacity-50 cursor-not-allowed');
+        } else {
+            $('#btn_buy_order').prop('disabled', false)
+                .removeClass('opacity-50 cursor-not-allowed');
+        }
     }
 
     $(document).ready(function () {
         loadCart();
     });
+
+    $(document).on('click', '.btn-remove', function () {
+        const token = getCookie('user_token');
+        const id = $(this).data('id');
+
+        Swal.fire({
+            title: 'Xác nhận',
+            text: "Bạn chắc chắn muốn xoá sản phẩm khỏi giỏ hàng?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#16a34a',
+            cancelButtonColor: '#dc2626',
+            confirmButtonText: 'Xoá ngay',
+            cancelButtonText: 'Huỷ'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+
+            $.ajax({
+                url: '/api/cart/' + id,
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                },
+                success(res) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã xoá khỏi giỏ hàng',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    loadCart();
+                    loadCartBadge();
+                },
+                error(xhr) {
+                    Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể xoá sản phẩm khỏi giỏ hàng', 'error');
+                }
+            });
+        });
+    }); 
 
 </script>
 @endsection
