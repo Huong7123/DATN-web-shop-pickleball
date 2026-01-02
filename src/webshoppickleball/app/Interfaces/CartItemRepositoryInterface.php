@@ -9,4 +9,6 @@ interface CartItemRepositoryInterface extends BaseRepositoryInterface
     function findVariant(int $parentId, array $selectedValueIds);
 
     public function deleteItems(int $id);
+
+    public function deleteCartItemsByUserAndProduct(int $userId, array $productIds): int;
 }

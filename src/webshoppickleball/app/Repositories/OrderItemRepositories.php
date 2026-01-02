@@ -17,4 +17,12 @@ class OrderItemRepositories extends BaseRepositories implements OrderItemReposit
         return $this->model->where('order_id', $orderId)->delete();
     }
 
+    public function getByOrder(int $orderId)
+    {
+        return $this->model
+            ->where('order_id', $orderId)
+            ->get();
+    }
+
+
 }

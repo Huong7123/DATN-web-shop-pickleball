@@ -79,6 +79,19 @@
 
 <script>
     $('#btn_buy_order').on('click', function () {
+        const items = getCheckedCartItems();
+
+        if (!items.length) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Chưa chọn sản phẩm',
+                text: 'Vui lòng chọn ít nhất 1 sản phẩm để thanh toán',
+                confirmButtonText: 'OK',
+            });
+            return;
+        }
+
+        sessionStorage.setItem('checkout_items', JSON.stringify(items));
         window.location.href = '/thanh-toan';
     });
 
@@ -100,10 +113,7 @@
         if (!token || !userId){
             table.hide();
             emptyBox.removeClass('hidden');
-            $('#cart_total').text('₫0');
-            $('#cart_total').text('₫0');
-            $('#summary_subtotal').text('₫0');
-            $('#summary_total').text('₫0');
+            updateCartSummary([]);
             $('#btn_buy_order').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
             return;
         }
@@ -118,105 +128,121 @@
             success(res) {
                 table.html('');
 
-                // ===== GIỎ RỖNG =====
                 if (!res.data || res.data.length === 0) {
                     table.hide();
                     emptyBox.removeClass('hidden');
-                    $('#cart_total').text('₫0');
-                    $('#cart_total').text('₫0');
-                    $('#summary_subtotal').text('₫0');
-                    $('#summary_total').text('₫0');
+                    updateCartSummary([]);
                     $('#btn_buy_order').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
                     return;
                 }
 
-                // ===== CÓ SẢN PHẨM =====
                 table.show();
                 emptyBox.addClass('hidden');
 
-                let totalCart = 0;
+                // Append THEAD 1 lần
+                table.append(`
+                    <thead class="bg-gray-100/50 dark:bg-gray-900/50">
+                        <tr>
+                            <th class="px-4 py-4 text-left">
+                                <input type="checkbox" id="check_all" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-0" checked>
+                            </th>
+                            <th class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">Sản phẩm</th>
+                            <th class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">Giá</th>
+                            <th class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">Số lượng</th>
+                            <th class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">Tạm tính</th>
+                            <th class="px-6 py-4 text-right"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-800" id="cart_tbody">
+                    </tbody>
+                `);
+
+                const tbody = $('#cart_tbody');
 
                 res.data.forEach(item => {
                     const product = item.product;
                     const qty = item.quantity;
                     const price = item.price;
                     const subTotal = qty * price;
-                    totalCart += subTotal;
 
                     const attrs = product.attribute_values.map(a => a.name).join(' - ');
+                    const attribute_value_ids = product.attribute_values.map(av => av.id);
+                    const image = product.image ? '/storage/' + JSON.parse(product.image)[0] : '/images/no-image.png';
 
-                    const image = product.image 
-                        ? '/storage/' + JSON.parse(product.image)[0] 
-                        : '/images/no-image.png';
-
-                    table.append(`
-                        <thead class="bg-gray-100/50 dark:bg-gray-900/50">
-                            <tr>
-                                <th
-                                    class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
-                                    Sản phẩm</th>
-                                <th
-                                    class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
-                                    Giá</th>
-                                <th
-                                    class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
-                                    Số lượng</th>
-                                <th
-                                    class="px-6 py-4 text-left text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">
-                                    Tạm tính</th>
-                                <th class="px-6 py-4 text-right"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
-                            <tr data-id="${item.id}">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-4">
-                                        <div class="bg-cover rounded-lg w-16 h-16"
-                                            style="background-image:url('${image}')"></div>
-                                        <div>
-                                            <p class="font-semibold">${product.name}</p>
-                                            <p class="text-xs text-gray-500">${attrs}</p>
-                                        </div>
+                    tbody.append(`
+                        <tr class="cart-item" data-id="${item.product_id}"
+                            data-parent_id="${product.parent_id}"
+                            data-name="${product.name}"
+                            data-image="${image}"
+                            data-price="${price}"
+                            data-attrs="${attrs}"
+                            data-attribute-value-ids='${JSON.stringify(attribute_value_ids)}'>
+                            <td class="px-4 py-4">
+                                <input type="checkbox"
+                                    class="cart-check h-4 w-4 rounded border-gray-300 text-primary focus:ring-0"
+                                    data-id="${item.product_id}" checked>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="bg-cover rounded-lg w-16 h-16"
+                                        style="background-image:url('${image}')"></div>
+                                    <div>
+                                        <p class="font-semibold">${product.name}</p>
+                                        <p class="text-xs text-gray-500">${attrs}</p>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 text-sm font-medium">
-                                    ₫${formatPrice(price)}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center border rounded-md w-28">
-                                        <button class="w-9 h-9 flex items-center justify-center hover:bg-slate-100 cart-decrease"
-                                            data-id="${item.id}">
-                                            <span class="material-symbols-outlined text-[18px]">remove</span>
-                                        </button>
-                                        <input type="number" readonly value="${qty}"
-                                            class="cart-qty w-12 text-center bg-transparent text-sm font-bold text-[#0d1b12] dark:text-white
-                                    border-none focus:ring-0 p-0 [&::-webkit-inner-spin-button]:appearance-none">
-                                        <button class="w-9 h-9 flex items-center justify-center hover:bg-slate-100 cart-increase"
-                                            data-id="${item.id}">
-                                            <span class="material-symbols-outlined text-[18px]">add</span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 font-bold text-primary cart-subtotal" data-price="${price}">
-                                    ₫${formatPrice(subTotal)}
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="btn-remove text-gray-500 hover:text-red-500"
-                                        data-id="${item.id}">
-                                        <span class="material-symbols-outlined">delete</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-medium">₫${formatPrice(price)}</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center border rounded-md w-28">
+                                    <button class="w-9 h-9 flex items-center justify-center hover:bg-slate-100 cart-decrease" data-id="${item.id}">
+                                        <span class="material-symbols-outlined text-[18px]">remove</span>
                                     </button>
-                                </td>
-                            </tr>
-                        </tbody>
+                                    <input type="number" readonly value="${qty}" class="cart-qty w-12 text-center bg-transparent text-sm font-bold text-[#0d1b12] dark:text-white border-none focus:ring-0 p-0 [&::-webkit-inner-spin-button]:appearance-none">
+                                    <button class="w-9 h-9 flex items-center justify-center hover:bg-slate-100 cart-increase" data-id="${item.id}">
+                                        <span class="material-symbols-outlined text-[18px]">add</span>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 font-bold text-primary cart-subtotal" data-price="${price}">₫${formatPrice(subTotal)}</td>
+                            <td class="px-6 py-4 text-right">
+                                <button class="btn-remove text-gray-500 hover:text-red-500" data-id="${item.id}">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            </td>
+                        </tr>
                     `);
                 });
 
-                $('#cart_total').text('₫' + totalCart.toLocaleString());
-                const shippingFee = 0;
-                $('#summary_subtotal').text('₫' + totalCart.toLocaleString());
-                $('#summary_total').text('₫' + (totalCart + shippingFee).toLocaleString());
+                // Cập nhật tóm tắt theo sản phẩm được check
+                updateCartSummary(getCheckedCartItems());
             }
         });
+    }
+
+    function updateCartSummary(items) {
+        let subtotal = 0;
+
+        items.forEach(i => {
+            subtotal += i.price * i.quantity;
+        });
+
+        const shipping = 0;
+
+        $('#summary_subtotal').text('₫' + formatPrice(subtotal));
+        $('#summary_total').text('₫' + formatPrice(subtotal + shipping));
+
+        // Tổng giỏ hàng
+        $('#cart_total').text('₫' + formatPrice(subtotal));
+
+        // Disable checkout nếu giỏ rỗng
+        if (subtotal <= 0) {
+            $('#btn_buy_order').prop('disabled', true)
+                .addClass('opacity-50 cursor-not-allowed');
+        } else {
+            $('#btn_buy_order').prop('disabled', false)
+                .removeClass('opacity-50 cursor-not-allowed');
+        }
     }
 
     $(document).on('click', '.cart-increase', function () {
@@ -322,6 +348,43 @@
             });
         });
     }); 
+
+    $(document).on('change', '.cart-check', function () {
+        // Update trạng thái check-all
+        const total = $('.cart-check').length;
+        const checked = $('.cart-check:checked').length;
+        $('#check_all').prop('checked', total === checked);
+
+        // Update summary
+        updateCartSummary(getCheckedCartItems());
+    });
+
+    // Khi check all thay đổi
+    $(document).on('change', '#check_all', function () {
+        $('.cart-check').prop('checked', $(this).is(':checked'));
+        updateCartSummary(getCheckedCartItems());
+    });
+
+    function getCheckedCartItems() {
+        const items = [];
+
+        $('.cart-check:checked').each(function () {
+            const row = $(this).closest('tr'); // dòng <tr> của sản phẩm
+
+            items.push({
+                product_id: row.data('id'),
+                parent_id: row.data('parent_id'),
+                name: row.data('name'),
+                image: row.data('image'),
+                price: parseInt(row.data('price')) || 0,
+                attrs: row.data('attrs'), // giữ nguyên text attrs
+                attribute_value_ids: JSON.parse(row.attr('data-attribute-value-ids') || '[]'),
+                quantity: parseInt(row.find('.cart-qty').val()) || 1
+            });
+        });
+
+        return items;
+    }
 
 </script>
 @endsection

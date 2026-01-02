@@ -45,6 +45,7 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
     public function getProductByCategory($categoryId, $productId);
     function findVariant(int $parentId, array $selectedValueIds);
     public function sumVariantQuantity(int $parentId): int;
-
+    public function decrementStock(int $productId, int $qty): bool;
+    public function increment(int $productId, string $field, int $qty);
     
 }
