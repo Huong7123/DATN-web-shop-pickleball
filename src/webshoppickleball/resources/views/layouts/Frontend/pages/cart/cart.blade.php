@@ -91,6 +91,7 @@
             return;
         }
 
+        sessionStorage.removeItem('checkout_items');
         sessionStorage.setItem('checkout_items', JSON.stringify(items));
         window.location.href = '/thanh-toan';
     });
