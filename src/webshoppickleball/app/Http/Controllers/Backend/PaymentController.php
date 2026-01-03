@@ -17,6 +17,7 @@ class PaymentController extends BaseController
     {
         $data = $request->validate([
             'amount' => 'required|integer|min:1000',
+            'order_id' => 'required|integer|exists:orders,id',
         ]);
 
         /** @var VnpayService $ser */
@@ -34,27 +35,22 @@ class PaymentController extends BaseController
         $result = $ser->handleReturn($request->all());
 
         if ($result->http_code === 200) {
-            return view('payment.payment-success', [
-                'transaction' => $result->data['transaction']
-            ]);
+            return redirect()->route('payment.success')
+                ->with('transaction', $result->data['transaction']);
         }
 
-        return view('payment.payment-failed', [
-            'message' => $result->message
-        ]);
+        return redirect()->route('payment.failed')
+            ->with('message', $result->message);
     }
 
-    public function redirectToVnpay(Request $request)
+    public function redirectToVnpay(string $txn)
     {
-        $txn = $request->query('txn');
         /** @var VnpayService $ser */
         $ser = $this->service;
 
-        $result = $ser->buildVnpayRedirectUrl($txn);
-        // dd($result);
-        return redirect()->away($result->data['redirect_url']);
+        return redirect()->away(
+            $ser->buildVnpayRedirectUrl($txn)->data['redirect_url']
+        );
     }
 
-
-    
 }

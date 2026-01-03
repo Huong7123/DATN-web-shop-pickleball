@@ -14,54 +14,20 @@ class VnpayService extends BaseService
 
     public function createPayUrl(array $data): DataResult
     {
-        $transactionId = date('YmdHis');
+        $txn = date('YmdHis');
 
-        /** @var VnPayRepositoryInterface $repo */
-        $repo = $this->repository;
-
-        $transaction = $repo->create([
-            'transaction_id' => $transactionId,
+        $payment = $this->repository->create([
+            'transaction_id' => $txn,
+            'order_id'       => $data['order_id'],
             'amount' => $data['amount'],
             'status' => 'pending',
             'payment_method' => 'vnpay',
-            'vnp_create_date' => date('YmdHis'),
-            'payload' => json_encode([
-                'vnp_Amount' => $data['amount'],
-                'vnp_TxnRef' => $transactionId
-            ]),
+            'vnp_create_date' => $txn,
         ]);
 
-        return new DataResult('Tạo URL thanh toán thành công', 201, [
-            'payment_url' => route('vnpay.redirect', ['txn' => $transactionId]),
-            'transaction' => $transaction
-        ]);
-    }
-
-    public function handleReturn(array $params): DataResult
-    {
-        $txn = $params['vnp_TxnRef'] ?? null;
-
-        /** @var VnPayRepositoryInterface $repo */
-        $repo = $this->repository;
-        $payment = $repo->findByTransactionId($txn);
-
-        if (!$payment) {
-            return new DataResult('Không tìm thấy giao dịch', 404);
-        }
-
-        $status = ($params['vnp_ResponseCode'] ?? '') == '00'
-            ? 'success'
-            : 'failed';
-
-        $repo->update($payment->id, [
-            'status' => $status,
-            'vnp_response_code' => $params['vnp_ResponseCode'] ?? null,
-            'bank_code' => $params['vnp_BankCode'] ?? null,
-            'payload' => json_encode($params),
-        ]);
-
-        return new DataResult('Xử lý giao dịch thành công', 200, [
-            'transaction' => $payment->refresh()
+        return new DataResult('OK', 201, [
+            'payment_url' => route('vnpay.redirect', $txn),
+            'transaction' => $payment
         ]);
     }
 
@@ -69,62 +35,88 @@ class VnpayService extends BaseService
     {
         /** @var VnPayRepositoryInterface $repo */
         $repo = $this->repository;
+        $p = $repo->findByTransactionId($txn);
+        if (!$p) return new DataResult('Not found', 404);
 
-        // Lấy thông tin giao dịch
-        $payment = $repo->findByTransactionId($txn);
-        if (!$payment) {
-            return new DataResult('Không tìm thấy giao dịch', 404);
-        }
-
-        $vnpUrl        = config('vnpay.vnp_Url');        // https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-        $vnpTmnCode    = config('vnpay.vnp_TmnCode');    // Mã merchant
-        $vnpHashSecret = config('vnpay.vnp_HashSecret'); // Chuỗi bí mật
-        $vnpReturnUrl  = config('vnpay.vnp_ReturnUrl');  // URL trả về
-
-        // Chuẩn hóa thông tin
-        $amount = intval($payment->amount) * 100; // nhân 100 theo yêu cầu VNPAY
-        $orderInfo = str_replace(' ', '_', "Thanh toan don hang " . $payment->transaction_id);
-        $clientIp = '127.0.0.1'; // Sandbox luôn dùng được IP này
-
-        $params = [
-            "vnp_Version"    => "2.1.0",
-            "vnp_Command"    => "pay",
-            "vnp_TmnCode"    => $vnpTmnCode,
-            "vnp_Amount"     => (string)$amount,
-            "vnp_TxnRef"     => $payment->transaction_id,
-            "vnp_OrderInfo"  => $orderInfo,
-            "vnp_OrderType"  => "other",
-            "vnp_ReturnUrl"  => $vnpReturnUrl,
-            "vnp_IpAddr"     => $clientIp,
-            "vnp_CreateDate" => $payment->vnp_create_date,
-            "vnp_CurrCode"   => "VND",
-            "vnp_Locale"     => "vn",
+        $input = [
+            "vnp_Version" => "2.1.0",
+            "vnp_TmnCode" => config('vnpay.tmn_code'),
+            "vnp_Command" => "pay",
+            "vnp_Amount" => (string)($p->amount * 100),
+            "vnp_CurrCode" => "VND",
+            "vnp_TxnRef" => $p->transaction_id,
+            "vnp_OrderInfo" => "Thanh toan don #" . $p->transaction_id,
+            "vnp_OrderType" => "other",
+            "vnp_Locale" => "vn",
+            "vnp_ReturnUrl" => config('vnpay.return_url'),
+            "vnp_IpAddr" => request()->ip(),
+            "vnp_CreateDate" => $p->vnp_create_date,
         ];
 
-        // Sắp xếp key theo thứ tự tăng dần
-        ksort($params);
+        ksort($input);
 
-        // Tạo chuỗi hash: key=value nối bằng &
-        $hashData = [];
-        foreach ($params as $key => $value) {
-            $hashData[] = $key . '=' . $value;
+        $query = "";
+        $i = 0;
+        $hashData = "";
+        foreach ($input as $key => $value) {
+            if ($i == 1) {
+                $hashData .= '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashData .= urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+            $query .= urlencode($key) . "=" . urlencode($value) . '&';
         }
-        $hashString = implode('&', $hashData);
 
-        // Sinh chữ ký
-        $secureHash = hash_hmac('sha512', $hashString, $vnpHashSecret);
+        $vnp_Url = config('vnpay.url') . "?" . $query;
+        $vnpSecureHash = hash_hmac('sha512', $hashData, config('vnpay.hash_secret'));
+        $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
 
-        // Build URL cuối cùng (encode value)
-        $query = [];
-        foreach ($params as $key => $value) {
-            $query[] = $key . '=' . urlencode($value);
-        }
-        $redirectUrl = $vnpUrl . '?' . implode('&', $query) . '&vnp_SecureHash=' . $secureHash;
-
-        return new DataResult('Tạo URL thành công', 200, [
-            'redirect_url' => $redirectUrl
+        return new DataResult('OK', 200, [
+            'redirect_url' => $vnp_Url
         ]);
     }
 
-    
+    public function handleReturn(array $input): DataResult
+    {
+        $vnp_SecureHash = $input['vnp_SecureHash'] ?? '';
+        
+        // Loại bỏ các tham số không tham gia tính toán hash
+        unset($input['vnp_SecureHash']);
+        unset($input['vnp_SecureHashType']);
+
+        ksort($input);
+
+        $i = 0;
+        $hashData = "";
+        foreach ($input as $key => $value) {
+            if ($i == 1) {
+                $hashData .= '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashData .= urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+        }
+
+        $secureHash = hash_hmac('sha512', $hashData, config('vnpay.hash_secret'));
+
+        if ($secureHash !== $vnp_SecureHash) {
+            return new DataResult('Sai chữ ký', 403);
+        }
+
+        /** @var VnPayRepositoryInterface $repo */
+        $repo = $this->repository;
+        $p = $repo->findByTransactionId($input['vnp_TxnRef']);
+        if (!$p) return new DataResult('Không tìm thấy giao dịch', 404);
+
+        $status = $input['vnp_ResponseCode'] === '00' ? 'success' : 'failed';
+        $repo->update($p->id, ['status' => $status]);
+
+        $transaction = $p->refresh()->load('order.items.product');
+
+        return new DataResult('OK', 200, [
+            'transaction' => $transaction,
+            'order'       => $transaction->order
+        ]);
+    }
 }

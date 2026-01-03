@@ -13,6 +13,7 @@ class PaymentTransaction extends Model
 
     protected $fillable = [
         'transaction_id',
+        'order_id',
         'amount',
         'status',
         'payment_method',
@@ -25,4 +26,9 @@ class PaymentTransaction extends Model
     protected $casts = [
         'payload' => 'array',
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }

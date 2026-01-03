@@ -223,21 +223,12 @@
             return;
         }
 
-        // Lấy thông tin giảm giá
         const discount = parseInt($('#discount').data('discount')) || 0;
+        const shippingMethod = $('input[name="shipping"]:checked').closest('.shipping-option').data('fee') == 30000 ? 1 : 0;
+        
+        // Lấy phương thức thanh toán
+        const paymentMethod = $('input[name="payment"]:checked').next().text().includes('VNPay') ? 'vnpay' : 'cod';
 
-        // Phương thức vận chuyển: 0 = tiêu chuẩn, 1 = nhanh
-        const shippingMethod = $('input[name="shipping"]:checked')
-            .closest('.shipping-option')
-            .data('fee') == 30000 ? 1 : 0;
-
-        // Phương thức thanh toán: 'cod' hoặc 'vnpay'
-        const paymentMethod = $('input[name="payment"]:checked')
-            .next()
-            .text()
-            .includes('VNPay') ? 'vnpay' : 'cod';
-
-        // Chuẩn hóa payload cho API
         const data = {
             user_name: $('#user_name').val(),
             user_phone: $('#user_phone').val(),
@@ -248,10 +239,13 @@
             discount: discount,
             items: checkoutItems.map(i => ({
                 parent_id: i.parent_id,
-                attribute_value_ids: i.attribute_value_ids, // đây là array số
+                attribute_value_ids: i.attribute_value_ids,
                 quantity: i.quantity
             }))
         };
+
+        // Bật loading để tránh user nhấn nhiều lần
+        Swal.showLoading();
 
         $.ajax({
             url: '/api/order',
@@ -263,29 +257,61 @@
             },
             data: JSON.stringify(data),
             success(res) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Đặt hàng thành công',
-                    timer: 1500,
-                    showConfirmButton: false,
-                    willClose: () => {
-                        sessionStorage.removeItem('checkout_items');
-                        window.location.href = '/lich-su-don-hang';
-                    }
-                });
+                // res thường chứa thông tin đơn hàng vừa tạo, ví dụ: res.data.id hoặc res.order_id
+                const orderId = res.data.id; 
+                const totalAmount = res.data.total;
+
+                if (paymentMethod === 'vnpay') {
+                    // GỌI API THỨ 2: Tạo link VNPay
+                    $.ajax({
+                        url: '/api/vnpay/create',
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify({
+                            order_id: orderId,
+                            amount: totalAmount
+                        }),
+                        success(vnpayRes) {
+                            // vnpayRes.data.payment_url là link nhận được từ VnpayService
+                            if (vnpayRes.data && vnpayRes.data.payment_url) {
+                                Swal.close();
+                                sessionStorage.removeItem('checkout_items');
+                                window.location.href = vnpayRes.data.payment_url;
+                            } else {
+                                Swal.fire('Lỗi', 'Không thể tạo link thanh toán VNPay', 'error');
+                            }
+                        },
+                        error(err) {
+                            Swal.close();
+                            Swal.fire('Lỗi', 'Lỗi kết nối VNPay, vui lòng thử lại trong lịch sử đơn hàng', 'error');
+                        }
+                    });
+                } else {
+                    Swal.close();
+                    // NẾU LÀ COD: Chỉ thông báo thành công và chuyển trang
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đặt hàng thành công',
+                        text: 'Đơn hàng của bạn đã được ghi nhận (COD)',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        willClose: () => {
+                            sessionStorage.removeItem('checkout_items');
+                            window.location.href = '/lich-su-don-hang';
+                        }
+                    });
+                }
             },
             error(err) {
+                Swal.hideLoading();
                 if (err.status === 422 && err.responseJSON?.errors) {
-                    // Lấy field đầu tiên
                     const firstField = Object.keys(err.responseJSON.errors)[0];
-                    // Lấy message đầu tiên của field đó
                     const firstMessage = err.responseJSON.errors[firstField][0];
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi xác thực',
-                        text: firstMessage
-                    });
+                    Swal.fire({ icon: 'error', title: 'Lỗi xác thực', text: firstMessage });
                 } else {
                     Swal.fire('Lỗi', err.responseJSON?.message || 'Đặt hàng thất bại', 'error');
                 }

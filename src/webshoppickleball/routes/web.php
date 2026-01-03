@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -8,6 +9,10 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+//payment vnpay
+Route::get('/vnpay/redirect/{txn}', [PaymentController::class, 'redirectToVnpay'])->name('vnpay.redirect');
+Route::get('/vnpay/return', [PaymentController::class, 'returnVnpay'])->name('vnpay.return');
 
 //Auth
 Route::get('/register', function () {
@@ -65,28 +70,28 @@ Route::get('/san-pham', function () {
 });
 Route::get('/san-pham/{slug}', [ProductController::class, 'getProductBySlug']);
 
-// Route::get('/san-pham/{slug}', function () {
-    
-//     return view('layouts.Frontend.pages.product.detail-product',['title' => 'Chi tiết sản phẩm']);
-// });
 Route::get('/gio-hang', function () {
     return view('layouts.Frontend.pages.cart.cart',['title' => 'Giỏ hàng của bạn']);
 });
 Route::get('/thanh-toan', function () {
     return view('layouts.Frontend.pages.payment.payment',['title' => 'Thanh toán đơn hàng']);
 });
+
 Route::get('/thanh-toan-thanh-cong', function () {
     return view('layouts.Frontend.pages.payment.payment-success',['title' => 'Thanh toán đơn hàng thành công']);
-});
+})->name('payment.success');
+
 Route::get('/thanh-toan-that-bai', function () {
     return view('layouts.Frontend.pages.payment.payment-failed',['title' => 'Thanh toán đơn hàng thất bại']);
-});
+})->name('payment.failed');
+
 Route::get('/lien-he', function () {
     return view('layouts.Frontend.pages.contact.contact',['title' => 'Liên hệ chúng tôi']);
 });
 Route::get('/kho-voucher', function () {
     return view('layouts.Frontend.pages.voucher.list-voucher',['title' => 'Kho voucher']);
 });
+
 //routes admin
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', function () {
