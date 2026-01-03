@@ -24,9 +24,8 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
 Route::post('/reset-password', [ForgotPasswordController::class, 'ResetPassword']);
 
-Route::get('/vnpay/return', [PaymentController::class, 'returnVnpay'])->name('vnpay.return');
-Route::get('/vnpay/redirect', [PaymentController::class, 'redirectToVnpay'])->name('vnpay.redirect');
-
+// Route::get('/vnpay/return', [PaymentController::class, 'returnVnpay'])->name('vnpay.return');
+// Route::get('/vnpay/redirect', [PaymentController::class, 'redirectToVnpay'])->name('vnpay.redirect');
 
 Route::get('/attribute', [AttributeController::class, 'index']);
 Route::get('/attribute-value', [AttributeValueController::class, 'index']);
