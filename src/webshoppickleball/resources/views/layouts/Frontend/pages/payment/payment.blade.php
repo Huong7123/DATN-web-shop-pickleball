@@ -296,7 +296,6 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Đặt hàng thành công',
-                        text: 'Đơn hàng của bạn đã được ghi nhận (COD)',
                         timer: 1500,
                         showConfirmButton: false,
                         willClose: () => {
