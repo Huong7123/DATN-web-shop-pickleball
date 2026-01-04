@@ -187,6 +187,14 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
             ->decrement('quantity', $qty) > 0;
     }
 
+    public function decrementParentStock(int $parentId, int $qty): bool
+    {
+        return $this->model
+            ->where('id', $parentId)
+            ->where('quantity', '>=', $qty)
+            ->decrement('quantity', $qty) > 0;
+    }
+
     // hoàn kho
     public function increment(int $productId, string $field, int $qty)
     {
@@ -195,5 +203,15 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
             ->increment($field, $qty);
     }
 
+    public function incrementParentStock(int $productId, string $field, int $qty)
+    {
+        $parentId = $this->model->where('id', $productId)->value('parent_id');
+
+        if ($parentId) {
+            return $this->model->where('id', $parentId)->increment($field, $qty);
+        }
+
+        return false;
+    }
 
 }

@@ -75,7 +75,7 @@
                 </div>
                 <!-- Price -->
                 <div class="flex items-baseline gap-4">
-                    <p class="text-4xl font-bold leading-tight text-primary" id="product_price">{{ $data->price }}₫</p>
+                    <p class="text-4xl font-bold leading-tight text-primary" id="product_price">{{ number_format((float)$data->price, 0, '.', ',') }}₫</p>
                     <!-- <p class="text-xl font-normal leading-normal text-gray-400 dark:text-gray-500 line-through">3.200.000₫</p>
                     <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">-22%</span> -->
                 </div>
@@ -313,7 +313,7 @@
                             }");'>
                 </div>
                 <p class="text-base font-bold leading-normal group-hover:text-primary transition-colors">${item.name}</p>
-                <p class="text-base font-bold leading-normal text-primary">${item.price}₫</p>
+                <p class="text-base font-bold leading-normal text-primary">${formatPrice(item.price)}₫</p>
             </div>
         </a>
         `
@@ -347,6 +347,16 @@
         getProductRecommend();
     });
 
+    function formatPrice(price) {
+        if (!price) return '0';
+
+        // Ép về string → bỏ phần thập phân
+        const integerPart = price.toString().split('.')[0];
+
+        // Format dấu phẩy
+        return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
     $(document).on('change', 'input[type=radio][name^="attribute_"]', function () {
 
         const productId = $('#product_detail').data('product-id');
@@ -378,7 +388,7 @@
 
                 // Update giá
                 $('#product_price').text(
-                    new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(variant.price)
+                    formatPrice(variant.price) + '₫'
                 );
 
                 // Update tồn kho

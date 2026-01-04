@@ -73,20 +73,14 @@
             email: $('#email').val(),
             password: $('#password').val(),
         };
-        Swal.fire({
-            title: 'Đang xử lý...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            onOpen: () => {
-                swal.showLoading();
-            }
-        });
         $.ajax({
             url: "/api/login",
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
+            beforeSend: function () {
+                showLoader();
+            },
             success: function (response) {
                 if(response.data.user.role == 1){
                     sessionStorage.setItem('email', response.data.user.email);
@@ -94,7 +88,6 @@
                     sessionStorage.setItem('avatar', response.data.user.avatar);
                     sessionStorage.setItem('id', response.data.user.id);
                     document.cookie = `user_token=${response.data.access_token}; path=/; max-age=10800;`;
-                    Swal.close();
                     setTimeout(() => {
                         window.location.href = "/";
                     }, 200);
@@ -128,6 +121,9 @@
                         timerProgressBar: true,
                     })
                 }
+            },
+            complete: function () {
+                hideLoader();
             }
         });
     }
