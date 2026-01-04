@@ -141,8 +141,14 @@
         ) || 0;
     }
 
-    function formatVnd(n) {
-        return n.toLocaleString('vi-VN') + 'đ';
+    function formatPrice(price) {
+        if (!price) return '0';
+
+        // Ép về string → bỏ phần thập phân
+        const integerPart = price.toString().split('.')[0];
+
+        // Format dấu phẩy
+        return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '₫';
     }
 
     const checkoutItems = JSON.parse(sessionStorage.getItem('checkout_items') || '[]');
@@ -165,7 +171,7 @@
                         <p class="font-medium">${item.name}</p>
                         ${item.attrs ? `<p class="text-sm text-subtle-light">${item.attrs}</p>` : ''}
                     </div>
-                    <p class="font-semibold">${formatVnd(rowTotal)}</p>
+                    <p class="font-semibold">${formatPrice(rowTotal)}</p>
                 </div>
             `);
         });
@@ -184,22 +190,22 @@
         $('#checkout_summary').html(`
             <div class="flex justify-between">
                 <span>Tạm tính</span>
-                <span>${formatVnd(subTotal)}</span>
+                <span>${formatPrice(subTotal)}</span>
             </div>
 
             <div class="flex justify-between">
                 <span>Phí vận chuyển</span>
-                <span>${formatVnd(shippingFee)}</span>
+                <span>${formatPrice(shippingFee)}</span>
             </div>
 
             <div id="discount" data-discount="${discount}" class="flex justify-between font-medium text-primary">
                 <span>Giảm giá</span>
-                <span>- ${formatVnd(discount)}</span>
+                <span>- ${formatPrice(discount)}</span>
             </div>
 
             <div class="flex justify-between text-lg font-bold">
                 <span>Tổng cộng</span>
-                <span>${formatVnd(grandTotal)}</span>
+                <span>${formatPrice(grandTotal)}</span>
             </div>
         `);
     }
@@ -244,9 +250,6 @@
             }))
         };
 
-        // Bật loading để tránh user nhấn nhiều lần
-        Swal.showLoading();
-
         $.ajax({
             url: '/api/order',
             method: 'POST',
@@ -256,6 +259,9 @@
                 'Content-Type': 'application/json'
             },
             data: JSON.stringify(data),
+            beforeSend: function () {
+                showLoader(); // HIỆN LOADER
+            },
             success(res) {
                 // res thường chứa thông tin đơn hàng vừa tạo, ví dụ: res.data.id hoặc res.order_id
                 const orderId = res.data.id; 
@@ -296,7 +302,6 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Đặt hàng thành công',
-                        text: 'Đơn hàng của bạn đã được ghi nhận (COD)',
                         timer: 1500,
                         showConfirmButton: false,
                         willClose: () => {
@@ -315,6 +320,9 @@
                 } else {
                     Swal.fire('Lỗi', err.responseJSON?.message || 'Đặt hàng thất bại', 'error');
                 }
+            },
+            complete: function () {
+                hideLoader(); // TẮT LOADER
             }
         });
     });

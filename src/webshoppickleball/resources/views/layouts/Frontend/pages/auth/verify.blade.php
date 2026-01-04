@@ -40,22 +40,15 @@
             email: sessionStorage.getItem('email'),
             otp_code: $('#otp').val(),
         };
-        Swal.fire({
-            title: 'Đang xử lý...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            onOpen: () => {
-                swal.showLoading();
-            }
-        });
         $.ajax({
             url: "/api/active",
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
+            beforeSend: function () {
+                showLoader(); // HIỆN LOADER
+            },
             success: function (response) {
-                Swal.close();
                 Swal.fire({
                     icon: "success",
                     title: "Xác thực tài khoản thành công!",
@@ -76,6 +69,9 @@
                     });
                 }
                 console.log(xhr.responseText);
+            },
+            complete: function () {
+                hideLoader(); // TẮT LOADER
             }
         });
     }

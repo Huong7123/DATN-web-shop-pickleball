@@ -271,14 +271,6 @@
     });
 
     function getAllProduct(page = 1, perPage = 6, keyword = '', status = -1) {
-        Swal.fire({
-            title: 'Đang xử lý...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            onOpen: () => Swal.showLoading()
-        });
-
         $.ajax({
             url: '/api/product',
             method: 'GET',
@@ -291,8 +283,10 @@
             headers: {
                 'Authorization': 'Bearer ' + getCookie('admin_token')
             },
+            beforeSend: function () {
+                showLoader(); // HIỆN LOADER
+            },
             success: function(res) {
-                Swal.close();
                 const pagination = res.data;
                 currentPage = pagination.current_page;
                 lastPage = pagination.last_page;
@@ -308,6 +302,9 @@
             error: function(err) {
                 Swal.close();
                 console.error('Không thể tải danh sách sản phẩm:', err);
+            },
+            complete: function () {
+                hideLoader(); // TẮT LOADER
             }
         });
     }
@@ -317,9 +314,19 @@
         getAllProduct();
     });
 
+    function formatPrice(price) {
+        if (!price) return '0';
+
+        // Ép về string → bỏ phần thập phân
+        const integerPart = price.toString().split('.')[0];
+
+        // Format dấu phẩy
+        return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
     function fillProductAddCartModal(item) {
         const firstImage = item.image ? `/storage/${JSON.parse(item.image)[0]}` : '/images/no-image.png';
-        const price = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price);
+        const price = formatPrice(item.price);
 
         // HTML cho các thuộc tính
         let attributesHTML = '';
@@ -443,7 +450,7 @@
                     if (!variant) return;
 
                     // Cập nhật giá
-                    modal.find('.modal-price').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(variant.price));
+                    modal.find('.modal-price').text(formatPrice(variant.price));
 
                     // Cập nhật quantity và trạng thái nút
                     const stockText = modal.find('.modal-stock');

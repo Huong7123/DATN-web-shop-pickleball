@@ -28,6 +28,14 @@ class OrderService extends BaseService
         $this->cartItemRepository = $cartItemRepository;
     }
 
+    public function getAllOrder(array $filters): DataResult
+    {
+        /** @var OrderRepositoryInterface $repo */
+        $repo = $this->repository;
+        $data = $repo->getAllOrder($filters);
+        return new DataResult('Lấy danh sách thành công',200,$data);
+    }
+
     public function create(array $data): DataResult
     {
         try {
@@ -70,7 +78,8 @@ class OrderService extends BaseService
                 }
 
                 $ok = $this->productRepository->decrementStock($variant->id, $item['quantity']);
-                if (!$ok) {
+                $okParent = $this->productRepository->decrementParentStock($item['parent_id'], $item['quantity']);
+                if (!$ok || !$okParent) {
                     $this->rollbackOrder($order->id);
                     throw new \Exception("Sản phẩm {$variant->id} không đủ tồn kho");
                 }
@@ -158,6 +167,12 @@ class OrderService extends BaseService
 
                 foreach ($orderItems as $item) {
                     $this->productRepository->increment(
+                        $item->product_id,
+                        'quantity',
+                        $item->quantity
+                    );
+
+                    $this->productRepository->incrementParentStock(
                         $item->product_id,
                         'quantity',
                         $item->quantity
