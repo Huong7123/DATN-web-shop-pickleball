@@ -36,6 +36,17 @@ class OrderService extends BaseService
         return new DataResult('Lấy danh sách thành công',200,$data);
     }
 
+    public function getOrderDetail(int $id): DataResult
+    {
+        /** @var OrderRepositoryInterface $repo */
+        $repo = $this->repository;
+        $item = $repo->getOrderDetail($id);
+        if (!$item) {
+            return new DataResult("Bản ghi với id $id không tồn tại", 404);
+        }
+        return new DataResult('Lấy dữ liệu thành công', 200, $item);
+    }
+
     public function create(array $data): DataResult
     {
         try {

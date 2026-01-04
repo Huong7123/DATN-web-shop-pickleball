@@ -26,4 +26,14 @@ class OrderController extends BaseController
 
         return response()->json($result, $result->http_code);
     }
+
+    public function getOrderDetail(int $id)
+    {
+        /** @var OrderService $ser */
+        $ser = $this->service;
+        $result = $ser->getOrderDetail($id);
+        return view('layouts.Frontend.pages.profile.history-order-detail', [
+            'title' => 'Chi tiết đơn hàng', 
+            'order' => $result->data]);
+    }
 }
