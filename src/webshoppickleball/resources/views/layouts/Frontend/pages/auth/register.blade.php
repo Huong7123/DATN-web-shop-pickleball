@@ -148,24 +148,16 @@
             password_confirmation: $('#confirmPassword').val(),
         };
 
-        Swal.fire({
-            title: 'Đang xử lý...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            onOpen: () => {
-                swal.showLoading();
-            }
-        });
-
         $.ajax({
             url: "/api/register",
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
+            beforeSend: function () {
+                showLoader(); // HIỆN LOADER
+            },
             success: function (response) {
                 sessionStorage.setItem('email', email.value);
-                Swal.close();
                 Swal.fire({
                     icon: "success",
                     title: "Đăng ký thành công!",
@@ -189,6 +181,9 @@
                         }
                     });
                 }
+            },
+            complete: function () {
+                hideLoader(); // TẮT LOADER
             }
         });
     }

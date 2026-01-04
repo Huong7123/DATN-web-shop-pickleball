@@ -41,22 +41,15 @@
         const data = {
             email: $('#email').val(),
         };
-        Swal.fire({
-            title: 'Đang xử lý...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            onOpen: () => {
-                swal.showLoading();
-            }
-        });
         $.ajax({
             url: "/api/forgot-password",
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
+            beforeSend: function () {
+                showLoader();
+            },
             success: function (response) {
-                Swal.close();
                 Swal.fire({
                     icon: "success",
                     title: "Gửi OTP thành công!",
@@ -76,6 +69,9 @@
                         $(`#${key}-error`).text(messages[0]);
                     });
                 }
+            },
+            complete: function () {
+                hideLoader();
             }
         });
     }

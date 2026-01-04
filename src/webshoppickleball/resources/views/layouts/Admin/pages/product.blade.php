@@ -336,14 +336,6 @@
     let currentPage = 1;
     let lastPage = 1;
     function getAllParentProduct(page = 1, keyword = '', status = -1) {
-        Swal.fire({
-            title: 'Đang xử lý...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            onOpen: () => Swal.showLoading()
-        });
-
         $.ajax({
             url: '/api/product',
             method: 'GET',
@@ -355,8 +347,10 @@
             headers: {
                 'Authorization': 'Bearer ' + getCookie('admin_token')
             },
+            beforeSend: function () {
+                showLoader(); // HIỆN LOADER
+            },
             success: function(res) {
-                Swal.close();
                 const pagination = res.data;
                 currentPage = pagination.current_page;
                 lastPage = pagination.last_page;
@@ -372,6 +366,9 @@
             error: function(err) {
                 Swal.close();
                 console.error('Không thể tải danh sách sản phẩm:', err);
+            },
+            complete: function () {
+                hideLoader(); // TẮT LOADER
             }
         });
     }

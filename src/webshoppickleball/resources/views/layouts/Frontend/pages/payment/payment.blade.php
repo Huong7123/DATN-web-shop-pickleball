@@ -250,9 +250,6 @@
             }))
         };
 
-        // Bật loading để tránh user nhấn nhiều lần
-        Swal.showLoading();
-
         $.ajax({
             url: '/api/order',
             method: 'POST',
@@ -262,6 +259,9 @@
                 'Content-Type': 'application/json'
             },
             data: JSON.stringify(data),
+            beforeSend: function () {
+                showLoader(); // HIỆN LOADER
+            },
             success(res) {
                 // res thường chứa thông tin đơn hàng vừa tạo, ví dụ: res.data.id hoặc res.order_id
                 const orderId = res.data.id; 
@@ -320,6 +320,9 @@
                 } else {
                     Swal.fire('Lỗi', err.responseJSON?.message || 'Đặt hàng thất bại', 'error');
                 }
+            },
+            complete: function () {
+                hideLoader(); // TẮT LOADER
             }
         });
     });

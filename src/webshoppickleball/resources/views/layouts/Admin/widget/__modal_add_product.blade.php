@@ -358,14 +358,6 @@
                 formData.append(`attribute_value_ids[${i}][]`, valueId);
             });
         });
-
-        Swal.fire({
-            title: 'Đang xử lý...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            onOpen: () => Swal.showLoading()
-        });
         $.ajax({
             url: '/api/product',
             method: 'POST',
@@ -375,8 +367,10 @@
             data: formData,
             processData: false,
             contentType: false,
+            beforeSend: function () {
+                showLoader();
+            },
             success(res) {
-                Swal.close();
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công',
@@ -393,6 +387,9 @@
             },
             error(err) {
                 console.error('❌ Lỗi tạo sản phẩm', err.responseJSON || err);
+            },
+            complete: function () {
+                hideLoader();
             }
         });
     }
