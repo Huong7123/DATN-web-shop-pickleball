@@ -28,6 +28,14 @@ class OrderService extends BaseService
         $this->cartItemRepository = $cartItemRepository;
     }
 
+    public function getAllOrder(array $filters): DataResult
+    {
+        /** @var OrderRepositoryInterface $repo */
+        $repo = $this->repository;
+        $data = $repo->getAllOrder($filters);
+        return new DataResult('Lấy danh sách thành công',200,$data);
+    }
+
     public function create(array $data): DataResult
     {
         try {

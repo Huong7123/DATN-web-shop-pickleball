@@ -49,33 +49,36 @@
                             <thead class="hidden lg:table-header-group">
                                 <tr class="bg-primary/10">
                                     <th class="px-6 py-3 text-left text-zinc-900 dark:text-zinc-50 text-sm font-medium leading-normal">
-                                        Mã đơn hàng</th>
+                                        Mã đơn hàng
+                                    </th>
                                     <th class="px-6 py-3 text-left text-zinc-900 dark:text-zinc-50 text-sm font-medium leading-normal">
-                                        Ngày đặt</th>
+                                        Ngày đặt
+                                    </th>
                                     <th class="px-6 py-3 text-left text-zinc-900 dark:text-zinc-50 text-sm font-medium leading-normal">
-                                        Tổng tiền</th>
+                                        Tổng tiền
+                                    </th>
                                     <th class="px-6 py-3 text-left text-zinc-900 dark:text-zinc-50 text-sm font-medium leading-normal">
-                                        Trạng thái</th>
+                                        Trạng thái
+                                    </th>
                                     <th class="px-6 py-3 text-right text-zinc-900 dark:text-zinc-50 text-sm font-medium leading-normal">
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-primary/20 grid lg:table-row-group gap-4 p-4 lg:p-0">
-                                <tr
+                            <tbody id="order_table_body" class="divide-y divide-primary/20 grid lg:table-row-group gap-4 p-4 lg:p-0">
+                                <!-- <tr
                                     class="grid grid-cols-2 lg:table-row gap-x-4 gap-y-2 p-4 lg:p-0 rounded-lg lg:rounded-none bg-primary/5 dark:bg-primary/10 lg:bg-transparent lg:dark:bg-transparent">
-                                    <td class="lg:hidden text-zinc-500 dark:text-zinc-400 text-sm font-medium">Mã đơn hàng</td>
                                     <td
                                         class="text-right lg:text-left lg:px-6 lg:py-4 text-zinc-900 dark:text-zinc-50 text-sm font-medium leading-normal">
-                                        #PB-10385</td>
-                                    <td class="lg:hidden text-zinc-500 dark:text-zinc-400 text-sm font-medium">Ngày đặt</td>
+                                        #PB-10385
+                                    </td>
                                     <td
                                         class="text-right lg:text-left lg:px-6 lg:py-4 text-zinc-600 dark:text-zinc-300 text-sm font-normal leading-normal">
-                                        05/07/2024</td>
-                                    <td class="lg:hidden text-zinc-500 dark:text-zinc-400 text-sm font-medium">Tổng tiền</td>
+                                        05/07/2024
+                                    </td>
                                     <td
                                         class="text-right lg:text-left lg:px-6 lg:py-4 text-zinc-600 dark:text-zinc-300 text-sm font-normal leading-normal">
-                                        4,500,000đ</td>
-                                    <td class="lg:hidden text-zinc-500 dark:text-zinc-400 text-sm font-medium">Trạng thái</td>
+                                        4,500,000đ
+                                    </td>
                                     <td class="text-right lg:text-left lg:px-6 lg:py-4 text-sm font-normal leading-normal">
                                         <span
                                             class="inline-flex items-center justify-center rounded-full h-7 px-3 bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-100 text-xs font-semibold">Đã
@@ -160,7 +163,7 @@
                                         <a class="text-primary font-bold text-sm tracking-[0.015em] hover:underline" href="#">Xem chi
                                             tiết</a>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -182,4 +185,95 @@
         </div>
     </div>
 </div>
+<script>
+    function formatPrice(price) {
+        if (!price) return '0';
+
+        // Ép về string → bỏ phần thập phân
+        const integerPart = price.toString().split('.')[0];
+
+        // Format dấu phẩy
+        return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    function getAllOrders(status){
+        userId = sessionStorage.getItem('id');
+        status = status ?? '';
+        $.ajax({
+            url: '/api/order/user',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token')
+            },
+            data:{
+                user_id: userId,
+                status: status
+            },
+            success: function(response) {
+                $('#order_table_body').html('');
+                response.data.forEach(order => {
+                    $('#order_table_body').append(`
+                        <tr
+                            class="grid grid-cols-2 lg:table-row gap-x-4 gap-y-2 p-4 lg:p-0 rounded-lg lg:rounded-none bg-primary/5 dark:bg-primary/10 lg:bg-transparent lg:dark:bg-transparent">
+                            <td
+                                class="text-right lg:text-left lg:px-6 lg:py-4 text-zinc-900 dark:text-zinc-50 text-sm font-medium leading-normal">
+                                #${order.id}
+                            </td>
+                            <td
+                                class="text-right lg:text-left lg:px-6 lg:py-4 text-zinc-600 dark:text-zinc-300 text-sm font-normal leading-normal">
+                                ${new Date(order.created_at).toLocaleDateString('en-GB')}
+                            </td>
+                            <td
+                                class="text-right lg:text-left lg:px-6 lg:py-4 text-zinc-600 dark:text-zinc-300 text-sm font-normal leading-normal">
+                                ${formatPrice(order.total)}đ
+                            </td>
+                            <td class="text-right lg:text-left lg:px-6 lg:py-4 text-sm font-normal leading-normal">
+                                ${(() => {
+                                    let statusText = '';
+                                    let statusClass = '';
+
+                                    switch (order.status) {
+                                        case 'pending':
+                                            statusText = 'Chờ xử lý';
+                                            statusClass = 'inline-flex items-center justify-center rounded-full h-7 px-3 bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100 text-xs font-semibold';
+                                            break;
+                                        case 'delivering':
+                                            statusText = 'Đang giao';
+                                            statusClass = 'inline-flex items-center justify-center rounded-full h-7 px-3 bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-100 text-xs font-semibold';
+                                            break;
+                                        case 'complete':
+                                            statusText = 'Đã giao';
+                                            statusClass = 'inline-flex items-center justify-center rounded-full h-7 px-3 bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-100 text-xs font-semibold';
+                                            break;
+                                        case 'cancel':
+                                            statusText = 'Đã hủy';
+                                            statusClass = 'inline-flex items-center justify-center rounded-full h-7 px-3 bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-100 text-xs font-semibold';
+                                            break;
+                                        default:
+                                            statusText = order.status;
+                                            statusClass = 'inline-flex items-center justify-center rounded-full h-7 px-3 bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-100 text-xs font-semibold';
+                                    }
+
+                                    return `<span class="${statusClass}">
+                                                ${statusText}
+                                            </span>`;
+                                })()}
+                            </td>
+                            <td class="col-span-2 lg:col-span-1 lg:px-6 lg:py-4 text-right">
+                                <a class="text-primary font-bold text-sm tracking-[0.015em] hover:underline" href="#">Xem chi
+                                    tiết</a>
+                            </td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function(error) {
+                console.error('Error fetching orders:', error);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        getAllOrders();
+    });
+</script>
 @endsection

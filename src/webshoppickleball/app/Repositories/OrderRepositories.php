@@ -12,4 +12,12 @@ class OrderRepositories extends BaseRepositories implements OrderRepositoryInter
         parent::__construct($model);
     }
 
+    public function getAllOrder(array $filters)
+    {
+        $query = $this->model->where('user_id', $filters['user_id']);
+        $query->when(!empty($filters['status']), function ($q) use ($filters) {
+            $q->where('status', $filters['status']);
+        });
+        return $query->get();
+    }
 }
