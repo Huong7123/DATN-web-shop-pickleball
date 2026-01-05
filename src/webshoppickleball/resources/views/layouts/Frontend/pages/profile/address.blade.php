@@ -19,14 +19,14 @@
                         <p class="text-[#0d1b12] dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">
                             Quản lý địa chỉ giao hàng</p>
                     </div>
-                    <button
+                    <button id="btn_add_address"
                         class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 px-5 bg-primary text-[#0d1b12] dark:text-background-dark gap-2 text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
                         <span class="material-symbols-outlined">add</span>
                         <span class="truncate">Thêm địa chỉ mới</span>
                     </button>
                 </div>
-                <div class="grid grid-cols-1 gap-6 mt-4">
-                    <div class="@container">
+                <div id="address_list" class="grid grid-cols-1 gap-6 mt-4">
+                    <!-- <div class="@container">
                         <div
                             class="flex flex-col items-stretch justify-start rounded-xl border border-primary/20 dark:border-primary/10 bg-background-light dark:bg-background-dark shadow-sm">
                             <div class="flex w-full grow flex-col items-stretch justify-center gap-2 p-6">
@@ -85,10 +85,250 @@
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal_add_address" class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-white hidden">
+        <div class="relative min-h-screen w-full flex flex-col items-center pt-20 overflow-hidden">
+            <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+                <div
+                    class="relative flex flex-col w-full max-w-[680px] max-h-[90vh] bg-white dark:bg-background-dark rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden animate-in zoom-in-95 duration-200 ease-out">
+                    <div
+                        class="flex items-center justify-between px-6 py-5 border-b border-border-light dark:border-border-dark">
+                        <h3
+                            class="text-xl font-bold leading-tight tracking-[-0.015em] text-text-main-light dark:text-text-main-dark">
+                            Thêm địa chỉ giao hàng Mới
+                        </h3>
+                        <button class="btn_close_modal_add_address group p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                            type="button">
+                            <span
+                                class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white">close</span>
+                        </button>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1 flex flex-col gap-1.5">
+                                <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_name">
+                                    Tên người nhận <span class="text-red-500">*</span>
+                                </label>
+                                <input id="user_name" type="text" placeholder="Nhập tên"
+                                    class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                            </div>
+                            <div class="flex-1 flex flex-col gap-1.5">
+                                <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_phone">
+                                    Số điện thoại <span class="text-red-500">*</span>
+                                </label>
+                                <input id="user_phone" type="text" placeholder="Nhập SĐT"
+                                    class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1 flex flex-col gap-1.5">
+                                <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_province">
+                                    Tỉnh/Thành phố <span class="text-red-500">*</span>
+                                </label>
+                                <input id="user_province" type="text" placeholder="Tỉnh/TP"
+                                    class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                            </div>
+                            <div class="flex-1 flex flex-col gap-1.5">
+                                <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_district">
+                                    Quận/Huyện <span class="text-red-500">*</span>
+                                </label>
+                                <input id="user_district" type="text" placeholder="Quận/Huyện"
+                                    class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_ward">
+                                Phường/Xã <span class="text-red-500">*</span>
+                            </label>
+                            <input id="user_ward" type="text" placeholder="Nhập tên phường/xã"
+                                class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_address">
+                                Số nhà/Đường <span class="text-red-500">*</span>
+                            </label>
+                            <input id="user_address" type="text" placeholder="Nhập số nhà, tên đường"
+                                class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg border border-border-light dark:border-border-dark bg-gray-50/50 dark:bg-black/10">
+                            <span class="text-sm font-medium text-text-main-light dark:text-text-main-dark">Đặt làm mặc định</span>
+                            <label class="relative inline-flex cursor-pointer items-center">
+                                <input id="is_default" type="checkbox" checked class="peer sr-only" />
+                                <div class="peer h-6 w-11 rounded-full bg-gray-200 dark:bg-gray-600 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-primary peer-checked:after:translate-x-full"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div
+                        class="flex items-center justify-end gap-3 px-6 py-5 border-t border-border-light dark:border-border-dark bg-gray-50/50 dark:bg-black/20">
+                        <button
+                            class="btn_close_modal_add_address rounded-lg px-5 py-2.5 text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-800 dark:hover:text-white transition-all"
+                            type="button">
+                            Hủy bỏ
+                        </button>
+                        <button id="btn_save_address"
+                            class="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-[#0d1b12] shadow-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all"
+                            type="button">
+                            <span class="material-symbols-outlined text-[18px]">save</span>
+                            Lưu địa chỉ
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
+
+<script>
+    $('#btn_add_address').on('click', function() {
+        $('#modal_add_address').show();
+    });
+
+    $('.btn_close_modal_add_address').on('click', function() {
+        $('#modal_add_address').hide();
+    });
+
+    function getAllAddress(status) {
+        const userId = sessionStorage.getItem('id');
+        $.ajax({
+            url: '/api/address/',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token')
+            },
+            data: { user_id: userId, per_page: 1000 },
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (response) {
+                let html = '';
+                let addresses = response.data.data;
+
+                if (addresses.length === 0) {
+                    html = `
+                        <p class="text-center text-gray-400">Bạn chưa có địa chỉ nào</p>
+                    `;
+                } else {
+                    addresses.forEach(addr => {
+                        html += `
+                        <div class="@container">
+                            <div class="flex flex-col rounded-xl border ${addr.is_default == 1 ? 'border-primary/20' : 'border-primary/10'} 
+                                        bg-background-light dark:bg-background-dark shadow-sm">
+                                <div class="flex flex-col gap-2 p-6">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-lg font-bold dark:text-white">
+                                            ${addr.user_name} - ${addr.user_phone}
+                                        </p>
+
+                                        ${addr.is_default == 1 ? `
+                                            <span class="inline-flex items-center rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold">
+                                                Mặc định
+                                            </span>` : ''}
+                                    </div>
+
+                                    <p class="text-[#4c9a66] dark:text-gray-400 text-base font-normal leading-normal">
+                                        ${addr.address_line}, ${addr.ward}, ${addr.district}, ${addr.province}
+                                    </p>
+
+                                    <div class="flex items-center gap-4 mt-3">
+                                        <button data-id="${addr.id}"
+                                            class="flex items-center gap-2 hover:text-primary text-sm font-medium">
+                                            <span class="material-symbols-outlined">edit</span>
+                                            Chỉnh sửa
+                                        </button>
+
+                                        <button data-id="${addr.id}"
+                                            class="flex items-center gap-2 hover:text-red-500 text-sm font-medium">
+                                            <span class="material-symbols-outlined">delete</span>
+                                            Xóa
+                                        </button>
+
+                                        ${addr.is_default == 0 
+                                            ? `
+                                                <div class="flex-grow"></div>
+                                                <button onclick="setDefaultAddress(${addr.id})"
+                                                    class="text-primary hover:opacity-80 text-sm font-medium">
+                                                    Đặt làm mặc định
+                                                </button>` 
+                                            : ''
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    });
+                }
+
+                $('#address_list').html(html);
+            },
+            error: function(error) {
+                Swal.fire('Lỗi', 'Không thể tải danh sách đơn hàng', 'error');
+            },
+            complete: function () {
+                hideLoader();
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        getAllAddress();
+    });
+
+    $('#btn_save_address').on('click', function() {
+        const data = {
+            user_name: $('#user_name').val().trim(),
+            user_phone: $('#user_phone').val().trim(),
+            province: $('#user_province').val().trim(),
+            district: $('#user_district').val().trim(),
+            ward: $('#user_ward').val().trim(),
+            address_line: $('#user_address').val().trim(),
+            is_default: $('#is_default').is(':checked') ? 1 : 0,
+        };
+
+        $.ajax({
+            url: '/api/address',
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token'),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(data),
+            beforeSend: function() {
+                showLoader();
+            },
+            success: function(response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thêm địa chỉ mới thành công',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                $('#modal_add_address').hide();
+                resetAddressForm(); 
+                
+                getAllAddress();
+            },
+            error: function(xhr) {
+                const errorMsg = xhr.responseJSON?.message || 'Không thể thêm địa chỉ. Vui lòng thử lại!';
+                Swal.fire('Lỗi', errorMsg, 'error');
+            },
+            complete: function() {
+                hideLoader();
+            }
+        });
+    });
+
+    function resetAddressForm() {
+        $('#user_name, #user_phone, #user_province, #user_district, #user_ward, #user_address').val('');
+        $('#is_default').prop('checked', false);
+    }
+</script>
 @endsection

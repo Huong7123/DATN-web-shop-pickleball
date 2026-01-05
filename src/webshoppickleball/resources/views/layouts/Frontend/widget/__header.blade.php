@@ -86,7 +86,7 @@
                                     </div>
                                     <p
                                         class="text-text-light dark:text-text-dark text-base font-normal leading-normal flex-1 truncate">
-                                        Quản lý địa chỉ</p>
+                                        Sổ địa chỉ</p>
                                 </div>
                             </a>
                         </div>

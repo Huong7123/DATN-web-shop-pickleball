@@ -20,6 +20,8 @@ class AddressService extends BaseService
 
         $addressData = [
             'user_id'      => $user->id,
+            'user_name'    => $data['user_name'],
+            'user_phone'   => $data['user_phone'],
             'address_line' => $data['address_line'],
             'ward'         => $data['ward'],
             'district'     => $data['district'],
@@ -51,6 +53,8 @@ class AddressService extends BaseService
         }
 
         $updateData = [
+            'user_name'    => $data['user_name']    ?? $currentAddress->user_name,
+            'user_phone'   => $data['user_phone']   ?? $currentAddress->user_phone,
             'address_line' => $data['address_line'] ?? $currentAddress->address_line,
             'ward'         => $data['ward']         ?? $currentAddress->ward,
             'district'     => $data['district']     ?? $currentAddress->district,
