@@ -21,6 +21,24 @@
                 <!-- Shipping Information -->
                 <section>
                     <h2 class="text-2xl font-bold tracking-tight">1. Thông tin giao hàng</h2>
+                    <div class="mt-6">
+                        <label class="mb-2 block text-sm font-medium">Sổ địa chỉ</label>
+                        <div class="relative">
+                            <details class="group relative" id="address_details">
+                                <summary class="flex cursor-pointer list-none items-center justify-between rounded-lg border border-border-light bg-background-light p-4 shadow-sm outline-none hover:border-primary dark:border-border-dark dark:bg-background-dark">
+                                    <div class="flex flex-col gap-1 text-left" id="address_summary_content">
+                                        <span class="text-sm text-gray-400">Đang tải địa chỉ...</span>
+                                    </div>
+                                    <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                                </summary>
+                                
+                                <div class="absolute left-0 top-full z-20 mt-2 w-full overflow-hidden rounded-lg border border-border-light bg-white shadow-xl dark:border-border-dark dark:bg-background-dark">
+                                    <div class="max-h-64 overflow-y-auto p-2" id="address_options_list">
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
                     <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div>
                             <label class="mb-2 block text-sm font-medium">Họ và tên</label>
@@ -38,7 +56,7 @@
                             <label class="mb-2 block text-sm font-medium">Địa chỉ</label>
                             <input id="address"
                                 class="form-input block h-14 w-full rounded-lg border border-border-light bg-background-light p-4 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark dark:placeholder:text-subtle-dark"
-                                placeholder="Số nhà, tên đường" type="text" />
+                                placeholder="Số nhà, tên đường, phường xã, quận huyện, tỉnh thành phố" type="text" />
                         </div>
                         <div class="sm:col-span-2">
                             <label class="mb-2 block text-sm font-medium">Ghi chú</label>
@@ -219,6 +237,7 @@
         shippingFee = getShippingFee();
         renderCheckoutProducts();
         renderCheckoutSummary();
+        getAllAddress();
     });
 
     $('#btn_place_order').click(function () {
@@ -327,6 +346,141 @@
         });
     });
 
+    function getAllAddress() {
+        const userId = sessionStorage.getItem('id');
+        
+        $.ajax({
+            url: '/api/address/',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token')
+            },
+            data: { user_id: userId, per_page: 1000 },
+            beforeSend: function () {
+                // showLoader(); // Bỏ comment nếu bạn có hàm loader
+            },
+            success: function (response) {
+                let addresses = response.data.data;
+                let optionsHtml = '';
 
+                if (addresses && addresses.length > 0) {
+                    // 1. Tìm địa chỉ mặc định (is_default = 1), nếu không có thì lấy cái đầu tiên
+                    let defaultAddr = addresses.find(a => a.is_default == 1) || addresses[0];
+
+                    // 2. Duyệt mảng để tạo danh sách radio options
+                    addresses.forEach(addr => {
+                        const isSelected = addr.id === defaultAddr.id;
+                        optionsHtml += `
+                            <label class="flex cursor-pointer items-start gap-3 rounded-lg p-3 transition-colors hover:bg-primary/5 ${isSelected ? 'bg-primary/10' : ''}">
+                                <input type="radio" name="saved_address" 
+                                    class="mt-1 h-4 w-4 text-primary focus:ring-primary" 
+                                    ${isSelected ? 'checked' : ''} 
+                                    onchange='selectAddress(${JSON.stringify(addr)})'>
+                                <div class="flex-grow">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="font-bold text-text-light dark:text-text-dark">${addr.user_name}</span>
+                                        <span class="text-sm text-subtle-light dark:text-subtle-dark">| ${addr.user_phone}</span>
+                                        ${addr.is_default == 1 ? '<span class="inline-flex items-center rounded-full bg-primary/20 px-2 py-0.5 text-xs font-bold text-primary">Mặc định</span>' : ''}
+                                    </div>
+                                    <p class="mt-1 text-sm text-subtle-light dark:text-subtle-dark">
+                                        ${addr.address_line}, ${addr.ward}, ${addr.district}, ${addr.province}
+                                    </p>
+                                </div>
+                            </label>
+                        `;
+                    });
+
+                    // 3. Thêm tùy chọn "Giao đến địa chỉ khác" vào cuối danh sách
+                    optionsHtml += `
+                        <div class="border-t border-border-light p-2 dark:border-border-dark mt-2">
+                            <label class="flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-colors hover:bg-background-light dark:hover:bg-background-dark/50">
+                                <input type="radio" name="saved_address" class="h-4 w-4 text-primary" onchange="resetShippingInfo()">
+                                <span class="font-medium text-primary">+ Giao đến địa chỉ khác</span>
+                            </label>
+                        </div>`;
+
+                    // 4. Đổ dữ liệu vào danh sách dropdown
+                    $('#address_options_list').html(optionsHtml);
+
+                    // 5. Tự động fill địa chỉ mặc định vào Summary và Form bên dưới
+                    selectAddress(defaultAddr);
+
+                } else {
+                    $('#address_summary_content').html('<span class="text-red-500 text-sm">Chưa có địa chỉ. Vui lòng nhập thông tin bên dưới.</span>');
+                    resetShippingInfo();
+                }
+            },
+            error: function() {
+                Swal.fire('Lỗi', 'Không thể tải sổ địa chỉ', 'error');
+            },
+            complete: function () {
+                // hideLoader();
+            }
+        });
+    }
+
+    // Hàm để render nội dung vào ô Summary
+    function renderSummary(addr) {
+        const html = `
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="font-bold text-text-light dark:text-text-dark">${addr.user_name}</span>
+                <span class="text-sm text-subtle-light dark:text-subtle-dark">| ${addr.user_phone}</span>
+                ${addr.is_default == 1 ? '<span class="inline-flex items-center rounded-full bg-primary/20 px-2 py-0.5 text-xs font-bold text-primary">Mặc định</span>' : ''}
+            </div>
+            <span class="text-sm text-subtle-light dark:text-subtle-dark truncate">
+                ${addr.address_line}, ${addr.ward}, ${addr.district}, ${addr.province}
+            </span>
+        `;
+        $('#address_summary_content').html(html);
+        
+        // Đóng dropdown sau khi chọn (tùy chọn)
+        $('#address_details').removeAttr('open');
+    }
+
+    function selectAddress(addr) {
+        // 1. Hiển thị thông tin lên ô Summary (thanh tiêu đề dropdown)
+        const summaryHtml = `
+            <div class="flex flex-wrap items-center gap-2 text-left">
+                <span class="font-bold text-text-light dark:text-text-dark">${addr.user_name}</span>
+                <span class="text-sm text-subtle-light dark:text-subtle-dark">| ${addr.user_phone}</span>
+                ${addr.is_default == 1 ? '<span class="inline-flex items-center rounded-full bg-primary/20 px-2 py-0.5 text-xs font-bold text-primary">Mặc định</span>' : ''}
+            </div>
+            <span class="text-sm text-subtle-light dark:text-subtle-dark truncate block w-full text-left">
+                ${addr.address_line}, ${addr.ward}, ${addr.district}, ${addr.province}
+            </span>
+        `;
+        $('#address_summary_content').html(summaryHtml);
+
+        // 2. Điền dữ liệu vào các ô Input thanh toán
+        $('#user_name').val(addr.user_name);
+        $('#user_phone').val(addr.user_phone);
+        
+        const fullAddrString = `${addr.address_line}, ${addr.ward}, ${addr.district}, ${addr.province}`;
+        $('#address').val(fullAddrString);
+
+        // 3. Đóng dropdown và lưu ID (nếu cần)
+        $('#address_details').removeAttr('open');
+        window.selectedAddressId = addr.id; 
+    }
+
+    function resetShippingInfo() {
+        // 1. Cập nhật Summary về trạng thái trống
+        $('#address_summary_content').html(`
+            <div class="text-left">
+                <span class="font-bold text-primary">Giao đến địa chỉ khác</span>
+                <p class="text-xs text-subtle-light">Vui lòng nhập thông tin bên dưới</p>
+            </div>
+        `);
+
+        // 2. Xóa sạch các ô input
+        $('#user_name').val('');
+        $('#user_phone').val('');
+        $('#address').val('');
+        $('#description').val('');
+
+        // 3. Xóa ID đã chọn và đóng dropdown
+        window.selectedAddressId = null;
+        $('#address_details').removeAttr('open');
+    }
 </script>
 @endsection
