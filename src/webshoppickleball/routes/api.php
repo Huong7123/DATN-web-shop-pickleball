@@ -35,7 +35,6 @@ Route::get('/product/{id}', [ProductController::class, 'show']);
 Route::get('/products/related/{categoryId}/{productId}', [ProductController::class, 'getProductByCategory']);
 Route::get('/product-child', [ProductController::class, 'getChildProduct']);
 Route::post('/product-variant/{id}', [ProductController::class, 'getVariant']);
-Route::get('/address', [AddressController::class, 'index']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
@@ -43,6 +42,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     //quản lý sổ địa chỉ
+    Route::get('/address', [AddressController::class, 'index']);
+    Route::get('/address/{id}', [AddressController::class, 'show']);
     Route::post('/address', [AddressController::class, 'store']);
     Route::post('/address/{id}', [AddressController::class, 'update']);
     Route::delete('/address/{id}', [AddressController::class, 'destroy']);

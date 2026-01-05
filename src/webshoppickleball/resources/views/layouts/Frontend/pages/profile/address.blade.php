@@ -100,7 +100,7 @@
                         class="flex items-center justify-between px-6 py-5 border-b border-border-light dark:border-border-dark">
                         <h3
                             class="text-xl font-bold leading-tight tracking-[-0.015em] text-text-main-light dark:text-text-main-dark">
-                            Thêm địa chỉ giao hàng Mới
+                            Thêm địa chỉ giao hàng mới
                         </h3>
                         <button class="btn_close_modal_add_address group p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
                             type="button">
@@ -182,7 +182,98 @@
             </div>
         </div>
     </div>
-
+    <div id="modal_edit_address" class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-white hidden">
+        <div class="relative min-h-screen w-full flex flex-col items-center pt-20 overflow-hidden">
+            <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+                <div
+                    class="relative flex flex-col w-full max-w-[680px] max-h-[90vh] bg-white dark:bg-background-dark rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden animate-in zoom-in-95 duration-200 ease-out">
+                    <div
+                        class="flex items-center justify-between px-6 py-5 border-b border-border-light dark:border-border-dark">
+                        <h3
+                            class="text-xl font-bold leading-tight tracking-[-0.015em] text-text-main-light dark:text-text-main-dark">
+                            Chỉnh sửa địa chỉ giao hàng
+                        </h3>
+                        <button class="btn_close_modal_add_address group p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                            type="button">
+                            <span
+                                class="material-symbols-outlined text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white">close</span>
+                        </button>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-6 space-y-5">
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1 flex flex-col gap-1.5">
+                                <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_name">
+                                    Tên người nhận <span class="text-red-500">*</span>
+                                </label>
+                                <input id="user_name_edit" type="text" placeholder="Nhập tên"
+                                    class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                            </div>
+                            <div class="flex-1 flex flex-col gap-1.5">
+                                <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_phone">
+                                    Số điện thoại <span class="text-red-500">*</span>
+                                </label>
+                                <input id="user_phone_edit" type="text" placeholder="Nhập SĐT"
+                                    class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1 flex flex-col gap-1.5">
+                                <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_province">
+                                    Tỉnh/Thành phố <span class="text-red-500">*</span>
+                                </label>
+                                <input id="user_province_edit" type="text" placeholder="Tỉnh/TP"
+                                    class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                            </div>
+                            <div class="flex-1 flex flex-col gap-1.5">
+                                <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_district">
+                                    Quận/Huyện <span class="text-red-500">*</span>
+                                </label>
+                                <input id="user_district_edit" type="text" placeholder="Quận/Huyện"
+                                    class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_ward">
+                                Phường/Xã <span class="text-red-500">*</span>
+                            </label>
+                            <input id="user_ward_edit" type="text" placeholder="Nhập tên phường/xã"
+                                class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-sm font-semibold text-text-main-light dark:text-text-main-dark" for="user_address">
+                                Số nhà/Đường <span class="text-red-500">*</span>
+                            </label>
+                            <input id="user_address_edit" type="text" placeholder="Nhập số nhà, tên đường"
+                                class="form-input w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-black/20 px-4 h-11 text-sm focus:border-primary focus:outline-none transition-all" />
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg border border-border-light dark:border-border-dark bg-gray-50/50 dark:bg-black/10">
+                            <span class="text-sm font-medium text-text-main-light dark:text-text-main-dark">Đặt làm mặc định</span>
+                            <label class="relative inline-flex cursor-pointer items-center">
+                                <input id="is_default_edit" type="checkbox" checked class="peer sr-only" />
+                                <div class="peer h-6 w-11 rounded-full bg-gray-200 dark:bg-gray-600 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-primary peer-checked:after:translate-x-full"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div
+                        class="flex items-center justify-end gap-3 px-6 py-5 border-t border-border-light dark:border-border-dark bg-gray-50/50 dark:bg-black/20">
+                        <button
+                            class="btn_close_modal_add_address rounded-lg px-5 py-2.5 text-sm font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-800 dark:hover:text-white transition-all"
+                            type="button">
+                            Hủy bỏ
+                        </button>
+                        <button id="btn_update_address"
+                            class="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-[#0d1b12] shadow-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all"
+                            type="button">
+                            <span class="material-symbols-outlined text-[18px]">save</span>
+                            Lưu địa chỉ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -192,9 +283,10 @@
 
     $('.btn_close_modal_add_address').on('click', function() {
         $('#modal_add_address').hide();
+        $('#modal_edit_address').hide();
     });
 
-    function getAllAddress(status) {
+    function getAllAddress() {
         const userId = sessionStorage.getItem('id');
         $.ajax({
             url: '/api/address/',
@@ -238,13 +330,13 @@
 
                                     <div class="flex items-center gap-4 mt-3">
                                         <button data-id="${addr.id}"
-                                            class="flex items-center gap-2 hover:text-primary text-sm font-medium">
+                                            class="btn-edit-address flex items-center gap-2 hover:text-primary text-sm font-medium">
                                             <span class="material-symbols-outlined">edit</span>
                                             Chỉnh sửa
                                         </button>
 
                                         <button data-id="${addr.id}"
-                                            class="flex items-center gap-2 hover:text-red-500 text-sm font-medium">
+                                            class="btn-delete-address flex items-center gap-2 hover:text-red-500 text-sm font-medium">
                                             <span class="material-symbols-outlined">delete</span>
                                             Xóa
                                         </button>
@@ -329,6 +421,125 @@
     function resetAddressForm() {
         $('#user_name, #user_phone, #user_province, #user_district, #user_ward, #user_address').val('');
         $('#is_default').prop('checked', false);
+        $('#user_name_edit, #user_phone_edit, #user_province_edit, #user_district_edit, #user_ward_edit, #user_address_edit').val('');
+        $('#is_default_edit').prop('checked', false);
     }
+
+    $(document).on('click', '.btn-edit-address', function() {
+        const addressId = $(this).data('id');
+        $.ajax({
+            url: '/api/address/' + addressId,
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token')
+            },
+            success: function (response) {
+                let addresses = response.data;
+                $('#user_name_edit').val(addresses.user_name);
+                $('#user_phone_edit').val(addresses.user_phone);
+                $('#user_province_edit').val(addresses.province);
+                $('#user_district_edit').val(addresses.district);
+                $('#user_ward_edit').val(addresses.ward);
+                $('#user_address_edit').val(addresses.address_line);
+                $('#is_default_edit').prop('checked', addresses.is_default == 1);
+                $('#modal_edit_address').show();
+                $('#btn_update_address').on('click', function() {
+                    updateAddress(addressId);
+                });
+            },
+            error: function(error) {
+                Swal.fire('Lỗi', 'Không thể tải danh sách đơn hàng', 'error');
+            },
+        });
+    });
+
+    function updateAddress(addressId) {
+        const data = {
+            user_name: $('#user_name_edit').val().trim(),
+            user_phone: $('#user_phone_edit').val().trim(),
+            province: $('#user_province_edit').val().trim(),
+            district: $('#user_district_edit').val().trim(),
+            ward: $('#user_ward_edit').val().trim(),
+            address_line: $('#user_address_edit').val().trim(),
+            is_default: $('#is_default_edit').is(':checked') ? 1 : 0,
+        };
+
+        $.ajax({
+            url: '/api/address/' + addressId,
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token'),
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(data),
+            beforeSend: function() {
+                showLoader();
+            },
+            success: function(response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cập nhật địa chỉ thành công',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                $('#modal_edit_address').hide();
+                resetAddressForm(); 
+                
+                getAllAddress();
+            },
+            error: function(xhr) {
+                const errorMsg = xhr.responseJSON?.message || 'Không thể thêm địa chỉ. Vui lòng thử lại!';
+                Swal.fire('Lỗi', errorMsg, 'error');
+            },
+            complete: function() {
+                hideLoader();
+            }
+        });
+    };
+
+    $(document).on('click', '.btn-delete-address', function() {
+        const addressId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn xóa địa chỉ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/address/' + addressId,
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('user_token')
+                    },
+                    beforeSend: function() {
+                        showLoader();
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Xóa địa chỉ thành công',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        getAllAddress();
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON?.message || 'Không thể xóa địa chỉ. Vui lòng thử lại!';
+                        Swal.fire('Lỗi', errorMsg, 'error');
+                    },
+                    complete: function() {
+                        hideLoader();
+                    }
+                });
+            }
+        });
+    });
 </script>
 @endsection
