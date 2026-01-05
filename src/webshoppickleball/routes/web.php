@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\UserController;
@@ -62,6 +63,9 @@ Route::get('/thong-tin-ca-nhan', function () {
 Route::get('/lich-su-don-hang', function () {
     return view('layouts.Frontend.pages.profile.history-order',['title' => 'Lịch sử đơn hàng']);
 });
+
+Route::get('/chi-tiet-don-hang/{id}', [OrderController::class, 'getOrderDetail']);
+
 Route::get('/dia-chi-giao-hang', function () {
     return view('layouts.Frontend.pages.profile.address',['title' => 'Địa chỉ giao hàng']);
 });

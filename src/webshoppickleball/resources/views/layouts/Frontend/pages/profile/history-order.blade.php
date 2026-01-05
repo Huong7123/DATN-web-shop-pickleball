@@ -153,7 +153,7 @@
                                 ${renderStatusBadge(order.status)}
                             </td>
                             <td class="col-span-2 lg:col-span-1 lg:px-6 lg:py-4 text-right">
-                                <a class="text-primary font-bold text-sm hover:underline" href="/don-hang/${order.id}">Xem chi tiết</a>
+                                <a class="text-primary font-bold text-sm hover:underline" href="/chi-tiet-don-hang/${order.id}">Xem chi tiết</a>
                             </td>
                         </tr>
                     `);

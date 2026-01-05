@@ -11,17 +11,7 @@
     <!-- PageHeading -->
     <div class="flex flex-wrap items-center justify-between gap-4 pb-6">
         <h1 class="text-4xl font-black tracking-tighter">Sản Phẩm Pickleball</h1>
-        <div class="flex items-center gap-2">
-            <span class="text-sm text-text-light-secondary dark:text-text-dark-secondary">Hiển thị 12 trên 48
-                sản phẩm</span>
-            <!-- <select
-                class="form-select rounded-lg border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark text-sm focus:border-primary focus:ring-primary">
-                <option>Sắp xếp theo: Mới nhất</option>
-                <option>Giá: Thấp đến Cao</option>
-                <option>Giá: Cao đến Thấp</option>
-                <option>Phổ biến nhất</option>
-            </select> -->
-        </div>
+        
     </div>
     <div class="flex flex-col gap-8 lg:flex-row">
         <!-- Filter Sidebar -->
@@ -51,8 +41,8 @@
 
                     <!-- Giá hiển thị -->
                     <div class="flex justify-between text-sm">
-                        <span id="min_price">1.000.000₫</span>
-                        <span id="max_price">6.000.000₫</span>
+                        <span id="min_price"></span>
+                        <span id="max_price"></span>
                     </div>
                 </div>
 

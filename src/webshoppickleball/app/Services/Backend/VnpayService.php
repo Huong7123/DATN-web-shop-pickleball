@@ -3,13 +3,19 @@
 namespace App\Services\Backend;
 
 use App\DTO\DataResult;
+use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\VnPayRepositoryInterface;
 
 class VnpayService extends BaseService
 {
-    public function __construct(VnPayRepositoryInterface $repository)
+    protected OrderRepositoryInterface $orderRepository;
+    public function __construct(
+        VnPayRepositoryInterface $repository,
+        OrderRepositoryInterface $orderRepository,
+    )
     {
         parent::__construct($repository);
+        $this->orderRepository = $orderRepository;
     }
 
     public function createPayUrl(array $data): DataResult
@@ -109,8 +115,16 @@ class VnpayService extends BaseService
         $p = $repo->findByTransactionId($input['vnp_TxnRef']);
         if (!$p) return new DataResult('Không tìm thấy giao dịch', 404);
 
-        $status = $input['vnp_ResponseCode'] === '00' ? 'success' : 'failed';
+        $isSuccess = $input['vnp_ResponseCode'] === '00';
+        $status = $isSuccess ? 'success' : 'failed';
+        $orderPaymentStatus = $isSuccess ? 'paid' : 'failed';
         $repo->update($p->id, ['status' => $status]);
+
+        if ($p->order_id) {
+            $this->orderRepository->update($p->order_id, [
+                'payment_status' => $orderPaymentStatus
+            ]);
+        }
 
         $transaction = $p->refresh()->load('order.items.product');
 

@@ -20,4 +20,9 @@ class OrderRepositories extends BaseRepositories implements OrderRepositoryInter
         });
         return $query->get();
     }
+
+    public function getOrderDetail(int $id)
+    {
+        return $this->model->with('items.product.attributeValues')->where('id', $id)->first();
+    }
 }
