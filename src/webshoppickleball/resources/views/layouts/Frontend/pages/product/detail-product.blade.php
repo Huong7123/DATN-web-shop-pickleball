@@ -465,6 +465,26 @@
     $('#btn_buy_now').click(function() {
         const wrapper = $('#product_detail');
 
+        const attributeGroups = new Set();
+        wrapper.find('input[type=radio][name^="attribute_"]').each(function() {
+            attributeGroups.add($(this).attr('name'));
+        });
+
+        // 2. Lấy danh sách các thuộc tính đã check
+        const checkedAttributes = wrapper.find('input[type=radio][name^="attribute_"]:checked');
+
+        // 3. So sánh: Nếu số lượng đã chọn < số lượng nhóm hiện có => Chưa chọn đủ
+        if (checkedAttributes.length < attributeGroups.size) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Thiếu thuộc tính',
+                text: 'Vui lòng chọn đầy đủ thuộc tính',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#3085d6'
+            });
+            return; // Dừng thực hiện các bước tiếp theo
+        }
+
         const parentId = wrapper.data('parent-id');
         const name      = wrapper.data('name');
         const image     = wrapper.data('image');
