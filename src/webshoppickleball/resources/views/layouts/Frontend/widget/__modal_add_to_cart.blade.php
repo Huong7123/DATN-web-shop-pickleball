@@ -25,62 +25,7 @@
                 </div>
                 <div class="flex-1 overflow-y-auto p-6 bg-white dark:bg-background-dark">
                     <div id="modal_add_to_cart_content" class="flex flex-col sm:flex-row gap-6">
-                        <!-- <div class="shrink-0 w-full sm:w-48">
-                            <div
-                                class="aspect-square w-full rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 relative bg-background-light dark:bg-surface-dark group">
-                                <div class="absolute inset-0 bg-center bg-cover bg-no-repeat transition-transform duration-500 group-hover:scale-105"
-                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC_96hhksEsXC1MMhR45hKnkNDzv84yrUswcJ4ReGfBWAxLJUqZVv-KEqD7iIQD0vIs65CaLUmuBk1hTILaclMhCh2btEfPj3wWYcZLCvc8bchRK3u8sVXTDZBLi1xQGTvHEf3FdCYvRphrY9t6qCAMDoutDWpc-4xeUQ2YaQd4enA5vO3h0q2CFgQPvFNwkh1anKOi0j9Xlvb3C37RcEdbCbz9Yn99FD3tozwnyN-nFCWldaXXMJgiwuvRmcHhwFIkGKNmlqMO9QaX");'>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex-1 space-y-6">
-                            <div>
-                                <h3 class="text-xl font-bold text-[#0d1b12] dark:text-white leading-snug">Vợt Pickleball
-                                    Joola Ben Johns Perseus</h3>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <p class="text-xl font-bold text-primary">3.200.000₫</p>
-                                </div>
-                            </div>
-                            <div class="h-px w-full bg-slate-100 dark:bg-slate-800"></div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Độ
-                                    dày lõi</label>
-                                <div class="flex flex-wrap gap-2">
-                                    <button
-                                        class="px-4 py-2 rounded-lg border-2 border-primary bg-primary/10 text-[#0d1b12] font-bold text-sm transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background-dark">
-                                        16mm
-                                    </button>
-                                    <button
-                                        class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-medium text-sm hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-surface-dark transition-all focus:outline-none focus:ring-2 focus:ring-slate-400">
-                                        14mm
-                                    </button>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Số
-                                    lượng</label>
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-transparent p-0.5 w-fit">
-                                        <button
-                                            class="w-9 h-9 flex items-center justify-center rounded hover:bg-slate-100 dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors cursor-pointer">
-                                            <span class="material-symbols-outlined text-[18px]">remove</span>
-                                        </button>
-                                        <input
-                                            class="w-12 text-center bg-transparent text-sm font-bold text-[#0d1b12] dark:text-white border-none focus:ring-0 p-0 [&amp;::-webkit-inner-spin-button]:appearance-none"
-                                            type="number" value="1" />
-                                        <button
-                                            class="w-9 h-9 flex items-center justify-center rounded hover:bg-slate-100 dark:hover:bg-surface-dark text-slate-500 dark:text-slate-400 transition-colors cursor-pointer">
-                                            <span class="material-symbols-outlined text-[18px]">add</span>
-                                        </button>
-                                    </div>
-                                    <div class="text-xs font-medium text-primary flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-[14px]">inventory_2</span>
-                                        Còn hàng
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
+                       
                     </div>
                 </div>
                 <div
@@ -95,7 +40,3 @@
         </div>
     </div>
 </div>
-
-<script>
-
-</script>
