@@ -96,7 +96,6 @@
                 showLoader();
             },
             success: function(response) {
-                Swal.close();
                 
                 // Div bao quanh bảng
                 const container = $('#order_table_container');

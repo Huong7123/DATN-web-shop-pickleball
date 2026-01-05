@@ -17,6 +17,8 @@ class AddressRequest extends FormRequest
     {
         return [
             'address_line'  => 'required|string|max:255',
+            'user_name'     => 'required|string|max:255',
+            'user_phone'    => 'required|string|max:255',
             'ward'          => 'required|string|max:255',
             'district'      => 'required|string|max:255',
             'province'      => 'required|string|max:255',
@@ -28,7 +30,8 @@ class AddressRequest extends FormRequest
     {
         return [
             'address_line.required' => 'Vui lòng nhập địa chỉ chi tiết.',
-
+            'user_name.required' => 'Vui lòng nhập tên người nhận.',
+            'user_phone.required' => 'Vui lòng nhập số điện thoại người nhận.',
             'ward.required' => 'Vui lòng chọn phường/xã.',
             'district.required' => 'Vui lòng chọn quận/huyện.',
             'province.required' => 'Vui lòng chọn tỉnh/thành phố.',

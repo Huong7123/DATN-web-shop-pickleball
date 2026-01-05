@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('address', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('user_name')->nullable();
+            $table->string('user_phone')->nullable();
             $table->string('address_line')->nullable();
             $table->string('ward')->nullable(); // xã
             $table->string('district')->nullable(); // huyện
