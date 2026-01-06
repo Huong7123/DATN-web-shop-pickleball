@@ -37,11 +37,11 @@ class ProductService extends BaseService
         return new DataResult('Lấy dữ liệu thành công', 200, $item);
     }
 
-    public function getParentProduct($perPage, $keyword, $status): DataResult
+    public function getParentProduct($perPage, $keyword, $status, $minPrice, $maxPrice, $categoryIds): DataResult
     {
         /** @var ProductRepositoryInterface $repo */
         $repo = $this->repository;
-        $data = $repo->getParentProduct($perPage, $keyword, $status);
+        $data = $repo->getParentProduct($perPage, $keyword, $status, $minPrice, $maxPrice, $categoryIds);
 
         return new DataResult('Lấy danh sách thành công', 200, $data);
     }
