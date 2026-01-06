@@ -46,7 +46,7 @@
                     </div>
                 </div>
 
-                <button
+                <button id="btn_apply_filter"
                     class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 bg-primary text-background-dark gap-2 text-sm font-bold leading-normal tracking-wide hover:opacity-90 transition-opacity">Áp
                     dụng bộ lọc</button>
             </div>
@@ -65,6 +65,15 @@
 </div>
 
 <script>
+    let currentFilter = {
+        keyword: '',
+        status: -1,
+        categories: '',
+        min_price: null,
+        max_price: null,
+        per_page: 12
+    };
+
     const slider = document.getElementById('price_slider');
     const handleMin = document.getElementById('handle_min');
     const handleMax = document.getElementById('handle_max');
@@ -72,11 +81,11 @@
     const minPriceDisplay = document.getElementById('min_price');
     const maxPriceDisplay = document.getElementById('max_price');
 
-    const minValue = 1000000; // 1.000.000
-    const maxValue = 6000000; // 6.000.000
+    const minValue = 0; // 0
+    const maxValue = 5000000; // 5.000.000
 
-    let minPercent = 20;
-    let maxPercent = 60;
+    let minPercent = 0;
+    let maxPercent = 100;
 
     function updateRange() {
         // cập nhật vị trí range fill
@@ -181,7 +190,7 @@
         return `
             <li>
                 <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-primary transition-colors">
-                    <input type="checkbox" name="category[]" value="Vợt" 
+                    <input type="checkbox" name="category[]" value="${item.id}" 
                         class="h-4 w-4 text-primary accent-primary border-0 focus:ring-0">
                     ${item.name}
                 </label>
@@ -241,34 +250,30 @@
 
     // click số trang
     $(document).on('click', '.page-btn', function () {
-        const page = $(this).data('page');
-        const keyword = $('#search_product').val();
-        const status = $('#filter_status').val();
-
-        getAllProduct(page, keyword, status);
+        getAllProduct($(this).data('page'));
     });
 
     $('#btn_prev').on('click', function () {
-        const keyword = $('#search_product').val();
-        const status = $('#filter_status').val();
-        getAllProduct(currentPage - 1, keyword, status);
+        if (currentPage > 1) getAllProduct(currentPage - 1);
     });
+
 
     $('#btn_next').on('click', function () {
-        const keyword = $('#search_product').val();
-        const status = $('#filter_status').val();
-        getAllProduct(currentPage + 1, keyword, status);
+        if (currentPage < lastPage) getAllProduct(currentPage + 1);
     });
 
-    function getAllProduct(page = 1, perPage = 6, keyword = '', status = -1) {
+    function getAllProduct(page = 1) {
         $.ajax({
             url: '/api/product',
             method: 'GET',
             data: {
                 page: page,
-                per_page: perPage,
-                keyword: keyword,
-                status: status
+                per_page: currentFilter.per_page,
+                keyword: currentFilter.keyword,
+                status: currentFilter.status,
+                category_id: currentFilter.categories,
+                min_price: currentFilter.min_price,
+                max_price: currentFilter.max_price
             },
             headers: {
                 'Authorization': 'Bearer ' + getCookie('admin_token')
@@ -526,5 +531,31 @@
             }
         });
     });
+
+    function getSelectedCategories() {
+        return $('input[name="category[]"]:checked')
+            .map(function () { return this.value; })
+            .get()
+            .join(','); // "3,5,8"
+    }
+    function getPriceRange() {
+        return {
+            min: parseInt($('#min_price').text().replace(/\D/g, '')) || null,
+            max: parseInt($('#max_price').text().replace(/\D/g, '')) || null
+        };
+    }
+
+    $('#btn_apply_filter').on('click', function () {
+
+        const price = getPriceRange();
+
+        currentFilter.categories = getSelectedCategories();
+        currentFilter.min_price  = price.min;
+        currentFilter.max_price  = price.max;
+
+        getAllProduct(1); // reset về trang 1
+    });
+
+
 </script>
 @endsection

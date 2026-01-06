@@ -77,7 +77,7 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         return true;
     }
 
-    public function getParentProduct($perPage, $keyword, $status)
+    public function getParentProduct($perPage, $keyword, $status, $minPrice, $maxPrice, $categoryIds)
     {
         return $this->model
             ->with([
@@ -101,6 +101,19 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
                 if ($status == 2) {
                     $q->where('quantity', '>', 5);
                 }
+            })
+            ->when(is_array($categoryIds), function ($q) use ($categoryIds) {
+                $q->whereHas('category', function ($cat) use ($categoryIds) {
+                    $cat->whereIn('id', $categoryIds);
+                });
+            })
+
+            // Lọc theo giá
+            ->when($minPrice !== null, function ($q) use ($minPrice) {
+                $q->where('price', '>=', $minPrice);
+            })
+            ->when($maxPrice !== null, function ($q) use ($maxPrice) {
+                $q->where('price', '<=', $maxPrice);
             })
             ->paginate($perPage);
     }
