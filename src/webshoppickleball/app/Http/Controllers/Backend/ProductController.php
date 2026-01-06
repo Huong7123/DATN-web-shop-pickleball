@@ -21,10 +21,17 @@ class ProductController extends BaseController
         $perPage = (int) $request->get('per_page', 10);
         $keyword = (string) $request->get('keyword', '');
         $status = (int) $request->get('status', -1);
+        $categoryIds = $request->get('category_id'); 
+        if ($categoryIds) {
+            $categoryIds = array_map('intval', explode(',', $categoryIds));
+        }
+
+        $minPrice = $request->get('min_price');
+        $maxPrice = $request->get('max_price');
         /** @var \App\Services\Backend\ProductService $productService */
         $productService = $this->service;
 
-        $result = $productService->getParentProduct($perPage, $keyword, $status);
+        $result = $productService->getParentProduct($perPage, $keyword, $status,  $minPrice, $maxPrice, $categoryIds);
         return response()->json($result, $result->http_code);
     }
 
