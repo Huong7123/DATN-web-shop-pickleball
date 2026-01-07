@@ -15,6 +15,19 @@ class OrderController extends BaseController
         parent::__construct($service);
         $this->storeRequest = OrderRequest::class;
     }
+
+    public function getAllOrderAdmin(Request $request): JsonResponse
+    {
+        $perPage = (int) $request->get('per_page', 20);
+        $status  = $request->get('status');
+        $orderId = $request->get('order_id');
+
+        /** @var OrderService $ser */
+        $ser = $this->service;
+        $result = $ser->getAllOrderAdmin($perPage, $status, $orderId);
+
+        return response()->json($result, $result->http_code);
+    }
     
     public function getAllOrder(Request $request): JsonResponse
     {

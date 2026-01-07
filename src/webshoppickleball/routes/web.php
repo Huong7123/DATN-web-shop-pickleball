@@ -126,6 +126,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/quan-ly-san-pham', function () {
         return view('layouts.Admin.pages.product',['title' => 'Quản lý sản phẩm']);
     });
+    Route::get('/quan-ly-don-hang', function () {
+        return view('layouts.Admin.pages.order',['title' => 'Quản lý đơn hàng']);
+    });
 
     Route::get('/attribute', function () {
         return view('layouts.Backend.pages.attribute.attribute',['title' => 'Quản lý bộ thuộc tính']);

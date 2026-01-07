@@ -6,12 +6,12 @@
     <!-- Breadcrumbs -->
     <div class="flex items-center gap-2 mb-6 text-sm">
         <a class="text-text-secondary dark:text-gray-400 hover:text-primary font-medium flex items-center gap-1"
-            href="#">
+            href="/tong-quan">
             <span class="material-symbols-outlined text-[18px]">home</span>
-            Trang chủ
+            Tổng quan
         </a>
         <span class="text-text-secondary dark:text-gray-500">/</span>
-        <span class="text-text-main dark:text-white font-bold">Quản trị sản phẩm</span>
+        <span class="text-text-main dark:text-gray-200 text-sm font-medium">Sản phẩm</span>
     </div>
     <!-- Page Heading & Actions -->
     <div class="flex flex-wrap justify-between items-end gap-4">
@@ -472,24 +472,24 @@
         $('#modal_add_product').addClass('hidden');
     });
 
-    let typingTimer = null;
-    $('#search_product').on('keyup', function () {
-        clearTimeout(typingTimer);
+        let typingTimer = null;
+        $('#search_product').on('keyup', function () {
+            clearTimeout(typingTimer);
 
-        const keyword = $(this).val();
-        const status = $('#filter_status').val();
+            const keyword = $(this).val();
+            const status = $('#filter_status').val();
 
-        typingTimer = setTimeout(function () {
+            typingTimer = setTimeout(function () {
+                getAllParentProduct(1, keyword, status);
+            }, 400);
+        });
+
+        $('#filter_status').on('change', function () {
+            const keyword = $('#search_product').val();
+            const status = $(this).val();
+
             getAllParentProduct(1, keyword, status);
-        }, 400);
-    });
-
-    $('#filter_status').on('change', function () {
-        const keyword = $('#search_product').val();
-        const status = $(this).val();
-
-        getAllParentProduct(1, keyword, status);
-    });
+        });
 
     $(document).on('click', '.btn-delete', function () {
         const id = $(this).data('id');

@@ -12,6 +12,24 @@ class OrderRepositories extends BaseRepositories implements OrderRepositoryInter
         parent::__construct($model);
     }
 
+    public function getAllOrderAdmin($perPage, $status, $orderId)
+    {
+        $query = $this->model->with('items.product');
+
+        // lọc theo status
+        if (!is_null($status) && $status !== '') {
+            $query->where('status', $status);
+        }
+
+        // tìm theo mã đơn hàng
+        if (!is_null($orderId) && $orderId !== '') {
+            $query->where('id', $orderId);
+        }
+
+        return $query->paginate($perPage);
+    }
+
+
     public function getAllOrder(array $filters)
     {
         $query = $this->model->where('user_id', $filters['user_id']);

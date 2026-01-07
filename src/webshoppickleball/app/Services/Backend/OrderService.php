@@ -27,6 +27,13 @@ class OrderService extends BaseService
         $this->productRepository = $productRepository;
         $this->cartItemRepository = $cartItemRepository;
     }
+    public function getAllOrderAdmin($perPage, $status, $orderId): DataResult
+    {
+        /** @var OrderRepositoryInterface $repo */
+        $repo = $this->repository;
+        $data = $repo->getAllOrderAdmin($perPage, $status, $orderId);
+        return new DataResult('Lấy danh sách thành công',200,$data);
+    }
 
     public function getAllOrder(array $filters): DataResult
     {
@@ -146,16 +153,23 @@ class OrderService extends BaseService
 
             // ================= ADMIN =================
             if ($isAdmin) {
+
                 if (!isset($data['status'])) {
                     return new DataResult('Admin chỉ được cập nhật trạng thái đơn hàng', 400);
                 }
 
-                $this->repository->update($orderId, [
-                    'status' => $data['status']
-                ]);
+                $updateData = ['status' => $data['status']];
+
+                // Admin hoàn tất đơn → auto paid
+                if ($data['status'] === 'complete') {
+                    $updateData['payment_status'] = 'paid';
+                }
+
+                $this->repository->update($orderId, $updateData);
 
                 return new DataResult('Cập nhật trạng thái thành công', 200);
             }
+
 
             // ================= USER =================
             if ($order->status !== 'pending') {
