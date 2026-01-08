@@ -34,7 +34,7 @@
             </div>
             <input id="input_search"
                 class="block w-full pl-10 pr-3 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg leading-5 bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all"
-                placeholder="Tìm kiếm theo email quản trị viên" type="search" />
+                placeholder="Tìm kiếm theo tên danh mục" type="search" />
         </label>
         <!-- Stock Status Filter -->
         <div class="relative min-w-[180px]">
@@ -232,8 +232,6 @@
                     </div>
                     <div>
                         <p class="font-bold text-text-main dark:text-white text-sm">${item.name}</p>
-                        <p class="text-xs text-text-secondary dark:text-gray-500 sm:hidden">Vợt thi đấu
-                            chuyên nghiệp</p>
                     </div>
                 </div>
             </td>
@@ -261,7 +259,7 @@
                                 data-id="${item.id}" 
                                 ${item.status == 1 ? 'checked' : ''}>
                             <div class="w-10 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 
-                                        peer-checked:after:translate-x-full peer-checked:after:border-white 
+                                        peer-checked:after:translate-x-[20px] peer-checked:after:border-white 
                                         after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
                                         after:bg-white after:border-gray-300 after:border after:rounded-full 
                                         after:h-4 after:w-4 after:transition-all dark:border-gray-600 

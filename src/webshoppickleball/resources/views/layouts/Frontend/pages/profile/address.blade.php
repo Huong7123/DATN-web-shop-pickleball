@@ -159,7 +159,7 @@
                             <span class="text-sm font-medium text-text-main-light dark:text-text-main-dark">Đặt làm mặc định</span>
                             <label class="relative inline-flex cursor-pointer items-center">
                                 <input id="is_default" type="checkbox" checked class="peer sr-only" />
-                                <div class="peer h-6 w-11 rounded-full bg-gray-200 dark:bg-gray-600 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-primary peer-checked:after:translate-x-full"></div>
+                                <div class="peer h-6 w-11 rounded-full bg-gray-200 dark:bg-gray-600 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-primary peer-checked:after:translate-x-[20px]"></div>
                             </label>
                         </div>
                     </div>
@@ -251,7 +251,7 @@
                             <span class="text-sm font-medium text-text-main-light dark:text-text-main-dark">Đặt làm mặc định</span>
                             <label class="relative inline-flex cursor-pointer items-center">
                                 <input id="is_default_edit" type="checkbox" checked class="peer sr-only" />
-                                <div class="peer h-6 w-11 rounded-full bg-gray-200 dark:bg-gray-600 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-primary peer-checked:after:translate-x-full"></div>
+                                <div class="peer h-6 w-11 rounded-full bg-gray-200 dark:bg-gray-600 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:bg-primary peer-checked:after:translate-x-[20px]"></div>
                             </label>
                         </div>
                     </div>
