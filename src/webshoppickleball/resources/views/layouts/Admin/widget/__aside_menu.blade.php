@@ -63,6 +63,15 @@
                 class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">monitoring</span>
             <p class="text-sm font-medium">Báo cáo</p>
         </a>
+        <!-- <a id="btn_logout" class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
+            href="/dang-xuat">
+                <span class="text-red-500 material-symbols-outlined"
+                    style="font-size: 24px;">logout
+                </span>
+            <p class="text-red-500 text-sm font-medium">Đăng xuất</p>
+        </a> -->
+    </nav>
+    <div class="p-4 border-t border-[#e7f3eb] dark:border-gray-800">
         <a id="btn_logout" class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
             href="/dang-xuat">
                 <span class="text-red-500 material-symbols-outlined"
@@ -70,8 +79,6 @@
                 </span>
             <p class="text-red-500 text-sm font-medium">Đăng xuất</p>
         </a>
-    </nav>
-    <div class="p-4 border-t border-[#e7f3eb] dark:border-gray-800">
         <div class="mt-4 flex items-center gap-3 px-3">
             <div id="icon_avatar" class="size-8 rounded-full bg-gray-200 bg-center bg-cover"
                 data-alt="User profile avatar placeholder">
@@ -145,19 +152,32 @@
     }
 
     function logout() {
-        $.ajax({
-            url: '/api/logout',
-            type: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + getCookie('user_token'),
-                'Accept': 'application/json'
-            },
-            success() {
-                clearClientAuth();
-            },
-            error() {
-                // Dù lỗi vẫn clear client để tránh kẹt token
-                clearClientAuth();
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#10b981', // Màu primary của bạn
+            cancelButtonColor: '#6b7280', // Màu xám
+            confirmButtonText: 'Đăng xuất!',
+            cancelButtonText: 'Hủy',
+            reverseButtons: true // Đưa nút Hủy sang bên trái cho thuận tay
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/logout',
+                    type: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('user_token'),
+                        'Accept': 'application/json'
+                    },
+                    success() {
+                        clearClientAuth();
+                    },
+                    error() {
+                        // Dù lỗi vẫn clear client để tránh kẹt token
+                        clearClientAuth();
+                    }
+                });
             }
         });
     }

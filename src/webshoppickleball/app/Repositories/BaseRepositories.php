@@ -62,7 +62,7 @@ class BaseRepositories
             ->when(!empty($filters['name']), function ($q) use ($filters) {
                 $q->where('name', 'LIKE', "%{$filters['name']}%");
             })
-            ->when(!empty($filters['status']), function ($q) use ($filters) {
+            ->when(isset($filters['status']) && $filters['status'] !== '', function ($q) use ($filters) {
                 $q->where('status', $filters['status']);
             })
             ->when(!empty($filters['role']), function ($q) use ($filters) {

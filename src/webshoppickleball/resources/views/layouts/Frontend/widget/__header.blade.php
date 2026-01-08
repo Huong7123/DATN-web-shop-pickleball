@@ -208,19 +208,32 @@
     }
 
     function logout() {
-        $.ajax({
-            url: '/api/logout',
-            type: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + getCookie('user_token'),
-                'Accept': 'application/json'
-            },
-            success() {
-                clearClientAuth();
-            },
-            error() {
-                // Dù lỗi vẫn clear client để tránh kẹt token
-                clearClientAuth();
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#10b981', // Màu primary của bạn
+            cancelButtonColor: '#6b7280', // Màu xám
+            confirmButtonText: 'Đăng xuất!',
+            cancelButtonText: 'Hủy',
+            reverseButtons: true // Đưa nút Hủy sang bên trái cho thuận tay
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/logout',
+                    type: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getCookie('user_token'),
+                        'Accept': 'application/json'
+                    },
+                    success() {
+                        clearClientAuth();
+                    },
+                    error() {
+                        // Dù lỗi vẫn clear client để tránh kẹt token
+                        clearClientAuth();
+                    }
+                });
             }
         });
     }
