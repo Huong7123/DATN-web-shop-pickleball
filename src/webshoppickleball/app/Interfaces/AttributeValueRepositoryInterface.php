@@ -6,5 +6,5 @@ use App\Models\Attribute;
 
 interface AttributeValueRepositoryInterface extends BaseRepositoryInterface
 {
-    
+    public function updateStatusByAttributeId(int $attributeId);
 }

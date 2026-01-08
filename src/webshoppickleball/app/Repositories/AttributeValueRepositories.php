@@ -12,4 +12,13 @@ class AttributeValueRepositories extends BaseRepositories implements AttributeVa
         parent::__construct($model);
     }
 
+    public function updateStatusByAttributeId(int $attributeId)
+    {
+        return $this->model
+            ->where('attribute_id', $attributeId)
+            ->update([
+                'status' => 0
+            ]);
+    }
+
 }
