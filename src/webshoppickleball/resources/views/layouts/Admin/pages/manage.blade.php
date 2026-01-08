@@ -133,14 +133,15 @@
         if (parts.length === 2) return parts.pop().split(';')[0];
         return null;
     }
-    function getAllAdmin(page = 1, role = 2, email = null, status= null, perPage = 20) {
+    function getAllAdmin(page = 1, role = 2, perPage = 20) {
+        const email = $('#input_search').val();
+        const status = $('#filter_status').val()
         $.ajax({
             url: '/api/user',
             method: 'GET',
             data: {
                 page: page,
                 role: role,
-                name: name,
                 email: email,
                 status: status,
                 per_page: perPage
@@ -347,19 +348,16 @@
     $('#input_search').on('keyup', function () {
         clearTimeout(typingTimer);
 
-        const email = $(this).val();
-
         typingTimer = setTimeout(function () {
             $('#filter_status').val("");
-            getAllAdmin(1, 2, email);
+            getAllAdmin(1);
         }, 400);
     });
 
     $('#filter_status').on('change', function () {
-        const status = $(this).val();
         
         $('#input_search').val("");
-        getAllAdmin(1, 2, null, status);
+        getAllAdmin(1);
     });
 </script>
 @endsection
