@@ -16,7 +16,7 @@
     <!-- Page Heading & Actions -->
     <div class="flex flex-wrap justify-between items-end gap-4">
         <div class="flex flex-col gap-1">
-            <h1 class="text-text-main dark:text-white text-3xl font-black tracking-tight">Quản trị sản phẩm
+            <h1 class="text-text-main dark:text-white text-3xl font-black tracking-tight">Danh sách sản phẩm
             </h1>
         </div>
         <button id="btn_add_product"
@@ -57,7 +57,7 @@
         class="bg-surface-light dark:bg-surface-dark rounded-xl border border-[#e7f3eb] dark:border-gray-700 shadow-sm overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-[#f8fcf9] dark:bg-gray-800 border-b border-[#e7f3eb] dark:border-gray-700">
+                <tr class="bg-background-light dark:bg-white/5 border-b border-border-color dark:border-white/10">
                     <th class="p-4 w-12 text-center">
                         <input
                             class="rounded border-gray-300 text-primary focus:ring-primary bg-white dark:bg-gray-700"
@@ -83,7 +83,7 @@
                         Hành động</th>
                 </tr>
             </thead>
-            <tbody id="parent_product_body" class="divide-y divide-[#e7f3eb] dark:divide-gray-700">
+            <tbody id="parent_product_body" class="divide-y divide-border-color dark:divide-white/10">
                 
             </tbody>
         </table>
@@ -117,7 +117,7 @@
     function renderParentProduct(item){
         return `
             <tr
-                class="group hover:bg-[#f0f9f4] dark:hover:bg-gray-700/50 transition-colors cursor-pointer bg-[#f0f9f4] dark:bg-gray-800/30">
+                class="group hover:bg-primary/5 transition-colors">
                 <td class="p-4 text-center">
                     <input
                         class="rounded border-gray-300 text-primary focus:ring-primary bg-white dark:bg-gray-700"
@@ -255,7 +255,7 @@
 
     function renderVariant(item){
         return `
-            <tr class="hover:bg-white dark:hover:bg-gray-700">
+            <tr class="group hover:bg-primary/5 transition-colors">
                 <td class="pl-4 py-3">
                     <div class="flex items-center gap-2">
                         <div class="size-8 rounded border border-gray-200 bg-red-500"

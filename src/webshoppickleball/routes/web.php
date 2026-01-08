@@ -106,8 +106,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/user', function () {
         return view('layouts.Backend.pages.user.user',['title' => 'Quản lý người dùng']);
     });
+
+    Route::get('/quan-ly-nguoi-dung', function () {
+        return view('layouts.Admin.pages.user',['title' => 'Quản lý người dùng']);
+    });
+
     Route::get('/manage', function () {
         return view('layouts.Backend.pages.user.manage',['title' => 'Quản lý QTV']);
+    });
+    Route::get('/quan-ly-QTV', function () {
+        return view('layouts.Admin.pages.manage',['title' => 'Quản lý QTV']);
     });
 
     //category
@@ -134,8 +142,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('layouts.Backend.pages.attribute.attribute',['title' => 'Quản lý bộ thuộc tính']);
     });
 
+    Route::get('/quan-ly-thuoc-tinh', function () {
+        return view('layouts.Admin.pages.attribute',['title' => 'Quản lý thuộc tính']);
+    });
+
     Route::get('/attribute-value', function () {
         return view('layouts.Backend.pages.attribute.attribute-value',['title' => 'Quản lý bộ thuộc tính']);
+    });
+
+    Route::get('/quan-ly-gia-tri-thuoc-tinh', function () {
+        return view('layouts.Admin.pages.attribute_value',['title' => 'Quản lý giá trị thuộc tính']);
     });
 
     Route::get('/discount', function () {
