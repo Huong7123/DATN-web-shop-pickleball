@@ -34,16 +34,15 @@
             </div>
             <input id="input_search"
                 class="block w-full pl-10 pr-3 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg leading-5 bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all"
-                placeholder="Tìm kiếm theo tên khách hàng" type="search" />
+                placeholder="Tìm kiếm theo email khách hàng" type="search" />
         </label>
         <!-- Stock Status Filter -->
         <div class="relative min-w-[180px]">
             <select id="filter_status"
                 class="w-full pl-4 pr-10 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer">
-                <option value="-1">Tất cả trạng thái</option>
-                <option value="0">Hết hàng</option>
-                <option value="1">Sắp hết hàng</option>
-                <option value="2">Còn hàng</option>
+                <option value="">Tất cả trạng thái</option>
+                <option value="1">Hoạt động</option>
+                <option value="0">Chưa kích hoạt</option>
             </select>
         </div>
     </div>
@@ -74,8 +73,8 @@
                             </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-border-color dark:divide-white/10">
-                    <tr class="group hover:bg-primary/5 transition-colors">
+                <tbody id="list_user_body" class="divide-y divide-border-color dark:divide-white/10">
+                    <!-- <tr class="group hover:bg-primary/5 transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="size-12 rounded-lg bg-gray-100 dark:bg-white/10 bg-cover bg-center shrink-0 border border-border-color dark:border-white/10"
@@ -120,11 +119,252 @@
                                 </button>
                             </div>
                         </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
     </div>
     @include('layouts.Admin.widget.__pagination')
 </div>
+<script>
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';')[0];
+        return null;
+    }
+    function getAllUser(page = 1, role = 1, perPage = 20) {
+        const email = $('#input_search').val();
+        const status = $('#filter_status').val()
+        $.ajax({
+            url: '/api/user',
+            method: 'GET',
+            data: {
+                page: page,
+                role: role,
+                email: email,
+                status: status,
+                per_page: perPage
+            },
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('admin_token')
+            },
+            beforeSend: function () {
+                showLoader(); // HIỆN LOADER
+            },
+            success: function(res) {
+                const pagination = res.data;
+                currentPage = pagination.current_page;
+                lastPage = pagination.last_page;
+
+                $('#list_user_body').html('');
+                pagination.data.forEach(item => {
+                    $('#list_user_body').append(renderItems(item));
+                });
+
+                updatePaginationUI(pagination);
+
+            },
+            error: function(err) {
+                Swal.close();
+                console.error('Không thể tải danh sách sản phẩm:', err);
+            },
+            complete: function () {
+                hideLoader(); // TẮT LOADER
+            }
+        });
+    }
+
+    function renderItems(item){
+        const isChecked = item.status == 1 ? 'checked' : '';
+        return `
+        <tr class="group hover:bg-primary/5 transition-colors">
+            <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <div class="size-12 rounded-lg bg-gray-100 dark:bg-white/10 bg-cover bg-center shrink-0 border border-border-color dark:border-white/10"
+                        data-alt="Hình ảnh minh họa danh mục Vợt Pickleball"
+                        style="background-image: url('${
+                            item.avatar
+                                ? '/storage/' + item.avatar
+                                : '/images/no-image.png'
+                        }');">
+                    </div>
+                    <div>
+                        <p class="font-bold text-text-main dark:text-white text-sm">${item.name}</p>
+                        <p class="text-xs text-text-secondary dark:text-gray-500 sm:hidden">Vợt thi đấu
+                            chuyên nghiệp</p>
+                    </div>
+                </div>
+            </td>
+            <td class="px-6 py-4 max-w-xs hidden sm:table-cell">
+                <p class="text-sm text-text-main dark:text-gray-300 truncate">${item.email}</p>
+            </td>
+            <td class="px-6 py-4">
+                <span
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-gray-200">
+                    ${item.phone}
+                </span>
+            </td>
+            <td class="px-6 py-4">
+                ${item.status == 1
+                    ? `<div
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800 border border-green-200">
+                        <span class="size-1.5 rounded-full bg-green-500"></span>
+                        Hoạt động
+                    </div>`
+                    : `<div
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-200">
+                        <span class="size-1.5 rounded-full bg-red-500"></span>
+                        Chưa kích hoạt
+                    </div>`
+                }
+            </td>
+            <td class="px-6 py-4 text-right">
+                <div class="flex items-center justify-end">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" 
+                            class="sr-only peer toggle-status" 
+                            data-id="${item.id}" 
+                            ${isChecked}>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 
+                                    peer-checked:after:translate-x-full peer-checked:after:border-white 
+                                    after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                    after:h-5 after:w-5 after:transition-all dark:border-gray-600 
+                                    peer-checked:bg-primary">
+                        </div>
+                    </label>
+                </div>
+            </td>
+        </tr>`;
+    }
+
+    $(document).ready(function () {
+        getAllUser();
+    });
+
+    function updatePaginationUI(pagination) {
+        $('#pagination_info').html(`
+            Hiển thị <b>${pagination.from || 0}-${pagination.to || 0}</b>
+            trong tổng số <b>${pagination.total}</b> bản ghi
+        `);
+
+        const $numbersContainer = $('#pagination_numbers');
+        $numbersContainer.empty();
+
+        for (let i = 1; i <= pagination.last_page; i++) {
+            const isActive = i === pagination.current_page;
+            const activeClass = isActive 
+                ? 'bg-primary text-[#0d1b12] font-bold' 
+                : 'border text-text-main dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800';
+
+            $numbersContainer.append(`
+                <button class="page-btn w-8 h-8 rounded-lg text-sm transition-all ${activeClass}" 
+                        data-page="${i}">
+                    ${i}
+                </button>
+            `);
+        }
+
+        $('#btn_prev').prop('disabled', pagination.current_page <= 1);
+        $('#btn_next').prop('disabled', pagination.current_page >= pagination.last_page);
+    }
+
+    let currentPage = 1;
+    let lastPage = 1;
+
+    $(document).on('click', '.page-btn', function () {
+        const page = $(this).data('page');
+
+        getAllUser(page);
+    });
+
+    $('#btn_prev').on('click', function () {
+        getAllUser(currentPage - 1);
+    });
+
+    $('#btn_next').on('click', function () {
+        getAllUser(currentPage + 1);
+    });
+
+    $(document).on('change', '.toggle-status', function() {
+        const $checkbox = $(this);
+        const userId = $checkbox.data('id');
+        const isChecked = $checkbox.is(':checked');
+        const newStatus = isChecked ? 1 : 0;
+
+        // Vô hiệu hóa tạm thời để tránh người dùng bấm liên tục khi đang xử lý
+        $checkbox.prop('disabled', true);
+
+        $.ajax({
+            url: `/api/user/${userId}`,
+            method: 'POST',
+            data: {
+                status: newStatus,
+            },
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('admin_token')
+            },
+            success: function(res) {
+                // Hiển thị thông báo nhỏ (Toast)
+                if (newStatus === 1) {
+                    showToast('Đã kích hoạt tài khoản', 'success');
+                } else {
+                    showToast('Đã khóa tài khoản', 'success');
+                }
+                
+                getAllUser(currentPage); 
+            },
+            error: function(err) {
+                // Nếu lỗi, gạt nút quay trở lại trạng thái ban đầu
+                $checkbox.prop('checked', !isChecked);
+                
+                let errorMsg = 'Không thể cập nhật trạng thái';
+                if(err.responseJSON && err.responseJSON.message) {
+                    errorMsg = err.responseJSON.message;
+                }
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: errorMsg,
+                    confirmButtonColor: '#10b981'
+                });
+            },
+            complete: function() {
+                // Mở khóa lại checkbox sau khi xong
+                $checkbox.prop('disabled', false);
+            }
+        });
+    });
+
+    function showToast(message, type = 'success') {
+        const color = type === 'success' ? '#10b981' : '#f59e0b';
+        Swal.fire({
+            text: message,
+            icon: type,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true
+        });
+    }
+
+    let typingTimer = null;
+    $('#input_search').on('keyup', function () {
+        clearTimeout(typingTimer);
+
+        typingTimer = setTimeout(function () {
+            $('#filter_status').val("");
+            getAllUser(1);
+        }, 400);
+    });
+
+    $('#filter_status').on('change', function () {
+        
+        $('#input_search').val("");
+        getAllUser(1);
+    });
+</script>
 @endsection

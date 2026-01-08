@@ -10,9 +10,10 @@
             <span class="material-symbols-outlined text-sm">chevron_left</span>
         </button>
 
-        <button class="page-btn w-8 h-8 rounded-lg text-sm" data-page="1">1</button>
+        <div id="pagination_numbers" class="flex items-center gap-2"></div>
+        <!-- <button class="page-btn w-8 h-8 rounded-lg text-sm" data-page="1">1</button>
         <button class="page-btn w-8 h-8 rounded-lg text-sm" data-page="2">2</button>
-        <button class="page-btn w-8 h-8 rounded-lg text-sm" data-page="3">3</button>
+        <button class="page-btn w-8 h-8 rounded-lg text-sm" data-page="3">3</button> -->
 
         <button id="btn_next"
             class="p-2 rounded-lg border hover:bg-gray-50 disabled:opacity-50">
