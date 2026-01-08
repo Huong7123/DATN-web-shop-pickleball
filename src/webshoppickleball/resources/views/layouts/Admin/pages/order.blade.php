@@ -15,7 +15,7 @@
     <!-- Page Heading & Actions -->
     <div class="flex flex-wrap justify-between items-end gap-4">
         <div class="flex flex-col gap-1">
-            <h1 class="text-text-main dark:text-white text-3xl font-black tracking-tight">Quản trị đơn hàng
+            <h1 class="text-text-main dark:text-white text-3xl font-black tracking-tight">Danh sách đơn hàng
             </h1>
         </div>
     </div>
@@ -53,7 +53,7 @@
         class="bg-surface-light dark:bg-surface-dark rounded-xl border border-[#e7f3eb] dark:border-gray-700 shadow-sm overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-[#f8fcf9] dark:bg-gray-800 border-b border-[#e7f3eb] dark:border-gray-700">
+                <tr class="bg-background-light dark:bg-white/5 border-b border-border-color dark:border-white/10">
                     <th class="p-4 w-12"></th> <!-- Expand toggle column -->
                     <th class="p-4 text-xs font-bold text-text-secondary uppercase tracking-wider">ID</th>
                     <th class="p-4 text-xs font-bold text-text-secondary uppercase tracking-wider">Khách hàng</th>
@@ -76,7 +76,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody id="list_order_body" class="divide-y divide-[#e7f3eb] dark:divide-gray-700">
+            <tbody id="list_order_body" class="divide-y divide-border-color dark:divide-white/10">
                 
             </tbody>
         </table>
@@ -282,7 +282,7 @@
 
     function renderItems(order){
         return `
-        <tr class="group bg-[#f0f9f4]">
+        <tr class="group hover:bg-primary/5 transition-colors">
             <td class="p-4 text-center">
                 <button
                     class="extension-btn p-1 rounded-full hover:bg-white dark:hover:bg-gray-600 text-primary 
@@ -392,7 +392,7 @@
         let html = '';
         items.forEach(it => {
             html += `
-                <tr class="hover:bg-white dark:hover:bg-gray-700">
+                <tr class="group hover:bg-primary/5 transition-colors">
                     <td class="p-4">
                         <div class="flex items-center gap-3">
                             <div class="h-10 w-10 rounded-lg bg-gray-100 bg-cover bg-center"
@@ -405,6 +405,7 @@
                     </td>
                     <td class="pl-4 py-3 text-sm font-bold">${formatPrice(it.price)}</td>
                     <td class="pl-4 py-3 text-sm">${it.quantity}</td>
+                    <td class="pl-4 py-3 text-sm"></td>
                 </tr>
             `;
         });

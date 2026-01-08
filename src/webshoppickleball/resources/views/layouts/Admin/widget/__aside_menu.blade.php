@@ -15,6 +15,24 @@
             <p class="text-sm font-medium">Tổng quan</p>
         </a>
         <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
+            href="/admin/quan-ly-danh-muc">
+            <span
+                class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">category</span>
+            <p class="text-sm font-medium">Danh mục sản phẩm</p>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
+            href="/admin/quan-ly-thuoc-tinh">
+            <span
+                class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">tune</span>
+            <p class="text-sm font-medium">Thuộc tính</p>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
+            href="/admin/quan-ly-gia-tri-thuoc-tinh">
+            <span
+                class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">ballot</span>
+            <p class="text-sm font-medium">Giá trị thuộc tính</p>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
             href="/admin/quan-ly-san-pham">
             <span
                 class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">inventory_2</span>
@@ -31,6 +49,13 @@
             <span
                 class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">group</span>
             <p class="text-sm font-medium">Khách hàng</p>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
+            href="/admin/quan-ly-QTV">
+            <span class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">
+                admin_panel_settings
+            </span>
+            <p class="text-sm font-medium">Quản trị viên</p>
         </a>
         <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
             href="#">
