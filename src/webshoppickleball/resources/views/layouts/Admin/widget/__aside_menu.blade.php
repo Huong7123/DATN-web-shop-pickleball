@@ -27,12 +27,6 @@
             <p class="text-sm font-medium">Thuộc tính</p>
         </a>
         <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
-            href="/admin/quan-ly-gia-tri-thuoc-tinh">
-            <span
-                class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">ballot</span>
-            <p class="text-sm font-medium">Giá trị thuộc tính</p>
-        </a>
-        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
             href="/admin/quan-ly-san-pham">
             <span
                 class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">inventory_2</span>
@@ -63,13 +57,6 @@
                 class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">monitoring</span>
             <p class="text-sm font-medium">Báo cáo</p>
         </a>
-        <!-- <a id="btn_logout" class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
-            href="/dang-xuat">
-                <span class="text-red-500 material-symbols-outlined"
-                    style="font-size: 24px;">logout
-                </span>
-            <p class="text-red-500 text-sm font-medium">Đăng xuất</p>
-        </a> -->
     </nav>
     <div class="p-4 border-t border-[#e7f3eb] dark:border-gray-800">
         <a id="btn_logout" class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"

@@ -4,14 +4,20 @@ namespace App\Services\Backend;
 
 use App\DTO\DataResult;
 use App\Interfaces\AttributeRepositoryInterface;
+use App\Interfaces\AttributeValueRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Storage;
 
 class AttributeService extends BaseService
 {
-    public function __construct(AttributeRepositoryInterface $repository)
+    protected AttributeValueRepositoryInterface $attributeValueRepository;
+    public function __construct(
+        AttributeRepositoryInterface $repository,
+        AttributeValueRepositoryInterface $attributeValueRepository
+    )
     {
         parent::__construct($repository);
+        $this->attributeValueRepository = $attributeValueRepository;
     }
 
     public function paginateWithFilters(array $filters, int $perPage = 10): DataResult
@@ -60,6 +66,10 @@ class AttributeService extends BaseService
             'name' => $data['name'] ?? $currentAttribute->name,
             'status' => $data['status'] ?? $currentAttribute->status,
         ];
+
+        if (isset($data['status']) && (int)$data['status'] === 0) {
+            $this->attributeValueRepository->updateStatusByAttributeId($id);
+        }
 
         $item = $this->repository->update($id, $updateData);
 
