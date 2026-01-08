@@ -219,33 +219,30 @@
     }
 
     function updatePaginationUI(pagination) {
-        // text info
         $('#pagination_info').html(`
-            Hiển thị <b>${pagination.from}-${pagination.to}</b>
-            trong số <b>${pagination.total}</b> sản phẩm
+            Hiển thị <b>${pagination.from || 0}-${pagination.to || 0}</b>
+            trong tổng số <b>${pagination.total}</b> sản phẩm
         `);
 
-        // active page
-        $('.page-btn').each(function () {
-            const page = $(this).data('page');
+        const $numbersContainer = $('#pagination_numbers');
+        $numbersContainer.empty();
 
-            if (page === pagination.current_page) {
-                $(this)
-                    .addClass('bg-primary text-[#0d1b12]')
-                    .removeClass('border');
-            } else {
-                $(this)
-                    .removeClass('bg-primary text-[#0d1b12]')
-                    .addClass('border');
-            }
+        for (let i = 1; i <= pagination.last_page; i++) {
+            const isActive = i === pagination.current_page;
+            const activeClass = isActive 
+                ? 'bg-primary text-[#0d1b12] font-bold' 
+                : 'border text-text-main dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800';
 
-            // Ẩn page > last_page
-            $(this).toggle(page <= pagination.last_page);
-        });
+            $numbersContainer.append(`
+                <button class="page-btn w-8 h-8 rounded-lg text-sm transition-all ${activeClass}" 
+                        data-page="${i}">
+                    ${i}
+                </button>
+            `);
+        }
 
-        // prev / next
-        $('#btn_prev').prop('disabled', !pagination.prev_page_url);
-        $('#btn_next').prop('disabled', !pagination.next_page_url);
+        $('#btn_prev').prop('disabled', pagination.current_page <= 1);
+        $('#btn_next').prop('disabled', pagination.current_page >= pagination.last_page);
     }
 
     // click số trang
