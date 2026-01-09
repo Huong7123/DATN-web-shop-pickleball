@@ -313,7 +313,7 @@
                     document.cookie = 'user_token=; path=/; max-age=0';
 
                     setTimeout(() => {
-                        window.location.href = '/login';
+                        window.location.href = '/dang-nhap';
                     }, 1500);
                 }
 

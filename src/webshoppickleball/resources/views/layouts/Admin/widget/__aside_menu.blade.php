@@ -66,7 +66,7 @@
                 </span>
             <p class="text-red-500 text-sm font-medium">Đăng xuất</p>
         </a>
-        <div class="mt-4 flex items-center gap-3 px-3">
+        <div style="cursor:pointer;" id="btn_show_infor" class="mt-4 flex items-center gap-3 px-3">
             <div id="icon_avatar" class="size-8 rounded-full bg-gray-200 bg-center bg-cover"
                 data-alt="User profile avatar placeholder">
             </div>
