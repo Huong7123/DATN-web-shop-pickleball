@@ -20,7 +20,7 @@
         <button id="btn_modal_add"
             class="group flex items-center justify-center gap-2 rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark transition-all shadow-lg shadow-green-500/20 text-[#0d1b12] text-sm font-bold">
             <span class="material-symbols-outlined">add</span>
-            <span>Thêm sản phẩm mới</span>
+            <span>Thêm danh mục mới</span>
         </button>
     </div>
     <!-- Filters & Search Toolbar -->
