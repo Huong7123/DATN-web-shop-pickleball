@@ -109,6 +109,7 @@
         <!-- Main Content -->
         <main class="flex-1 flex flex-col h-full overflow-hidden relative">
             @yield('content')
+            @include('layouts.Admin.widget.__modal_infor_admin')
         </main>
         <div id="global-loader" class="fixed inset-0 z-[9999] hidden bg-black/40 flex items-center justify-center">
             <div class="loader"></div>
