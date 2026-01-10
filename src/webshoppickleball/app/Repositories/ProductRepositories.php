@@ -101,6 +101,10 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
                 if ($status == 2) {
                     $q->where('quantity', '>', 5);
                 }
+
+                if ($status == 3) {
+                    $q->where('status', 0);
+                }
             })
             ->when(is_array($categoryIds), function ($q) use ($categoryIds) {
                 $q->whereHas('category', function ($cat) use ($categoryIds) {

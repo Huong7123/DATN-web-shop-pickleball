@@ -75,6 +75,7 @@
         <main class="layout-container flex h-full grow flex-col">
             <div class="container mx-auto px-4">
                 @yield('content')
+                @include('layouts.Frontend.widget.__mini_chat_box')
             </div>
             <div id="global-loader" class="fixed inset-0 z-[9999] hidden bg-black/40 flex items-center justify-center">
                 <div class="loader"></div>

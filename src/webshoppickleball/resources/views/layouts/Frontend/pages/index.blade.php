@@ -22,122 +22,199 @@
     </div>
 </div>
 <section class="py-8">
-    <h2
-        class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 sm:px-6 lg:px-10 pb-3 pt-5">
-        Sản Phẩm Nổi Bật</h2>
-    <div class="pb-3 px-4 sm:px-6 lg:px-10">
-        <div class="flex border-b border-primary/20 dark:border-primary/10 gap-8">
-            <a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-gray-900 dark:text-white pb-[13px] pt-4"
-                href="#">
-                <p class="text-sm font-bold leading-normal tracking-[0.015em]">Bán chạy nhất</p>
-            </a>
-            <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-gray-500 dark:text-gray-400 pb-[13px] pt-4 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
-                href="#">
-                <p class="text-sm font-bold leading-normal tracking-[0.015em]">Sản phẩm mới</p>
-            </a>
-        </div>
-    </div>
-    <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 p-4 sm:p-6 lg:p-10">
-        <div class="flex flex-col gap-3 pb-3 group">
-            <div
-                class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105"
-                data-alt="A professional carbon fiber pickleball paddle."
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAdi5v09GHXDbIJhtZI955czkXkuxk8bMIZ-ZPHvJLuZ5CQKiBZaj5t8W3e08zCsGDI3YxGOy2WHWaHo0jt4cr37dGxzTzzhxNwjYvkKsGnT_qehKRJP2jSwpySjRiICAWwF1qgAjIiuUX2CfMxe9Pds6pIv44iCJnJJe0qsJv8F3L1quDU9LECBR17iBH-SMpFyV5JEK1w2msE3ps9QnJs7fh1qkXTZQ493MKIrNJCrKHq4GwNEnE7iqDxooA-bYoNkxIx9jL1cU1");'>
-            </div>
-            <div>
-                <p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Vợt Carbon Fiber Pro
-                </p>
-                <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">₫2,500,000</p>
-            </div>
-        </div>
-        <div class="flex flex-col gap-3 pb-3 group">
-            <div
-                class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105"
-                data-alt="A set of yellow X-40 pickleballs."
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBzdn8G63ayVjltUDYGFIq_2Xf23Q34jfUom6DtrK0Gk7AujCiim0hB9tGA_Spn1tyq5CRiQcKpk3AhnHmzyKgBTPhxi4mOmBiCxGmQYrnDP4ciEjz0ZlE21q7lNlyVSrwygaEj8Wj5D7pEbSHk6W9TcNS-2GSI1Wx9TNBYYVb668tydhM5ujIN7yjPIctt4GKAV2LZO_XiOfOM0SnfEDrdpGR5fO3UNny5ttcTdnqGjz546SMZDAvksoDOMbIxaIhKlJlLvEv31VqW");'>
-            </div>
-            <div>
-                <p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Bóng Pickleball X-40
-                </p>
-                <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">₫350,000</p>
-            </div>
-        </div>
-        <div class="flex flex-col gap-3 pb-3 group">
-            <div
-                class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105"
-                data-alt="A pair of stylish Court Supreme pickleball shoes."
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBfmxqwvpFilWzUiB0YS3A-xHyPjSKKaR6ube0lfgA12fF0cxPLZuTmHQusNox0pfz2SzC2fvjRyLZVxAucoS9gUnJY5HBLfOnz7YkCEecC2U963NIssnjyDOtgLocf91s0-6tgZwMPx_qifWCgLgEYlXUxSoTzaWLCAjGNGkrAtbYpDqDn3VJmIukqMOGee7KeFrwMu-QMXCSLzEkdkaW3yoBGkrnSdCLh-nXUcOYV33V2FWyNIEXkPv8LkjgBXOVXd-e1TFB38CRJ");'>
-            </div>
-            <div>
-                <p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Giày Court Supreme</p>
-                <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">₫1,800,000</p>
-            </div>
-        </div>
-        <div class="flex flex-col gap-3 pb-3 group">
-            <div
-                class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105"
-                data-alt="A Pro Gear pickleball paddle bag."
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDGL1k73soIyFBDropY4A8xCd_3LMLTw_GyVslvEEK1GjR1TI5Du_yk1ppsp9rWws3DTVAyWNdfobs3mMSqgzqzLmvYjghLleYn6zmHi8zlOCLnWceomiZvAbbQ4p9RwiJAKjtugceXKIVh25HoQK9RxuaCTEgdZlD2bTTqfBGwdvd1TIoARQmylBIKazwkt2mX7bHZgStE2g0DylB7TiMpfNFkYFTJrr1vS1PK2Y8nJlWnhuWEi8-VRS5V2fYBlwYvHAW2bXecGkUw");'>
-            </div>
-            <div>
-                <p class="text-gray-900 dark:text-white text-base font-medium leading-normal">Túi Đựng Vợt Pro Gear
-                </p>
-                <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">₫1,200,000</p>
-            </div>
-        </div>
+    <h2 class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 sm:px-6 lg:px-10 pb-3 pt-5">
+        Sản Phẩm Mới
+    </h2>
+    <div id="wrap_product_body" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 sm:p-6 lg:p-10">
     </div>
 </section>
-<section class="px-4 sm:px-6 lg:px-10 py-16">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div
-            class="flex flex-col justify-center items-start bg-primary/20 dark:bg-primary/10 p-8 sm:p-12 rounded-xl text-center md:text-left">
-            <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">Giảm giá 20%</h3>
-            <p class="text-gray-700 dark:text-gray-300 mb-6">Cho đơn hàng đầu tiên của bạn! Đừng bỏ lỡ cơ hội sở
-                hữu những sản phẩm chất lượng với giá ưu đãi.</p>
-            <button
-                class="w-full md:w-auto flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-gray-900 text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-colors">
-                <span class="truncate">Săn Sale Ngay</span>
-            </button>
+<section
+    class="px-4 sm:px-6 lg:px-10 py-20 bg-white dark:bg-gray-900/30 rounded-3xl mx-4 sm:mx-6 lg:mx-10 shadow-sm border border-primary/5">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex flex-col items-center text-center mb-16">
+            <span class="text-primary font-bold tracking-widest uppercase text-sm mb-4">Câu
+                Chuyện Của Chúng Tôi</span>
+            <h2
+                class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
+                Về Pickleball Pro</h2>
+            <div class="w-20 h-1.5 bg-primary rounded-full mb-8"></div>
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl leading-relaxed">
+                Khởi nguồn từ niềm đam mê mãnh liệt với bộ môn thể thao năng động này,
+                Pickleball Pro không chỉ là một cửa hàng dụng cụ. Chúng tôi là người bạn đồng
+                hành, là nơi hội tụ và lan tỏa tinh thần thể thao tích cực đến cộng đồng người
+                chơi Việt Nam.
+            </p>
         </div>
-        <div
-            class="flex flex-col justify-center items-start bg-gray-800 dark:bg-gray-900 p-8 sm:p-12 rounded-xl text-center md:text-left">
-            <h3 class="text-2xl sm:text-3xl font-bold text-white mb-3">Mua Vợt Tặng Bóng</h3>
-            <p class="text-gray-300 mb-6">Nhận ngay một bộ bóng thi đấu tiêu chuẩn khi mua bất kỳ vợt nào từ bộ
-                sưu tập mới của chúng tôi.</p>
-            <button
-                class="w-full md:w-auto flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-white text-gray-900 text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-colors">
-                <span class="truncate">Xem Vợt Mới</span>
-            </button>
-        </div>
-    </div>
-</section>
-<section class="px-4 sm:px-6 lg:px-10 py-16">
-    <div
-        class="flex flex-col md:flex-row items-center gap-12 bg-white dark:bg-gray-900/50 p-8 sm:p-12 rounded-xl">
-        <div class="w-full md:w-1/2">
-            <div class="aspect-w-4 aspect-h-3">
-                <div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-lg"
-                    data-alt="A group of people playing pickleball happily at an outdoor court."
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
+            <div class="relative group">
+                <div
+                    class="absolute -inset-4 bg-primary/10 rounded-2xl blur-lg transition group-hover:bg-primary/20">
+                </div>
+                <div class="relative aspect-[4/3] w-full bg-center bg-no-repeat bg-cover rounded-2xl shadow-xl overflow-hidden"
+                    data-alt="Cộng đồng Pickleball"
                     style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA4sK1hMRONQN3ti-PaX0tZMjiTaGyVyLKyMc8qTk2lw57J3s2CD1H92BweNmBBSjbXSTDwL1i8Vjmop9YmorxPl7OuOYWAmRY-giKH6jg_Fk2cYip37CQpzLYQOK_IHdq0gVHglTZAqhHgoT6oVszrmXCHjPmfAJf1UlH9J8w6q5hX8mxmUC5UR23TBR-q36d8Wv8NupD_159kzdu4m1cdqmNK7itRUdWBNs9XE2-onCe4Z43vOYyBuGMtwzcri_T267ZD_-hjD5ip");'>
                 </div>
             </div>
+            <div class="flex flex-col gap-8">
+                <div>
+                    <h3
+                        class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">target</span>
+                        Sứ Mệnh Của Chúng Tôi
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Mang đến những dụng cụ Pickleball tiêu chuẩn quốc tế với giá thành hợp
+                        lý nhất. Chúng tôi cam kết giúp mọi người chơi, từ người mới bắt đầu đến
+                        các vận động viên chuyên nghiệp, khai phá tối đa tiềm năng bản thân và
+                        tận hưởng trọn vẹn từng khoảnh khắc trên sân đấu.
+                    </p>
+                </div>
+                <div>
+                    <h3
+                        class="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">visibility</span>
+                        Tầm Nhìn Chiến Lược
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Trở thành biểu tượng của sự chuyên nghiệp và uy tín trong lĩnh vực cung
+                        cấp đồ tập Pickleball tại Việt Nam. Chúng tôi hướng tới việc xây dựng
+                        một hệ sinh thái thể thao bền vững, nơi mỗi sản phẩm bán ra đều đóng góp
+                        vào sự phát triển của cộng đồng.
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="w-full md:w-1/2 flex flex-col items-start">
-            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Về Pickleball Store</h2>
-            <p class="text-gray-600 dark:text-gray-300 mb-6">Chúng tôi cam kết cung cấp dụng cụ pickleball chất
-                lượng hàng đầu để giúp mọi người chơi, từ người mới bắt đầu đến chuyên nghiệp, đạt được hiệu suất
-                tốt nhất và tận hưởng trọn vẹn niềm vui trên sân đấu.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div
+                class="bg-primary/5 dark:bg-primary/10 p-8 rounded-2xl border border-primary/10 hover:border-primary/30 transition-all text-center">
+                <div
+                    class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-primary">verified_user</span>
+                </div>
+                <h4 class="font-bold text-gray-900 dark:text-white mb-2">Chất Lượng Tuyệt Đối
+                </h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">100% sản phẩm chính hãng,
+                    được kiểm định nghiêm ngặt trước khi đến tay khách hàng.</p>
+            </div>
+            <div
+                class="bg-primary/5 dark:bg-primary/10 p-8 rounded-2xl border border-primary/10 hover:border-primary/30 transition-all text-center">
+                <div
+                    class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-primary">groups</span>
+                </div>
+                <h4 class="font-bold text-gray-900 dark:text-white mb-2">Gắn Kết Cộng Đồng</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Hỗ trợ các giải đấu phong
+                    trào và tạo không gian giao lưu cho người chơi khắp cả nước.</p>
+            </div>
+            <div
+                class="bg-primary/5 dark:bg-primary/10 p-8 rounded-2xl border border-primary/10 hover:border-primary/30 transition-all text-center">
+                <div
+                    class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-primary">support_agent</span>
+                </div>
+                <h4 class="font-bold text-gray-900 dark:text-white mb-2">Dịch Vụ Tận Tâm</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Đội ngũ tư vấn am hiểu sâu
+                    sắc về kỹ thuật, luôn sẵn sàng hỗ trợ bạn chọn dụng cụ phù hợp nhất.</p>
+            </div>
+        </div>
+        <!-- <div class="mt-16 flex justify-center">
             <button
-                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary/20 dark:bg-primary/10 text-gray-900 dark:text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/30 dark:hover:bg-primary/20 transition-colors">
-                <span class="truncate">Tìm Hiểu Thêm</span>
+                class="flex items-center gap-2 px-10 py-4 bg-primary text-gray-900 font-bold rounded-full hover:scale-105 transition-transform shadow-lg shadow-primary/20">
+                <span>Gia nhập cộng đồng ngay</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
             </button>
-        </div>
+        </div> -->
     </div>
 </section>
 
 <script>
     $('#btn_buy').on('click', function () {
         window.location.href = '/san-pham';
+    });
+
+    // Hàm định dạng tiền tệ Việt Nam
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(amount).replace('₫', 'đ');
+    }
+
+    function getAllProduct(page = 1) {
+        $.ajax({
+            url: '/api/product',
+            method: 'GET',
+            data: {
+                page: page,
+                per_page: 4,
+            },
+            headers: {
+                // Nếu API công khai có thể không cần Token, nhưng tôi giữ lại theo code của bạn
+                'Authorization': 'Bearer ' + getCookie('admin_token')
+            },
+            beforeSend: function () {
+                if (typeof showLoader === "function") showLoader();
+            },
+            success: function(res) {
+                // Dữ liệu sản phẩm nằm trong res.data.data dựa trên JSON bạn gửi
+                const products = res.data.data; 
+                const $container = $('#wrap_product_body');
+                
+                $container.html('');
+                
+                if (products && products.length > 0) {
+                    products.forEach(product => {
+                        $container.append(renderCardProduct(product));
+                    });
+                } else {
+                    $container.html('<p class="text-center col-span-full text-gray-500">Chưa có sản phẩm nào.</p>');
+                }
+            },
+            error: function(err) {
+                console.error('Không thể tải danh sách sản phẩm:', err);
+            },
+            complete: function () {
+                if (typeof hideLoader === "function") hideLoader();
+            }
+        });
+    }
+
+    function renderCardProduct(item) {
+        let imageUrl = '/images/no-image.png';
+        
+        // Xử lý chuỗi JSON image
+        try {
+            if (item.image) {
+                const images = JSON.parse(item.image);
+                if (Array.isArray(images) && images.length > 0) {
+                    // Lấy ảnh đầu tiên trong mảng
+                    imageUrl = '/storage/' + images[0];
+                }
+            }
+        } catch (e) {
+            console.warn("Lỗi parse ảnh cho sản phẩm:", item.name);
+        }
+
+        return `
+        <div class="flex flex-col gap-3 pb-3 group cursor-pointer" onclick="window.location.href='/san-pham/${item.slug}'">
+            <div
+                class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-sm border border-gray-100 dark:border-gray-800"
+                style='background-image: url("${imageUrl}");'>
+            </div>
+            <div class="px-1">
+                <p class="text-gray-900 dark:text-white text-xl font-semibold leading-tight mb-1 truncate">
+                    ${item.name}
+                </p>
+                <p class="text-primary font-bold text-lg leading-normal">
+                    ${formatCurrency(item.price)}
+                </p>
+            </div>
+        </div>
+        `;
+    }
+
+    $(document).ready(function () {
+        getAllProduct();
     });
 </script>
 @endsection
