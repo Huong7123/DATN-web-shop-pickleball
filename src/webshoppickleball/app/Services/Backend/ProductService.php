@@ -236,6 +236,7 @@ class ProductService extends BaseService
             // Cập nhật sản phẩm cha
             $productData = [
                 'name'        => $data['name'] ?? $product->name,
+                'status'        => $data['status'] ?? $product->status,
                 'slug'        => Str::slug($data['name'] ?? $product->name),
                 'description' => $data['description'] ?? $product->description,
                 'category_id' => $data['category_id'] ?? $product->category_id,

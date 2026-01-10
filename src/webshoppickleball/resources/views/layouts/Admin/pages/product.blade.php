@@ -46,6 +46,7 @@
                 <option value="0">Hết hàng</option>
                 <option value="1">Sắp hết hàng</option>
                 <option value="2">Còn hàng</option>
+                <option value="3">Ngừng kinh doanh</option>
             </select>
         </div>
     </div>
@@ -162,28 +163,45 @@
                             </span>`
                     }
                 </td>
-                <td class="p-4 text-center">
-                    ${
-                        item.status === 1
-                            ? `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#e7f3eb] text-[#0d1b12] dark:bg-primary/20 dark:text-primary">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-4 min-w-[150px]">
+                        <div class="shrink-0">
+                            ${item.status == 1
+                                ? `<div style="width: 96px;" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-green-100 text-green-800 border border-green-200 shadow-sm">
+                                    <span class="relative flex h-2 w-2">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                    </span>
                                     Hoạt động
-                            </span>`
-                            : `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                                    Ngừng bán
-                            </span>`
-                    }
+                                </div>`
+                                : `<div style="width: 96px;" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-700 border border-red-100 shadow-sm">
+                                    <span class="size-2 rounded-full bg-red-500"></span>
+                                    Ngừng KD
+                                </div>`
+                            }
+                        </div>
+                        <div class="flex items-center">
+                            <label class="relative inline-flex items-center cursor-pointer group">
+                                <input type="checkbox" 
+                                    class="sr-only peer toggle-status" 
+                                    data-id="${item.id}" 
+                                    ${item.status == 1 ? 'checked' : ''}>
+                                <div class="w-10 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 
+                                            peer-checked:after:translate-x-[20px] peer-checked:after:border-white 
+                                            after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                            after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                            after:h-4 after:w-4 after:transition-all dark:border-gray-600 
+                                                peer-checked:bg-primary group-hover:ring-4 group-hover:ring-primary/10">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
                 </td>
                 <td class="p-4 text-right">
                     <div class="flex items-center justify-end gap-2">
                         <button data-id="${item.id}"
                             class="btn-edit p-1.5 rounded text-gray-400 hover:text-primary hover:bg-green-50 dark:hover:bg-gray-700 transition-colors">
                             <span class="material-symbols-outlined text-[20px]">edit</span>
-                        </button>
-                        <button data-id="${item.id}"
-                            class="btn-delete p-1.5 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-gray-700 transition-colors">
-                            <span class="material-symbols-outlined text-[20px]">delete</span>
                         </button>
                     </div>
                 </td>
@@ -469,65 +487,81 @@
         $('#modal_add_product').addClass('hidden');
     });
 
-        let typingTimer = null;
-        $('#search_product').on('keyup', function () {
-            clearTimeout(typingTimer);
+    let typingTimer = null;
+    $('#search_product').on('keyup', function () {
+        clearTimeout(typingTimer);
 
-            const keyword = $(this).val();
-            const status = $('#filter_status').val();
+        const keyword = $(this).val();
+        const status = $('#filter_status').val();
 
-            typingTimer = setTimeout(function () {
-                getAllParentProduct(1, keyword, status);
-            }, 400);
-        });
-
-        $('#filter_status').on('change', function () {
-            const keyword = $('#search_product').val();
-            const status = $(this).val();
-
+        typingTimer = setTimeout(function () {
             getAllParentProduct(1, keyword, status);
-        });
+        }, 400);
+    });
 
-    $(document).on('click', '.btn-delete', function () {
-        const id = $(this).data('id');
+    $('#filter_status').on('change', function () {
+        const keyword = $('#search_product').val();
+        const status = $(this).val();
+
+        getAllParentProduct(1, keyword, status);
+    });
+
+    function showToast(message, type = 'success') {
+        const color = type === 'success' ? '#10b981' : '#f59e0b';
         Swal.fire({
-            title: 'Bạn có chắc muốn xóa?',
-            text: "Hành động này sẽ xóa cả sản phẩm và các biến thể con!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Xóa',
-            cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/api/product/' + id,
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': 'Bearer ' + getCookie('admin_token')
-                    },
-                    success: function(res) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công',
-                            text: 'Xoá sản phẩm thành công',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
+            text: message,
+            icon: type,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true
+        });
+    }
 
-                        setTimeout(() => {
-                            getAllParentProduct();
-                        }, 1500);
-                    },
-                    error: function(xhr) {
-                        Swal.fire(
-                            'Lỗi!',
-                            xhr.responseJSON?.message || 'Xảy ra lỗi khi xóa sản phẩm.',
-                            'error'
-                        );
-                    }
+    $(document).on('change', '.toggle-status', function() {
+        const $checkbox = $(this);
+        const productId = $checkbox.data('id');
+        const isChecked = $checkbox.is(':checked');
+        const newStatus = isChecked ? 1 : 0;
+
+        // Vô hiệu hóa tạm thời để tránh người dùng bấm liên tục khi đang xử lý
+        $checkbox.prop('disabled', true);
+
+        $.ajax({
+            url: `/api/product/${productId}`,
+            method: 'POST',
+            data: {
+                status: newStatus,
+            },
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('admin_token')
+            },
+            success: function(res) {
+                // Hiển thị thông báo nhỏ (Toast)
+                showToast('Cập nhật trạng thái thành công!', 'success');
+                
+                getAllParentProduct(currentPage); 
+            },
+            error: function(err) {
+                // Nếu lỗi, gạt nút quay trở lại trạng thái ban đầu
+                $checkbox.prop('checked', !isChecked);
+                
+                let errorMsg = 'Không thể cập nhật trạng thái';
+                if(err.responseJSON && err.responseJSON.message) {
+                    errorMsg = err.responseJSON.message;
+                }
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: errorMsg,
+                    confirmButtonColor: '#10b981'
                 });
+            },
+            complete: function() {
+                // Mở khóa lại checkbox sau khi xong
+                $checkbox.prop('disabled', false);
             }
         });
     });
