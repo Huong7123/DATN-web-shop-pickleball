@@ -8,12 +8,12 @@
         <h1 class="text-text-main dark:text-white text-lg font-bold leading-normal">PickleAdmin</h1>
     </div>
     <nav class="flex-1 flex flex-col gap-2 px-4 py-4 overflow-y-auto">
-        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
+        <!-- <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
             href="/tong-quan">
             <span
                 class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">dashboard</span>
             <p class="text-sm font-medium">Tổng quan</p>
-        </a>
+        </a> -->
         <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
             href="/admin/quan-ly-danh-muc">
             <span
@@ -51,12 +51,12 @@
             </span>
             <p class="text-sm font-medium">Quản trị viên</p>
         </a>
-        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
+        <!-- <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
             href="#">
             <span
                 class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">monitoring</span>
             <p class="text-sm font-medium">Báo cáo</p>
-        </a>
+        </a> -->
     </nav>
     <div class="p-4 border-t border-[#e7f3eb] dark:border-gray-800">
         <a id="btn_logout" class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"

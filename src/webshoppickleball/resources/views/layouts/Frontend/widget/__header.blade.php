@@ -7,8 +7,8 @@
             </div>
             <div class="hidden md:flex items-center gap-9">
                 <a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors" href="/san-pham">Sản phẩm</a>
-                <a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors" href="/kho-voucher">Kho voucher</a>
-                <a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors" href="/lien-he">Liên hệ</a>
+                <!-- <a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors" href="/kho-voucher">Kho voucher</a> -->
+                <!-- <a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors" href="/lien-he">Liên hệ</a> -->
 
             </div>
         </div>
