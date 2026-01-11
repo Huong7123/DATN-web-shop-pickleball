@@ -71,7 +71,7 @@
         categories: '',
         min_price: null,
         max_price: null,
-        per_page: 12
+        per_page: 9
     };
 
     const slider = document.getElementById('price_slider');
