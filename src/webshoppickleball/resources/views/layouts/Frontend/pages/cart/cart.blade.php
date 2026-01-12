@@ -168,7 +168,9 @@
 
                     const attrs = product.attribute_values.map(a => a.name).join(' - ');
                     const attribute_value_ids = product.attribute_values.map(av => av.id);
-                    const image = product.image ? '/storage/' + JSON.parse(product.image)[0] : '/images/no-image.png';
+                    const image = product.image?.length
+                        ? '/storage/' + product.image[0]
+                        : '/images/no-image.png';
 
                     tbody.append(`
                         <tr class="cart-item" data-id="${item.product_id}"
