@@ -123,7 +123,7 @@
                 <div id="checkout_products" class="mt-6 space-y-4">
                     
                 </div>
-                <div class="my-6 border-t border-border-light dark:border-border-dark"></div>
+                <!-- <div class="my-6 border-t border-border-light dark:border-border-dark"></div>
                 <div class="flex items-end gap-3">
                     <div class="flex-grow">
                         <label class="mb-2 block text-sm font-medium">Mã giảm giá</label>
@@ -134,7 +134,7 @@
                     <button
                         class="h-12 shrink-0 rounded-lg bg-primary/20 px-5 font-bold text-text-light dark:text-text-dark">Áp
                         dụng</button>
-                </div>
+                </div> -->
                 <div class="my-6 border-t border-border-light dark:border-border-dark"></div>
                 <div id="checkout_summary" class="space-y-3">
 
@@ -216,10 +216,7 @@
                 <span>${formatPrice(shippingFee)}</span>
             </div>
 
-            <div id="discount" data-discount="${discount}" class="flex justify-between font-medium text-primary">
-                <span>Giảm giá</span>
-                <span>- ${formatPrice(discount)}</span>
-            </div>
+            
 
             <div class="flex justify-between text-lg font-bold">
                 <span>Tổng cộng</span>

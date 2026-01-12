@@ -168,9 +168,7 @@
 
                     const attrs = product.attribute_values.map(a => a.name).join(' - ');
                     const attribute_value_ids = product.attribute_values.map(av => av.id);
-                    const image = product.image?.length
-                        ? '/storage/' + product.image[0]
-                        : '/images/no-image.png';
+                    const image = product.image ? '/storage/' + JSON.parse(product.image)[0] : '/images/no-image.png';
 
                     tbody.append(`
                         <tr class="cart-item" data-id="${item.product_id}"
@@ -187,8 +185,10 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-4">
-                                    <div class="bg-cover rounded-lg w-16 h-16"
-                                        style="background-image:url('${image}')"></div>
+                                    <div class="w-36 h-16 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+    <img src="${image}" class="w-full h-full object-contain">
+</div>
+
                                     <div>
                                         <p class="font-semibold">${product.name}</p>
                                         <p class="text-xs text-gray-500">${attrs}</p>
