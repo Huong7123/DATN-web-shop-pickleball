@@ -130,6 +130,7 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
                 'attributes',
                 'attributeValues',
             ])
+            ->where('status', 1)
             ->where('parent_id', $parentId)
             ->get();
     }
@@ -168,6 +169,7 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         $count = count($selectedValueIds);
 
         return Product::query()
+            ->where('status', 1)
             ->where('parent_id', $parentId)
             ->whereIn('id', function ($q) use ($selectedValueIds, $count) {
                 $q->select('product_id')

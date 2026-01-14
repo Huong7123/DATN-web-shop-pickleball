@@ -69,9 +69,9 @@
         keyword: '',
         status: -1,
         categories: '',
-        min_price: null,
-        max_price: null,
-        per_page: 12
+        min_price: 0,
+        max_price: 20000000,
+        per_page: 9
     };
 
     const slider = document.getElementById('price_slider');
@@ -82,7 +82,7 @@
     const maxPriceDisplay = document.getElementById('max_price');
 
     const minValue = 0; // 0
-    const maxValue = 5000000; // 5.000.000
+    const maxValue = 20000000; // 5.000.000
 
     let minPercent = 0;
     let maxPercent = 100;
@@ -153,33 +153,40 @@
         : '';
         return `
         <a href="/san-pham/${item.slug}">
-            <div
-                class="flex flex-col overflow-hidden rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark group" style="cursor: pointer;">
-                <div class="relative overflow-hidden">
-                    <img class="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        data-alt="A green and black pickleball paddle leaning against a net."
-                        src="${
-                                item.image
-                                    ? '/storage/' + JSON.parse(item.image)[0]
-                                    : '/images/no-image.png'
-                            }"/>
+            <div class="flex flex-col h-[480px] overflow-hidden rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark group transition-all hover:shadow-lg" style="cursor: pointer;">
+                
+                <div class="relative overflow-hidden aspect-square">
+                    <img class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        alt="${item.name}"
+                        src="${item.image ? '/storage/' + JSON.parse(item.image)[0] : '/images/no-image.png'}"/>
                     ${badgeHTML}
                 </div>
+
                 <div class="flex flex-1 flex-col p-4">
-                    <h3 class="text-base font-bold">${item.name}</h3>
-                    <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary mb-2">${item.category.name}
+                    
+                    <h3 class="text-base font-bold text-text-light dark:text-text-dark line-clamp-2 h-[48px] mb-1 leading-6">
+                        ${item.name}
+                    </h3>
+                    
+                    <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary mb-2">
+                        ${item.category.name}
                     </p>
-                    <p class="text-lg font-extrabold text-primary mt-auto">${formatPrice(item.price)}</p>
-                    <div class="flex gap-2 mt-3">
-                        <button data-id="${item.id}" 
-                            class="flex-1 flex items-center gap-2 justify-center h-10 rounded-lg bg-primary text-[#0d1b12] font-bold text-base tracking-wide hover:bg-[#10d652] transition-all shadow-lg shadow-primary/25 cursor-pointer group">
-                            <span class="material-symbols-outlined text-base">shopping_bag</span>
-                            Mua ngay
-                        </button>
-                        <button data-id="${item.id}" 
-                            class="btn-add-to-cart flex items-center justify-center w-10 h-10 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors">
-                            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
-                        </button>
+
+                    <div class="mt-auto">
+                        <p class="text-lg font-extrabold text-primary">${formatPrice(item.price)}</p>
+                        
+                        <div class="flex gap-2 mt-3">
+                            <button data-id="${item.id}" 
+                                class="flex-1 flex items-center gap-2 justify-center h-10 rounded-lg bg-primary text-[#0d1b12] font-bold text-base tracking-wide hover:bg-[#10d652] transition-all shadow-lg shadow-primary/25 cursor-pointer">
+                                <span class="material-symbols-outlined text-base">shopping_bag</span>
+                                Mua ngay
+                            </button>
+                            
+                            <button data-id="${item.id}" 
+                                class="btn-add-to-cart flex items-center justify-center w-10 h-10 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors">
+                                <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -176,7 +176,11 @@
                 statusText = 'Chờ xử lý';
                 statusClass = 'bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-100';
                 break;
-            case 'delivering':
+            case 'confirm':
+                statusText = 'Đã xác nhận';
+                statusClass = 'bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-100';
+                break;
+            case 'shipping':
                 statusText = 'Đang giao';
                 statusClass = 'bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-100';
                 break;
