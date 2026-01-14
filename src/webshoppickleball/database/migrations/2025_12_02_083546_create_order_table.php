@@ -29,7 +29,7 @@ return new class extends Migration
             // unpaid | paid
 
             $table->string('status')->default('pending'); 
-            // pending | confirmed | shipping | completed | canceled
+            // pending | confirm | shipping | completed | canceled
             $table->timestamps();
         });
     }
