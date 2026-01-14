@@ -56,6 +56,9 @@ class BaseRepositories
         $query->when(!empty($filters['id']), function ($q) use ($filters) {
                 $q->where('id', $filters['id']);
             })
+            ->when(!empty($filters['user_id']), function ($q) use ($filters) {
+                $q->where('user_id', $filters['user_id']);
+            })
             ->when(!empty($filters['email']), function ($q) use ($filters) {
                 $q->where('email', 'LIKE', "%{$filters['email']}%");
             })
