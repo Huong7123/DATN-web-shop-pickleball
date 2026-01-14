@@ -23,6 +23,7 @@ class Product extends Model
         'quantity',
         'parent_id',
         'status',
+        // 'sold',
     ];
 
     public function category()

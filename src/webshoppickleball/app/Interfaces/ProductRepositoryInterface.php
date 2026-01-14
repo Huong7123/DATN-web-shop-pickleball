@@ -49,5 +49,7 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
     public function decrementParentStock(int $parentId, int $qty): bool;
     public function increment(int $productId, string $field, int $qty);
     public function incrementParentStock(int $productId, string $field, int $qty);
-    
+    public function incrementSold(int $productId, int $qty): bool;
+    public function decrementSoldChildProduct(int $productId, int $qty): bool;
+    public function decrementSoldParentProduct(int $productId, int $qty): bool;
 }

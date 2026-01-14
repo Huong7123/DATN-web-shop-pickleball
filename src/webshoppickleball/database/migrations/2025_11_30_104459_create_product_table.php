@@ -21,6 +21,8 @@ return new class extends Migration
             $table->decimal('price', 15, 2)->default(0);
             $table->integer('quantity')->default(0);
             $table->integer('parent_id')->default(0);
+            $table->integer('sold')->default(0);
+
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
