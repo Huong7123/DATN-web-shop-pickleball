@@ -21,7 +21,7 @@
                 <!-- Shipping Information -->
                 <section>
                     <h2 class="text-2xl font-bold tracking-tight">1. Thông tin giao hàng</h2>
-                    <div class="mt-6">
+                    <div id="list_address" class="mt-6">
                         <label class="mb-2 block text-sm font-medium">Sổ địa chỉ</label>
                         <div class="relative">
                             <details class="group relative" id="address_details">
@@ -403,7 +403,10 @@
                     selectAddress(defaultAddr);
 
                 } else {
-                    $('#address_summary_content').html('<span class="text-red-500 text-sm">Chưa có địa chỉ. Vui lòng nhập thông tin bên dưới.</span>');
+                    console.log("111")
+                    $('#list_address').addClass('hidden')
+                    // $('#address_summary_content').html('<span class="text-red-500 text-sm">Chưa có địa chỉ. Vui lòng nhập thông tin bên dưới.</span>');
+                    // $('#address_options_list').empty();
                     resetShippingInfo();
                 }
             },
@@ -414,24 +417,6 @@
                 // hideLoader();
             }
         });
-    }
-
-    // Hàm để render nội dung vào ô Summary
-    function renderSummary(addr) {
-        const html = `
-            <div class="flex flex-wrap items-center gap-2">
-                <span class="font-bold text-text-light dark:text-text-dark">${addr.user_name}</span>
-                <span class="text-sm text-subtle-light dark:text-subtle-dark">| ${addr.user_phone}</span>
-                ${addr.is_default == 1 ? '<span class="inline-flex items-center rounded-full bg-primary/20 px-2 py-0.5 text-xs font-bold text-primary">Mặc định</span>' : ''}
-            </div>
-            <span class="text-sm text-subtle-light dark:text-subtle-dark truncate">
-                ${addr.address_line}, ${addr.ward}, ${addr.district}, ${addr.province}
-            </span>
-        `;
-        $('#address_summary_content').html(html);
-        
-        // Đóng dropdown sau khi chọn (tùy chọn)
-        $('#address_details').removeAttr('open');
     }
 
     function selectAddress(addr) {

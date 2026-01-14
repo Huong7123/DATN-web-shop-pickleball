@@ -268,9 +268,10 @@ class ProductService extends BaseService
 
                 // Xoá biến thể cũ
                 foreach ($variants as $variant) {
-                    $repo->detachAttributes($variant->id);
-                    $repo->detachAttributeValues($variant->id);
-                    $repo->delete($variant->id);
+                    $dataStatus = ['status' => 0];
+                    // $repo->detachAttributes($variant->id);
+                    // $repo->detachAttributeValues($variant->id);
+                    $repo->update($variant->id,$dataStatus);
                 }
 
                 // Gán attributes mới cho sản phẩm cha
