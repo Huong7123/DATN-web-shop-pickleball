@@ -262,4 +262,12 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         return false;
     }
 
+    public function suggest(array $filter)
+    {
+        return $this->model->where('parent_id',0)
+            ->where('level',$filter['level'])
+            ->where('play_style',$filter['style'])
+            ->whereBetween('price',$filter['budget'])
+            ->limit(3)->get();
+    }
 }

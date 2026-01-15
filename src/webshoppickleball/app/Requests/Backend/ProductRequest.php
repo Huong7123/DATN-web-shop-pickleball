@@ -31,6 +31,9 @@ class ProductRequest extends FormRequest
             'name'            => 'required|string|max:255',
             'description'     => 'nullable|string',
             'category_id'     => 'nullable|integer|exists:categories,id',
+
+            'level' => 'required|in:beginner,basic,intermediate,pro',
+            'play_style' => 'required|in:power,control,balance',
             
             'price_main'      => 'required|string|max:255',
             'price'           => 'nullable|array',
@@ -98,6 +101,12 @@ class ProductRequest extends FormRequest
             'attribute_value_ids.*.*.required' => 'Giá trị thuộc tính không được để trống.',
             'attribute_value_ids.*.*.integer'  => 'Giá trị thuộc tính không hợp lệ.',
             'attribute_value_ids.*.*.exists'   => 'Giá trị thuộc tính không tồn tại trong hệ thống.',
+
+            'level.required' => 'Vui lòng chọn trình độ người chơi.',
+            'level.in'       => 'Trình độ không hợp lệ.',
+
+            'play_style.required' => 'Vui lòng chọn phong cách chơi.',
+            'play_style.in'       => 'Phong cách chơi không hợp lệ.',
         ];
     }
 

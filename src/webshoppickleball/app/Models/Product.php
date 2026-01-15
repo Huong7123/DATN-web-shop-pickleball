@@ -23,17 +23,14 @@ class Product extends Model
         'quantity',
         'parent_id',
         'status',
+        'level',
+        'play_style',
         // 'sold',
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function variants()
-    {
-        return $this->hasMany(ProductVariant::class);
     }
 
     public function attributes()
