@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\CartController;
 use App\Http\Controllers\Backend\PaymentController;
+use App\Http\Controllers\Backend\SaleController;
 use Illuminate\Http\Request;
 
 Route::post('/register', [RegisterController::class, 'register']);
@@ -99,3 +100,5 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/attribute-value/{id}', [AttributeValueController::class, 'destroy']);
 
 });
+
+Route::get('/sale', [SaleController::class, 'check']);
