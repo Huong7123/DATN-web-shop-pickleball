@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\DiscountController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\CartController;
+use App\Http\Controllers\Backend\ChatAIController;
 use App\Http\Controllers\Backend\PaymentController;
 use Illuminate\Http\Request;
 
@@ -35,6 +36,9 @@ Route::get('/product/{id}', [ProductController::class, 'show']);
 Route::get('/products/related/{categoryId}/{productId}', [ProductController::class, 'getProductByCategory']);
 Route::get('/product-child', [ProductController::class, 'getChildProduct']);
 Route::post('/product-variant/{id}', [ProductController::class, 'getVariant']);
+
+Route::post('/chatbot', ChatAIController::class);
+
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);

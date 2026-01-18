@@ -233,4 +233,39 @@ class ProductRepositories extends BaseRepositories implements ProductRepositoryI
         return false;
     }
 
+    //tăng đã bán
+    public function incrementSold(int $productId, int $qty): bool
+    {
+        return $this->model
+            ->where('id', $productId)
+            ->increment('sold', $qty) > 0;
+    }
+
+
+    // giảm đã bán
+    public function decrementSoldChildProduct(int $productId, int $qty): bool
+    {
+        return $this->model
+            ->where('id', $productId)
+            ->where('sold', '>=', $qty) // không cho sold âm
+            ->decrement('sold', $qty) > 0;
+    }
+
+    public function decrementSoldParentProduct(int $productId, int $qty): bool
+    {
+        $parentId = $this->model->where('id', $productId)->value('parent_id');
+
+        if ($parentId) {
+            return $this->model->where('id', $parentId)->decrement('sold', $qty);
+        }
+
+        return false;
+    }
+
+    public function getActiveProductsForConsulting() {
+        return Product::with(['attributeValues.attribute', 'category'])
+            ->where('parent_id', 0)
+            ->where('status', 1)
+            ->get();
+    }
 }

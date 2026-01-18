@@ -21,7 +21,10 @@ return new class extends Migration
             $table->decimal('price', 15, 2)->default(0);
             $table->integer('quantity')->default(0);
             $table->integer('parent_id')->default(0);
+            $table->integer('sold')->default(0);
             $table->tinyInteger('status')->default(1);
+            $table->enum('level',['beginner','basic','intermediate','pro'])->nullable(); //mới, cơ bản, trung bình, CN
+            $table->enum('play_style',['power','control','balance'])->nullable(); //lực,kiểm soát, cân bằng
             $table->timestamps();
         });
     }

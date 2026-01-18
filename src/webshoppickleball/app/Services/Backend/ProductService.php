@@ -116,6 +116,8 @@ class ProductService extends BaseService
                 'price' => $data['price_main'] ?? 0,
                 'quantity' => 0,
                 'status' => 1,
+                'level' => $data['level'],
+                'play_style' => $data['play_style'],
                 'parent_id' => 0,
                 'image'     => json_encode($images),
             ]);
@@ -166,6 +168,8 @@ class ProductService extends BaseService
                     'status'    => 1,
                     'parent_id' => $mainProduct->id,
                     'image'     => $mainProduct->image,
+                    'level' => $data['level'],
+                    'play_style' => $data['play_style'],
                 ]);
 
                 // 👇 GẮN ATTRIBUTE_VALUE CHO VARIANT

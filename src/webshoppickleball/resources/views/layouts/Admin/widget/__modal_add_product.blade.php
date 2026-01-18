@@ -108,6 +108,33 @@
                         placeholder="Nhập chi tiết về thông số kỹ thuật, chất liệu..."></textarea>
                 </div>
             </div>
+            <div class="col-span-1">
+                <label class="block text-sm font-medium mb-2 text-text-light dark:text-text-dark">Phù hợp với người chơi<span
+                        class="text-red-500">*</span></label>
+                <div class="relative">
+                    <select id="level_select"
+                        class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-shadow pr-10">
+                        <option disabled selected value="">Chọn trình độ người chơi</option>
+                        <option value="beginner">Người mới</option>
+                        <option value="basic">Trình độ cơ bản</option>
+                        <option value="intermediate">Trình độ trung bình</option>
+                        <option value="pro">Trình độ Pro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-span-1">
+                <label class="block text-sm font-medium mb-2 text-text-light dark:text-text-dark">Phù hợp với lối chơi<span
+                        class="text-red-500">*</span></label>
+                <div class="relative">
+                    <select id="play_style_select"
+                        class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-shadow pr-10">
+                        <option disabled selected value="">Chọn phong lối chơi</option>
+                        <option value="power">Tấn công</option>
+                        <option value="control">Kiểm soát</option>
+                        <option value="balance">Cân bằng</option>
+                    </select>
+                </div>
+            </div>
         </section>
         <hr class="border-border-light dark:border-border-dark opacity-50" />
         <!-- Variants / Attributes -->
@@ -358,6 +385,10 @@
                 formData.append(`attribute_value_ids[${i}][]`, valueId);
             });
         });
+
+        formData.append('level', $('#level_select').val());
+        formData.append('play_style', $('#play_style_select').val());
+
         $.ajax({
             url: '/api/product',
             method: 'POST',
