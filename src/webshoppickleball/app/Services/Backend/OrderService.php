@@ -97,6 +97,7 @@ class OrderService extends BaseService
 
                 $ok = $this->productRepository->decrementStock($variant->id, $item['quantity']);
                 $okParent = $this->productRepository->decrementParentStock($item['parent_id'], $item['quantity']);
+
                 if (!$ok || !$okParent) {
                     $this->rollbackOrder($order->id);
                     throw new \Exception("Sản phẩm {$variant->id} không đủ tồn kho");
@@ -108,6 +109,9 @@ class OrderService extends BaseService
                     'quantity'   => $item['quantity'],
                     'price'      => $variant->price,
                 ]);
+
+                $this->productRepository->incrementSold($item['parent_id'], $item['quantity']);
+                $this->productRepository->incrementSold($variant->id, $item['quantity']);
 
                 $productTotal += $variant->price * $item['quantity'];
                 $productIds[] = $variant->id;
@@ -202,9 +206,12 @@ class OrderService extends BaseService
                         'quantity',
                         $item->quantity
                     );
+                    $this->productRepository->decrementSoldChildProduct($item->product_id, $item->quantity);
+                    $this->productRepository->decrementSoldParentProduct($item->product_id, $item->quantity);
                 }
 
                 $updateData['status'] = 'cancel';
+
             }
 
             $updated = $this->repository->update($orderId, $updateData);

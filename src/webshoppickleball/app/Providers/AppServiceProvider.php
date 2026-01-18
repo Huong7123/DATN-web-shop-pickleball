@@ -9,6 +9,7 @@ use App\Interfaces\BaseRepositoryInterface;
 use App\Interfaces\CartItemRepositoryInterface;
 use App\Interfaces\CartRepositoryInterface;
 use App\Interfaces\CategoryRepositoryInterface;
+use App\Interfaces\ChatbotSessionInterface;
 use App\Interfaces\DiscountRepositoryInterface;
 use App\Interfaces\Mail\MailServiceInterface;
 use App\Interfaces\OrderItemRepositoryInterface;
@@ -24,6 +25,7 @@ use App\Repositories\BaseRepositories;
 use App\Repositories\CartItemRepositories;
 use App\Repositories\CartRepositories;
 use App\Repositories\CategoryRepositories;
+use App\Repositories\ChatbotSessionRepositories;
 use App\Repositories\DiscountRepositories;
 use App\Repositories\OrderItemRepositories;
 use App\Repositories\OrderRepositories;
@@ -57,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CartItemRepositoryInterface::class,CartItemRepositories::class);
         $this->app->bind(AddressRepositoryInterface::class,AddressRepositories::class);
         $this->app->bind(VnPayRepositoryInterface::class,VnPayRepositories::class);
-
+        $this->app->bind(ChatbotSessionInterface::class, ChatbotSessionRepositories::class);
     }
 
     /**
