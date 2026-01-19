@@ -531,7 +531,25 @@
                 loadCartBadge();
             },
             error(xhr) {
-                Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể thêm vào giỏ', 'error');
+                if (xhr.status === 401) {
+                    // Xử lý riêng cho lỗi chưa đăng nhập
+                    Swal.fire({
+                        title: 'Bạn cần đăng nhập để thực hiện chức năng này!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Đăng nhập ngay',
+                        cancelButtonText: 'Để sau'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Điều hướng người dùng đến trang đăng nhập
+                            window.location.href = '/dang-nhap'; // Thay đổi đường dẫn theo route của bạn
+                        }
+                    });
+                } else {
+                    Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể thêm vào giỏ', 'error');
+                }
             }
         });
     });
