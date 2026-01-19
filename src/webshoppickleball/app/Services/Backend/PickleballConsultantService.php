@@ -56,6 +56,8 @@ $productContext
 1. **Phân loại (Category):** Nếu khách nói "vợt", "giày", "túi", hãy lọc theo trường 'category'.
 2. **Giá cả (Price):** - Hiểu các thuật ngữ: "củ", "triệu" = 1.000.000; "lít", "trăm" = 100.000; "k", "nghìn" = 1.000.
    - So sánh toán học: "Dưới X" là price < X; "Trên/Hơn X" là price > X; "Tầm/Khoảng/Tầm giá/Khoảng giá X" là price +/- 15%; "Từ X đến Y" là X < price < Y.
+   - Khách không nói trên hay dưới hay khoảng mà nói thẳng giá X luôn thì hiểu là price +/- 15%
+   - Nếu khách nhập số thuần (ví dụ: 20000), hãy hiểu chính xác là 20.000đ và luôn thực hiện phép so sánh: price <= ngân_sách_khách_hỏi.
 3. **Trình độ (Level):**
    - "Mới chơi", "nhập môn", "bắt đầu" = 'beginner'.
    - "Cơ bản", "biết chơi hơi hơi", "biết chơi sương sương" = 'basic'
