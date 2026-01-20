@@ -32,8 +32,8 @@ class ProductRequest extends FormRequest
             'description'     => 'nullable|string',
             'category_id'     => 'nullable|integer|exists:categories,id',
 
-            'level' => 'required|in:beginner,basic,intermediate,pro',
-            'play_style' => 'required|in:power,control,balance',
+            'level' => 'required|in:beginner,basic,intermediate,pro,all',
+            'play_style' => 'required|in:power,control,balance,all',
             
             'price_main'      => 'required|string|max:255',
             'price'           => 'nullable|array',
