@@ -33,6 +33,7 @@ class PickleballConsultantService
                 'id' => $p->id,
                 'name' => $p->name,
                 'price' => (float) $p->price,
+                'sold' => (int)$p->sold,
                 'category' => $p->category->name ?? '',
                 'level' => $p->level, 
                 'style' => $p->play_style, 
@@ -55,17 +56,29 @@ $productContext
 1. **Phân loại (Category):** Nếu khách nói "vợt", "giày", "túi", hãy lọc theo trường 'category'.
 2. **Giá cả (Price):** - Hiểu các thuật ngữ: "củ", "triệu" = 1.000.000; "lít", "trăm" = 100.000; "k", "nghìn" = 1.000.
    - So sánh toán học: "Dưới X" là price < X; "Trên/Hơn X" là price > X; "Tầm/Khoảng/Tầm giá/Khoảng giá X" là price +/- 15%; "Từ X đến Y" là X < price < Y.
+   - Khách không nói trên hay dưới hay khoảng mà nói thẳng giá X luôn thì hiểu là price +/- 15%
+   - Nếu khách nhập số thuần (ví dụ: 20000), hãy hiểu chính xác là 20.000đ và luôn thực hiện phép so sánh: price <= ngân_sách_khách_hỏi.
 3. **Trình độ (Level):**
    - "Mới chơi", "nhập môn", "bắt đầu" = 'beginner'.
    - "Cơ bản", "biết chơi hơi hơi", "biết chơi sương sương" = 'basic'
    - "Trung bình" = 'intermediate'
    - "Chuyên nghiệp", "thi đấu", "lâu năm", "đẳng cấp" = 'pro'.
+   - Nếu sản phẩm có level = 'all', nó được coi là khớp với TẤT CẢ các yêu cầu về trình độ (beginner, basic, intermediate, pro).
 4. **Lối chơi (Style):**
    - "Tấn công", "mạnh mẽ", "uy lực" = 'power'.
    - "Phòng thủ", "kiểm soát", "khéo léo" = 'control'.
-   - "toàn diện", "cân bằng" = 'balance
+   - "toàn diện", "cân bằng" = 'balance.
+   - Nếu sản phẩm có style = 'all', nó được coi là khớp với TẤT CẢ các yêu cầu về lối chơi (power, control, balance).
 5. **Thuộc tính (Specs):** Tìm kiếm màu sắc (đen, trắng, đỏ...) hoặc chất liệu (carbon, sợi thủy tinh...) trong mảng 'specs'.
-
+6. **Sản phẩm bán chạy (Best Seller):** - Nếu khách hỏi "best seller", "bán chạy", "mua nhiều", "hot", "quan tâm" hãy dựa vào trường `sold`.
+   - Phải ưu tiên đưa các sản phẩm có số `sold` cao nhất lên đầu và sắp xếp giảm dần.
+   - Chỉ lấy tối đa 3 sản phẩm phù hợp nhất cho yêu cầu này.
+7. **Xử lý đa điều kiện:
+   - Khi khách tìm sản phẩm cho trình độ X và lối chơi Y:
+     + Bước 1: Tìm sản phẩm có (level == X HOẶC level == 'all').
+     + Bước 2: Trong kết quả đó, tìm sản phẩm có (style == Y HOẶC style == 'all').
+     + Bước 3: Ưu tiên sản phẩm khớp chính xác cả X và Y lên trước, sau đó mới đến các sản phẩm có giá trị 'all'.
+   - Xử lý các bước tương tự khi khách muốn tìm sản phẩm với các điều kiện khác:
 ### QUY TẮC TRẢ LỜI:
 - Trình bày câu trả lời (message) bằng tiếng Việt thân thiện, chuyên nghiệp, có sử dụng icon. 
 - Nếu có sản phẩm phù hợp: Liệt kê ID của chúng vào mảng 'data'.
@@ -98,14 +111,12 @@ SYS;
             $result = json_decode(trim($jsonContent), true);
 
             // LẤY ID VÀ ÉP KIỂU SỐ NGUYÊN NGAY LẬP TỨC
-            $ids = collect($result['data'] ?? [])
-                ->pluck('id')
-                ->map(fn($id) => (int)$id) // Ép "5" thành 5
-                ->filter()
-                ->toArray();
+            $ids = collect($result['data'] ?? [])->pluck('id')->map(fn($id) => (int)$id)->toArray();
 
-            // Dùng whereIn để lấy full data
-            $matchedProducts = $products->whereIn('id', $ids)->values();
+            // Lấy sản phẩm và giữ đúng thứ tự ưu tiên của AI (Sản phẩm bán nhiều nhất đứng đầu)
+            $matchedProducts = collect($ids)->map(function($id) use ($products) {
+                return $products->firstWhere('id', $id);
+            })->filter()->values();
 
             // Debug thử nếu vẫn rỗng
             if ($matchedProducts->isEmpty() && !empty($ids)) {
@@ -113,7 +124,7 @@ SYS;
             }
 
             return [
-                'message' => $result['message'] ?? 'Tôi tìm thấy sản phẩm này cho bạn:',
+                'message' => $result['message'] ?? 'Hiện tại shop chưa có sản phẩm phù hợp với yêu cầu của bạn.',
                 'data' => $matchedProducts
             ];
 

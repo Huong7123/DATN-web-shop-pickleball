@@ -23,8 +23,8 @@ return new class extends Migration
             $table->integer('parent_id')->default(0);
             $table->integer('sold')->default(0);
             $table->tinyInteger('status')->default(1);
-            $table->enum('level',['beginner','basic','intermediate','pro'])->nullable(); //mới, cơ bản, trung bình, CN
-            $table->enum('play_style',['power','control','balance'])->nullable(); //lực,kiểm soát, cân bằng
+            $table->enum('level',['beginner','basic','intermediate','pro','all'])->nullable(); //mới, cơ bản, trung bình, CN
+            $table->enum('play_style',['power','control','balance','all'])->nullable(); //lực,kiểm soát, cân bằng
             $table->timestamps();
         });
     }
