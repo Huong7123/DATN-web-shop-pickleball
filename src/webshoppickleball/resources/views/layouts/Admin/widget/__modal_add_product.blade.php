@@ -115,6 +115,7 @@
                     <select id="level_select"
                         class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-shadow pr-10">
                         <option disabled selected value="">Chọn trình độ người chơi</option>
+                        <option value="all">Tất cả trình độ</option>
                         <option value="beginner">Người mới</option>
                         <option value="basic">Trình độ cơ bản</option>
                         <option value="intermediate">Trình độ trung bình</option>
@@ -129,6 +130,7 @@
                     <select id="play_style_select"
                         class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-shadow pr-10">
                         <option disabled selected value="">Chọn phong lối chơi</option>
+                        <option value="all">Tất cả lối chơi</option>
                         <option value="power">Tấn công</option>
                         <option value="control">Kiểm soát</option>
                         <option value="balance">Cân bằng</option>

@@ -63,15 +63,22 @@ $productContext
    - "Cơ bản", "biết chơi hơi hơi", "biết chơi sương sương" = 'basic'
    - "Trung bình" = 'intermediate'
    - "Chuyên nghiệp", "thi đấu", "lâu năm", "đẳng cấp" = 'pro'.
+   - Nếu sản phẩm có level = 'all', nó được coi là khớp với TẤT CẢ các yêu cầu về trình độ (beginner, basic, intermediate, pro).
 4. **Lối chơi (Style):**
    - "Tấn công", "mạnh mẽ", "uy lực" = 'power'.
    - "Phòng thủ", "kiểm soát", "khéo léo" = 'control'.
-   - "toàn diện", "cân bằng" = 'balance
+   - "toàn diện", "cân bằng" = 'balance.
+   - Nếu sản phẩm có style = 'all', nó được coi là khớp với TẤT CẢ các yêu cầu về lối chơi (power, control, balance).
 5. **Thuộc tính (Specs):** Tìm kiếm màu sắc (đen, trắng, đỏ...) hoặc chất liệu (carbon, sợi thủy tinh...) trong mảng 'specs'.
 6. **Sản phẩm bán chạy (Best Seller):** - Nếu khách hỏi "best seller", "bán chạy", "mua nhiều", "hot", "quan tâm" hãy dựa vào trường `sold`.
    - Phải ưu tiên đưa các sản phẩm có số `sold` cao nhất lên đầu và sắp xếp giảm dần.
    - Chỉ lấy tối đa 3 sản phẩm phù hợp nhất cho yêu cầu này.
-
+7. **Xử lý đa điều kiện:
+   - Khi khách tìm sản phẩm cho trình độ X và lối chơi Y:
+     + Bước 1: Tìm sản phẩm có (level == X HOẶC level == 'all').
+     + Bước 2: Trong kết quả đó, tìm sản phẩm có (style == Y HOẶC style == 'all').
+     + Bước 3: Ưu tiên sản phẩm khớp chính xác cả X và Y lên trước, sau đó mới đến các sản phẩm có giá trị 'all'.
+   - Xử lý các bước tương tự khi khách muốn tìm sản phẩm với các điều kiện khác:
 ### QUY TẮC TRẢ LỜI:
 - Trình bày câu trả lời (message) bằng tiếng Việt thân thiện, chuyên nghiệp, có sử dụng icon. 
 - Nếu có sản phẩm phù hợp: Liệt kê ID của chúng vào mảng 'data'.
@@ -117,7 +124,7 @@ SYS;
             }
 
             return [
-                'message' => $result['message'] ?? 'Tôi tìm thấy sản phẩm này cho bạn:',
+                'message' => $result['message'] ?? 'Hiện tại shop chưa có sản phẩm phù hợp với yêu cầu của bạn.',
                 'data' => $matchedProducts
             ];
 
