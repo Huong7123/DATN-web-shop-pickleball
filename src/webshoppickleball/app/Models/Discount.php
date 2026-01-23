@@ -19,13 +19,18 @@ class Discount extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'image',
         'title',
         'code',
         'description',
-        'percent_off',
+        'discount_type',
+        'discount_value',
+        'max_discount_amount',
+        'min_order_value',
+        'min_total_spent',
+        'is_first_order',
         'start_date',
         'end_date',
+        'usage_limit',
         'status',
     ];
 }

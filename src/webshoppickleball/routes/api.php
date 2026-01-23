@@ -88,6 +88,7 @@ Route::middleware('auth:api')->group(function () {
 
     // quản lý mã giảm giá
     Route::get('/discount', [DiscountController::class, 'index']);
+    Route::get('/discount/{id}', [DiscountController::class, 'show']);
     Route::post('/discount', [DiscountController::class, 'store']);
     Route::post('/discount/{id}', [DiscountController::class, 'update']);
     Route::delete('/discount/{id}', [DiscountController::class, 'destroy']);
