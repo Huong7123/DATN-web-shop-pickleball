@@ -163,6 +163,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('layouts.Admin.pages.discounts',['title' => 'Quản lý mã giảm giá']);
     });
 
+    Route::get('/cau-hinh-uu-dai', function () {
+        return view('layouts.Admin.pages.exclusive-configs',['title' => 'Cấu hình ưu đãi độc quyền']);
+    });
+
     Route::middleware('admin.role')->group(function () {
         
     });

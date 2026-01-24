@@ -43,6 +43,11 @@
             <span class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">confirmation_number</span>
             <span class="text-sm font-medium">Mã giảm giá</span>
         </a>
+        <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group" 
+            href="/admin/cau-hinh-uu-dai">
+            <span class="material-symbols-outlined text-gray-500 group-hover:text-primary dark:text-gray-400">confirmation_number</span>
+            <span class="text-sm font-medium">Cấu hình ưu đãi độc quyền</span>
+        </a>
         <a class="flex items-center gap-3 px-3 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-[#e7f3eb] dark:hover:bg-gray-800 transition-colors group"
             href="/admin/quan-ly-nguoi-dung">
             <span

@@ -15,40 +15,21 @@
     </header>
     <!-- Actions & Filters Bar -->
     <div
-        class="bg-white dark:bg-[#152a1c] p-4 rounded-xl border border-gray-200 dark:border-gray-800 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div class="flex items-center gap-2 w-full md:w-auto">
-            <!-- Search Bar -->
-            <div class="relative w-full md:w-80">
+        class="mt-8 flex flex-wrap gap-4 items-center bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-[#e7f3eb] dark:border-gray-700">
+        <!-- Search -->
+        <label class="flex-1 min-w-[280px] relative group">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span
-                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                <input
-                    class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border-none focus:ring-2 focus:ring-primary/50 text-sm placeholder:text-gray-400"
-                    placeholder="Tìm theo mã" type="text" />
+                    class="material-symbols-outlined text-text-secondary group-focus-within:text-primary transition-colors">search</span>
             </div>
-        </div>
-        <!-- Chips / Tabs -->
-        <div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-            <button
-                class="flex h-9 items-center justify-center gap-x-2 rounded-full bg-primary/20 text-primary border border-primary/30 px-5 text-sm font-bold whitespace-nowrap">
-                Tất cả
-            </button>
-            <button
-                class="flex h-9 items-center justify-center gap-x-2 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-500 px-5 text-sm font-semibold whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-700">
-                Đang hoạt động
-            </button>
-            <button
-                class="flex h-9 items-center justify-center gap-x-2 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-500 px-5 text-sm font-semibold whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-700">
-                Tạm dừng
-            </button>
-            <button
-                class="flex h-9 items-center justify-center gap-x-2 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-500 px-5 text-sm font-semibold whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-700">
-                Hết hạn
-            </button>
-        </div>
+            <input id="input_search"
+                class="block w-full pl-10 pr-3 py-2.5 border border-[#cfe7d7] dark:border-gray-600 rounded-lg leading-5 bg-[#f8fcf9] dark:bg-gray-800 text-text-main dark:text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all"
+                placeholder="Tìm kiếm theo mã" type="search" />
+        </label>
     </div>
     <!-- Data Table -->
     <div
-        class="bg-white dark:bg-[#152a1c] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-sm">
+        class="mt-6 bg-white dark:bg-[#152a1c] border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -269,16 +250,13 @@
         // Format dấu phẩy
         return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
-    function getDiscount(page = 1, perPage = 20) {
-        const name = $('#input_search').val();
-        const status = $('#filter_status').val()
+    function getDiscount(page = 1, perPage = 20, code = null) {
         $.ajax({
             url: '/api/discount',
             method: 'GET',
             data: {
                 page: page,
-                name: name,
-                status: status,
+                code: code,
                 per_page: perPage
             },
             headers: {
@@ -391,9 +369,23 @@
                 }
             </td>
             <td class="px-6 py-4 text-right">
-                <div class="flex justify-end gap-2">
+                <div class="flex justify-end items-center">
+                    <label class="relative inline-flex items-center cursor-pointer group">
+                        <input type="checkbox" 
+                            class="sr-only peer toggle-status" 
+                            data-id="${item.id}" 
+                            ${item.status == 1 ? 'checked' : ''}>
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 
+                                    peer-checked:after:translate-x-[16px] peer-checked:after:border-white 
+                                    after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                    after:h-4 after:w-4 after:transition-all dark:border-gray-600 
+                                    peer-checked:bg-primary group-hover:ring-4 group-hover:ring-primary/10">
+                        </div>
+                    </label>
+
                     <button data-id="${item.id}" class="btn-edit p-2 text-gray-400 hover:text-primary transition-colors">
-                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                        <span class="material-symbols-outlined text-[20px]">edit</span>
                     </button>
                 </div>
             </td>
@@ -642,6 +634,64 @@
                 
                 // Hiện modal
                 $('#modal_discount').removeClass('hidden');
+            }
+        });
+    });
+
+    let typingTimer = null;
+    $('#input_search').on('keyup', function () {
+        clearTimeout(typingTimer);
+        const code = $(this).val();
+        typingTimer = setTimeout(function () {
+            getDiscount(currentPage, 20, code);
+        }, 400);
+    });
+
+
+    function showToast(message, type = 'success') {
+        const color = type === 'success' ? '#10b981' : '#f59e0b';
+        Swal.fire({
+            text: message,
+            icon: type,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true
+        });
+    }
+
+    $(document).on('change', '.toggle-status', function() {
+        const id = $(this).data('id');
+        const isChecked = $(this).is(':checked');
+        const newStatus = isChecked ? 1 : 0;
+
+        $.ajax({
+            url: `/api/discount/${id}`, // Sử dụng luôn API update của bạn
+            method: 'POST',
+            data: JSON.stringify({ status: newStatus }), // Chỉ gửi trường status
+            contentType: 'application/json',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('admin_token')
+            },
+            success: function(res) {
+                showToast('Cập nhật trạng thái thành công!', 'success');
+                getDiscount(currentPage);
+            },
+            error: function() {
+                $checkbox.prop('checked', !isChecked);
+                
+                let errorMsg = 'Không thể cập nhật trạng thái';
+                if(err.responseJSON && err.responseJSON.message) {
+                    errorMsg = err.responseJSON.message;
+                }
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: errorMsg,
+                    confirmButtonColor: '#10b981'
+                });
             }
         });
     });
