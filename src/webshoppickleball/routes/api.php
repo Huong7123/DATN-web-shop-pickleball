@@ -95,7 +95,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/discount/{id}', [DiscountController::class, 'destroy']);
 
     // cấu hình ưu đãi độc quyền
-    Route::get('/exclusive-config', [ExclusiveConfigController::class, 'index']);
+    Route::get('/exclusive-config', [ExclusiveConfigController::class, 'getAll']);
     Route::get('/exclusive-config/{id}', [ExclusiveConfigController::class, 'show']);
     Route::post('/exclusive-config', [ExclusiveConfigController::class, 'store']);
     Route::post('/exclusive-config/{id}', [ExclusiveConfigController::class, 'update']);

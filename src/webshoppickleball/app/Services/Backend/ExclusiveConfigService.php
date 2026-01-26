@@ -58,4 +58,77 @@ class ExclusiveConfigService extends BaseService
             return new DataResult('Có lỗi xảy ra: ' . $e->getMessage(), 500);
         }
     }
+
+    public function update(int $id, array $data): DataResult
+    {
+        // 1. Kiểm tra quyền hạn
+        $user = JWTAuth::parseToken()->authenticate();
+        if ($user->role != "2") {
+            return new DataResult('Bạn không có quyền thực hiện thao tác này', 403);
+        }
+
+        // 2. Kiểm tra sự tồn tại của bản ghi
+        $item = $this->repository->getById($id);
+        if (!$item) {
+            return new DataResult('Không tìm thấy cấu hình ưu đãi này', 404);
+        }
+
+        DB::beginTransaction();
+        try {
+            // 3. Map dữ liệu mới dựa trên dữ liệu hiện tại
+            $configData = $this->mapData($data, $item);
+            
+            // 4. Cập nhật bảng chính exclusive_configs
+            $item = $this->repository->update($id, $configData);
+
+            // 5. Cập nhật bảng trung gian (Many-to-Many)
+            // sync() sẽ tự động xóa các ID cũ không có trong mảng và thêm các ID mới
+            if (isset($data['discount_ids']) && is_array($data['discount_ids'])) {
+                $item->discounts()->sync($data['discount_ids']);
+            }
+
+            DB::commit();
+
+            // Load lại quan hệ discounts để trả về dữ liệu mới nhất
+            $item->load('discounts');
+
+            return new DataResult('Cập nhật cấu hình ưu đãi thành công', 200, $item);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new DataResult('Có lỗi xảy ra khi cập nhật: ' . $e->getMessage(), 500);
+        }
+    }
+    public function delete(int $id): DataResult
+    {
+        // 1. Kiểm tra quyền hạn
+        $user = JWTAuth::parseToken()->authenticate();
+        if ($user->role != "2") {
+            return new DataResult('Bạn không có quyền thực hiện thao tác này', 403);
+        }
+
+        // 2. Kiểm tra sự tồn tại của bản ghi
+        $item = $this->repository->getById($id);
+        if (!$item) {
+            return new DataResult('Không tìm thấy cấu hình ưu đãi để xóa', 404);
+        }
+
+        DB::beginTransaction();
+        try {
+            // 3. Xóa các liên kết trong bảng trung gian trước (detach)
+            // Việc này sẽ xóa sạch các dòng có exclusive_config_id = $id trong bảng exclusive_config_discount
+            $item->discounts()->detach();
+
+            // 4. Xóa bản ghi ở bảng chính
+            $this->repository->delete($id);
+
+            DB::commit();
+
+            return new DataResult('Xóa cấu hình ưu đãi độc quyền thành công', 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return new DataResult('Có lỗi xảy ra khi xóa: ' . $e->getMessage(), 500);
+        }
+    }
 }
