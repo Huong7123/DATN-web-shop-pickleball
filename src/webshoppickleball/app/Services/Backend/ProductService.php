@@ -28,7 +28,7 @@ class ProductService extends BaseService
         return new DataResult('Lấy danh sách thành công', 200, $data);
     }
 
-    public function getById(int $id, array $columns = ['*']): DataResult
+    public function getById(int $id, array $columns = ['*'], array $with = []): DataResult
     {
         $item = $this->repository->getById($id, $columns, ['attributes', 'attributeValues']);
         if (!$item) {
