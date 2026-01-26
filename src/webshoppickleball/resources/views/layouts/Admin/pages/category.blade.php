@@ -327,11 +327,11 @@
     });
 
     $('#btn_prev').on('click', function () {
-        getAllUser(currentPage - 1);
+        getAllCategory(currentPage - 1);
     });
 
     $('#btn_next').on('click', function () {
-        getAllUser(currentPage + 1);
+        getAllCategory(currentPage + 1);
     });
 
     $(document).on('change', '.toggle-status', function() {

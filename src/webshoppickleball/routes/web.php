@@ -134,6 +134,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/quan-ly-san-pham', function () {
         return view('layouts.Admin.pages.product',['title' => 'Quản lý sản phẩm']);
     });
+
     Route::get('/quan-ly-don-hang', function () {
         return view('layouts.Admin.pages.order',['title' => 'Quản lý đơn hàng']);
     });
@@ -156,6 +157,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/discount', function () {
         return view('layouts.Backend.pages.discount.discount',['title' => 'Quản lý ưu đãi']);
+    });
+
+    Route::get('/quan-ly-ma-giam-gia', function () {
+        return view('layouts.Admin.pages.discounts',['title' => 'Quản lý mã giảm giá']);
+    });
+
+    Route::get('/cau-hinh-uu-dai', function () {
+        return view('layouts.Admin.pages.exclusive-configs',['title' => 'Cấu hình ưu đãi độc quyền']);
     });
 
     Route::middleware('admin.role')->group(function () {

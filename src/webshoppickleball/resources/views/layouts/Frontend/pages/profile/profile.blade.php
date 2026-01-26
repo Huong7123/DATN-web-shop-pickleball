@@ -218,6 +218,9 @@
                 Authorization: "Bearer " + token
             },
             success: function (response) {
+                sessionStorage.setItem('email', response.data.email);
+                sessionStorage.setItem('name', response.data.name);
+                sessionStorage.setItem('avatar', response.data.avatar);
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công',
@@ -228,6 +231,7 @@
                 });
 
                 setTimeout(() => {
+                    location.reload();
                     getUser();
                 }, 1500);
             },

@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Discount extends Model
+class ExclusiveConfig extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    protected $table = 'discounts';
+    protected $table = 'exclusive_configs';
 
     /**
      * The attributes that are mass assignable.
@@ -19,18 +19,14 @@ class Discount extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'title',
-        'code',
-        'description',
-        'discount_type',
-        'discount_value',
-        'max_discount_amount',
-        'min_order_value',
-        'min_total_spent',
-        'is_first_order',
-        'start_date',
-        'end_date',
-        'usage_limit',
-        'status',
+        'tier_name',
+        'min_spending',
+        'discount_id',
+        'status'
     ];
+
+    public function discounts()
+    {
+        return $this->belongsToMany(Discount::class, 'exclusive_config_discount');
+    }
 }
