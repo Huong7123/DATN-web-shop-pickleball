@@ -7,6 +7,7 @@ use App\Interfaces\CartItemRepositoryInterface;
 use App\Interfaces\OrderItemRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,17 +16,21 @@ class OrderService extends BaseService
     protected OrderItemRepositoryInterface $orderItemRepository;
     protected ProductRepositoryInterface $productRepository;
     protected CartItemRepositoryInterface $cartItemRepository;
+    protected UserRepositoryInterface $userRepository;
+    
 
     public function __construct(
         OrderRepositoryInterface $repository,
         OrderItemRepositoryInterface $orderItemRepository,
         ProductRepositoryInterface $productRepository,
         CartItemRepositoryInterface $cartItemRepository,
+        UserRepositoryInterface $userRepository,
     ){
         parent::__construct($repository);
         $this->orderItemRepository = $orderItemRepository;
         $this->productRepository = $productRepository;
         $this->cartItemRepository = $cartItemRepository;
+        $this->userRepository = $userRepository;
     }
     public function getAllOrderAdmin($perPage, $status, $orderId): DataResult
     {
@@ -122,6 +127,13 @@ class OrderService extends BaseService
             $this->repository->update($order->id, ['total' => $grandTotal]);
             $order->total = $grandTotal;
 
+            // Cập nhật chi tiêu cho User =====
+            $newTotalSpending = $user->total_spending + $grandTotal;
+            // Sử dụng repo của user để update
+            $this->userRepository->update($user->id, [
+                'total_spending' => $newTotalSpending
+            ]);
+
             // 4. Xoá sản phẩm khỏi giỏ hàng qua repository
             if (!empty($productIds)) {
                 $this->cartItemRepository->deleteCartItemsByUserAndProduct($user->id, $productIds);
@@ -209,6 +221,12 @@ class OrderService extends BaseService
                     $this->productRepository->decrementSoldChildProduct($item->product_id, $item->quantity);
                     $this->productRepository->decrementSoldParentProduct($item->product_id, $item->quantity);
                 }
+
+                // Trừ lại tiền chi tiêu khi hủy đơn 
+                $newTotalSpending = max(0, $user->total_spending - $order->total);
+                $this->userRepository->update($user->id, [
+                    'total_spending' => $newTotalSpending
+                ]);
 
                 $updateData['status'] = 'cancel';
 
