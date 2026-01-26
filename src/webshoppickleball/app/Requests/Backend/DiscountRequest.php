@@ -15,32 +15,42 @@ class DiscountRequest extends FormRequest
 
     public function rules(): array
     {
+        $id = $this->route('id'); // Lấy id từ route để loại trừ khi update
+
         return [
-            'image'        => 'nullable|image|mimes:jpeg,png,jpg,webp,gif',
-            'title'        => 'required|string|max:255',
-            'code'         => 'required|string|max:50|unique:discounts,code,',
-            'description'  => 'nullable|string',
-            'percent_off'  => 'required|numeric|min:0|max:100',
-            'start_date'   => 'required|date|before_or_equal:end_date',
-            'end_date'     => 'required|date|after_or_equal:start_date',
+            'title'               => 'required|string|max:255',
+            'code'                => 'required|string|max:50|unique:discounts,code,' . $id,
+            'description'         => 'nullable|string',
+            'discount_type'       => 'required|in:percentage,fixed',
+            'discount_value'      => [
+                'required',
+                'numeric',
+                'min:0',
+                function ($attribute, $value, $fail) {
+                    if ($this->discount_type === 'percentage' && $value > 100) {
+                        $fail('Phần trăm giảm giá không được lớn hơn 100%.');
+                    }
+                },
+            ],
+            'max_discount_amount' => 'nullable|numeric|min:0',
+            'min_order_value'     => 'nullable|numeric|min:0',
+            'min_total_spent'     => 'nullable|numeric|min:0',
+            'is_first_order'      => 'nullable|in:0,1,true,false',
+            'start_date'          => 'required|date|before_or_equal:end_date',
+            'end_date'            => 'required|date|after_or_equal:start_date',
+            'usage_limit'         => 'nullable|integer|min:1',
+            'status'              => 'nullable|in:0,1',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'title.required'       => 'Tên ưu đãi không được để trống.',
-            'code.required'        => 'Mã giảm giá không được để trống.',
-            'code.unique'          => 'Mã giảm giá đã tồn tại.',
-            'percent_off.required' => 'Vui lòng nhập phần trăm giảm giá.',
-            'percent_off.min'      => 'Phần trăm giảm giá không được nhỏ hơn 0%.',
-            'percent_off.max'      => 'Phần trăm giảm giá không được lớn hơn 100%.',
-            'start_date.required'  => 'Vui lòng chọn ngày bắt đầu.',
-            'end_date.required'    => 'Vui lòng chọn ngày kết thúc.',
-            'start_date.before_or_equal' => 'Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.',
-            'end_date.after_or_equal'    => 'Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.',
-            'image.image'          => 'Tệp tải lên phải là hình ảnh.',
-            'image.mimes'          => 'Hình ảnh phải thuộc định dạng: jpeg, png, jpg, webp hoặc gif.',
+            'title.required'    => 'Tiêu đề không được để trống.',
+            'code.required'     => 'Mã giảm giá không được để trống.',
+            'code.unique'       => 'Mã giảm giá này đã tồn tại.',
+            'discount_type.in'  => 'Loại giảm giá phải là percentage hoặc fixed.',
+            'start_date.before_or_equal' => 'Ngày bắt đầu không được sau ngày kết thúc.',
         ];
     }
 
@@ -48,7 +58,7 @@ class DiscountRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
-            'message' => 'Validation error',
+            'message' => 'Lỗi xác thực dữ liệu',
             'errors'  => $validator->errors()
         ], 422));
     }

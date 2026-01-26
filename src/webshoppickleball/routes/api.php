@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\CartController;
 use App\Http\Controllers\Backend\ChatAIController;
+use App\Http\Controllers\Backend\ExclusiveConfigController;
 use App\Http\Controllers\Backend\PaymentController;
 use Illuminate\Http\Request;
 
@@ -88,9 +89,17 @@ Route::middleware('auth:api')->group(function () {
 
     // quản lý mã giảm giá
     Route::get('/discount', [DiscountController::class, 'index']);
+    Route::get('/discount/{id}', [DiscountController::class, 'show']);
     Route::post('/discount', [DiscountController::class, 'store']);
     Route::post('/discount/{id}', [DiscountController::class, 'update']);
     Route::delete('/discount/{id}', [DiscountController::class, 'destroy']);
+
+    // cấu hình ưu đãi độc quyền
+    Route::get('/exclusive-config', [ExclusiveConfigController::class, 'getAll']);
+    Route::get('/exclusive-config/{id}', [ExclusiveConfigController::class, 'show']);
+    Route::post('/exclusive-config', [ExclusiveConfigController::class, 'store']);
+    Route::post('/exclusive-config/{id}', [ExclusiveConfigController::class, 'update']);
+    Route::delete('/exclusive-config/{id}', [ExclusiveConfigController::class, 'destroy']);
 
     // quản lý bộ thuộc tính
     Route::post('/attribute', [AttributeController::class, 'store']);

@@ -14,9 +14,9 @@ class BaseService
         $this->repository = $repository;
     }
 
-    public function getAll(array $columns = ['*']): DataResult
+    public function getAll(array $columns = ['*'], array $with = []): DataResult
     {
-        $data = $this->repository->getAll($columns);
+        $data = $this->repository->getAll($columns, $with);
         return new DataResult('Lấy dữ liệu thành công', 200, $data);
     }
 
@@ -27,9 +27,9 @@ class BaseService
         return new DataResult('Lấy danh sách thành công',200,$data);
     }
 
-    public function getById(int $id, array $columns = ['*']): DataResult
+    public function getById(int $id, array $columns = ['*'], array $with = []): DataResult
     {
-        $item = $this->repository->getById($id, $columns);
+        $item = $this->repository->getById($id, $columns, $with);
         if (!$item) {
             return new DataResult("Bản ghi với id $id không tồn tại", 404);
         }
