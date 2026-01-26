@@ -67,6 +67,9 @@
                             Số điện thoại</th>
                         <th
                             class="px-6 py-4 text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">
+                            Tổng chi tiêu</th>
+                        <th
+                            class="px-6 py-4 text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">
                             Trạng thái</th>
                         <th
                             class="px-6 py-4 text-xs font-bold text-text-secondary dark:text-gray-400 uppercase tracking-wider">
@@ -127,6 +130,15 @@
     @include('layouts.Admin.widget.__pagination')
 </div>
 <script>
+    function formatPrice(price) {
+        if (!price) return '0';
+
+        // Ép về string → bỏ phần thập phân
+        const integerPart = price.toString().split('.')[0];
+
+        // Format dấu phẩy
+        return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -204,6 +216,9 @@
                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-gray-200">
                     ${item.phone}
                 </span>
+            </td>
+            <td class="px-6 py-4">
+                <span class="text-sm font-bold text-primary">${formatPrice(item.total_spending)} ₫</span>
             </td>
             <td class="px-6 py-4">
                 ${item.status == 1

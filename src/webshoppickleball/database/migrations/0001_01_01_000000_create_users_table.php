@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->tinyInteger('role');
             $table->tinyInteger('status');
+            $table->decimal('total_spending', 15, 2)->default(0);
             $table->string('otp_code', 6)->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->rememberToken();
