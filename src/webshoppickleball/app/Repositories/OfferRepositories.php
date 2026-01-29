@@ -37,4 +37,9 @@ class OfferRepositories  extends BaseRepositories implements OfferRepositoryInte
         return Offer::where('user_id', $userId)->first();
     }
 
+    public function getOfferByUserId(int $userId)
+    {
+        return Offer::with('offerDetails.discount')->where('user_id', $userId)->get();
+    }
+
 }

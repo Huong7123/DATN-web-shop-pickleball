@@ -13,37 +13,6 @@
             </div>
         </div>
         <!-- PageHeading End -->
-        <!-- Chips Start -->
-        <div class="flex items-center justify-between gap-4 flex-wrap">
-            <div class="flex gap-2 p-1 flex-wrap">
-                <div
-                    class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-primary text-black/90 px-4">
-                    <p class="text-sm font-semibold leading-normal">Tất cả</p>
-                </div>
-                <div
-                    class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 px-4">
-                    <p class="text-black/80 dark:text-white/80 text-sm font-medium leading-normal">Còn hiệu lực</p>
-                </div>
-                <div
-                    class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 px-4">
-                    <p class="text-black/80 dark:text-white/80 text-sm font-medium leading-normal">Đã sử dụng</p>
-                </div>
-                <div
-                    class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 px-4">
-                    <p class="text-black/80 dark:text-white/80 text-sm font-medium leading-normal">Hết hạn</p>
-                </div>
-            </div>
-            <div class="relative">
-                <select
-                    class="form-select appearance-none rounded-lg border-none bg-black/5 dark:bg-white/10 text-black/80 dark:text-white/80 text-sm font-medium pl-4 pr-10 h-8 focus:ring-2 focus:ring-primary/50">
-                    <option>Mới nhất</option>
-                    <option>Sắp hết hạn</option>
-                </select>
-                <span
-                    class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-lg pointer-events-none text-black/60 dark:text-white/60">expand_more</span>
-            </div>
-        </div>
-        <!-- Chips End -->
         <!-- Voucher Cards Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Card 1 -->

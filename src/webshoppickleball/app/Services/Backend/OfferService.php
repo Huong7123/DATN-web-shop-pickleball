@@ -115,4 +115,12 @@ class OfferService extends BaseService
     }
 
 
+    public function getOfferByUserId(): DataResult
+    {
+        $user = JWTAuth::parseToken()->authenticate()->id;
+
+        $data = $this->offerRepo->getOfferByUserId($user);
+
+        return new DataResult('Lấy danh sách thành công', 200, $data);
+    }
 }

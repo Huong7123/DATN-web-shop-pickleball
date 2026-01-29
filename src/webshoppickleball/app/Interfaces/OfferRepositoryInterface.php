@@ -14,4 +14,5 @@ interface OfferRepositoryInterface extends BaseRepositoryInterface
     public function createOffer(int $userId): Offer;
     public function createOfferDetails(array $details): void;
     public function findOfferByUserId(int $userId);
+    public function getOfferByUserId(int $userId);
 }
