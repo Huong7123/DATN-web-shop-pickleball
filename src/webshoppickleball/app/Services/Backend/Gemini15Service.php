@@ -29,9 +29,10 @@ class Gemini15Service
                     ]
                 ],
                 'generationConfig' => [
-                    'temperature' => 0.3,
-                    'maxOutputTokens' => 500,
-                ]
+                    'temperature' => 0.2, // Giảm xuống 0.2 để AI trả lời chính xác hơn, ít sáng tạo linh tinh
+                    'maxOutputTokens' => 2000, // Tăng lên để không bị cắt cụt JSON
+                    'responseMimeType' => 'application/json',
+                ],
             ]);
 
             // ❌ Gemini lỗi (429, 5xx, quota...)
@@ -58,21 +59,20 @@ class Gemini15Service
                 ];
             }
 
+            // Trong Gemini15Service.php
             $text = trim($text);
-            $text = preg_replace('/```json|```/', '', $text);
+            // Xóa bỏ các ký tự markdown nếu có
+            $text = str_replace(['```json', '```'], '', $text);
 
             $json = json_decode($text, true);
 
-            // Gemini trả không đúng JSON
-            if (!is_array($json)) {
-                Log::warning('Gemini response is not valid JSON', [
-                    'raw_text' => $text
-                ]);
-
-                return [
-                    'message' => '',
-                    'data' => []
-                ];
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                Log::error('Gemini trả về JSON lỗi: ' . json_last_error_msg(), ['text' => $text]);
+                // Thử cứu vãn bằng cách đóng ngoặc nếu bị cắt cụt (Optional)
+                if (strpos($text, '"data": [') !== false && substr($text, -1) !== '}') {
+                    $text .= ' ] }'; 
+                    $json = json_decode($text, true);
+                }
             }
 
             return $json;

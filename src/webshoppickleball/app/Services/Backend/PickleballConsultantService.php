@@ -146,7 +146,7 @@ message gợi ý điều chỉnh tiêu chí hoặc gợi ý 3 sản phẩm bán 
 SYS;
 
         // 3. Gọi AI
-        $rawResponse = $this->gemini->ask($systemPrompt . "\nDATA: " . $productContext, $userMessage);
+        $rawResponse = $this->gemini->ask($systemPrompt, $userMessage);
 
         // 4. Xử lý kết quả (Sửa lỗi ép kiểu tại đây)
         try {
