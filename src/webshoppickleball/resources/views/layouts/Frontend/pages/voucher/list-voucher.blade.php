@@ -14,10 +14,14 @@
         </div>
         <!-- PageHeading End -->
         <!-- Voucher Cards Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div id="voucher_list" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Card 1 -->
-            <div
+            <!-- <div
                 class="flex items-stretch justify-between gap-4 rounded-xl bg-background-light dark:bg-background-dark p-4 shadow-sm border border-black/10 dark:border-white/10">
+                <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex-1"
+                    data-alt="Image of a pickleball paddle."
+                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4orZi7OXQxY9gXx-VhSHZWoEy-3J1T_Z3FvisYoYSWwmfPGNIUYkapt_CJQbaFnU4P8HkIG_qMKomaiQj78x1PhplJTWQIUUOpSACmEkebLCxmkDx8wDtwgS4MhPWBTHosP7Fgw6VLO7TMa82PTVWAMoGyaWB2SftN2hzQuW6KsIrUmH_XLKpl0GyCK09gbd3gub2DbW3lvCvmgE_vwmCJTv4F3KHW-ueXxYN1hjJwUTH7Bjk6ydCvm9RBBi3Ah9biV_hRAOQguEk');">
+                </div>
                 <div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
                     <div class="flex flex-col gap-1">
                         <p class="text-black/60 dark:text-white/60 text-sm font-normal leading-normal">HSD: 31/12/2024</p>
@@ -30,75 +34,99 @@
                         <span class="truncate">Dùng ngay</span>
                     </button>
                 </div>
-                <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex-1"
-                    data-alt="Image of a pickleball paddle."
-                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4orZi7OXQxY9gXx-VhSHZWoEy-3J1T_Z3FvisYoYSWwmfPGNIUYkapt_CJQbaFnU4P8HkIG_qMKomaiQj78x1PhplJTWQIUUOpSACmEkebLCxmkDx8wDtwgS4MhPWBTHosP7Fgw6VLO7TMa82PTVWAMoGyaWB2SftN2hzQuW6KsIrUmH_XLKpl0GyCK09gbd3gub2DbW3lvCvmgE_vwmCJTv4F3KHW-ueXxYN1hjJwUTH7Bjk6ydCvm9RBBi3Ah9biV_hRAOQguEk');">
-                </div>
-            </div>
-            <!-- Card 2 -->
-            <div
-                class="flex items-stretch justify-between gap-4 rounded-xl bg-background-light dark:bg-background-dark p-4 shadow-sm border border-black/10 dark:border-white/10">
-                <div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
-                    <div class="flex flex-col gap-1">
-                        <p class="text-black/60 dark:text-white/60 text-sm font-normal leading-normal">HSD: 30/11/2024</p>
-                        <p class="text-black dark:text-white text-lg font-bold leading-tight">Miễn phí vận chuyển</p>
-                        <p class="text-black/60 dark:text-white/60 text-sm font-normal leading-normal">Miễn phí vận chuyển
-                            toàn quốc</p>
-                    </div>
-                    <button
-                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-black text-sm font-bold leading-normal w-fit">
-                        <span class="truncate">Dùng ngay</span>
-                    </button>
-                </div>
-                <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex-1"
-                    data-alt="Image of pickleballs on a court."
-                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_PGNbidwAAT7w_O3mp-CVa_7af6fMNLa37R-x9y373ZoMUDGivP22dSebljmBO-bIjnj5DrYxIt-1QQPMKGBCEO7eF7o2QIOEXsyExXDetFzYzPAsRFZqlu9OAIKErI6dPMJd8jp-0fm_s83j_SZlT2ItUqXt3sfOhumX9mNIVoyMk6UkMHHCv0t-B35XolVSrXgMOfy0o29InGIM1mZBtDOyKFWC_yAesIuRMuehqnCECY_L6rnyrdwagIkmhf-iEY8HYb9z8Z4t');">
-                </div>
-            </div>
-            <!-- Card 3 - Expiring Soon -->
-            <div
-                class="flex items-stretch justify-between gap-4 rounded-xl bg-background-light dark:bg-background-dark p-4 shadow-sm border border-black/10 dark:border-white/10">
-                <div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
-                    <div class="flex flex-col gap-1">
-                        <p class="text-orange-600 dark:text-orange-400 text-sm font-bold leading-normal">Sắp hết hạn:
-                            25/08/2024</p>
-                        <p class="text-black dark:text-white text-lg font-bold leading-tight">Giảm 100.000đ</p>
-                        <p class="text-black/60 dark:text-white/60 text-sm font-normal leading-normal">Cho đơn hàng vợt từ
-                            1.000.000đ</p>
-                    </div>
-                    <button
-                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-black text-sm font-bold leading-normal w-fit">
-                        <span class="truncate">Dùng ngay</span>
-                    </button>
-                </div>
-                <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex-1"
-                    data-alt="Image of pickleball accessories."
-                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDxRLHXMSPppIsscgGMX9AlHupRqhab4dGEbvjKahGfH1LUXJwZ0TvF0I9hLusueX56eGgw5btnMLGu_vQV2VAPLwEYrOCZ8FaMyFgl3QI5PL3B4TJP1shL4y8FBQBNbZzPrSDwdxV1XY_ffvGpP_0FD5J_tQ-HUhl1ve0sVo9-MHU19L29gQrjibc8Zr7ZjuH_T6hsJh6x2dkYykoPEjz8hNl267ZwNZqotbzbFupXgRhvqcsVOGnX6euglM85O5AzME6v9ukDKq6h');">
-                </div>
-            </div>
-            <!-- Card 4 - Used -->
-            <div
-                class="relative flex items-stretch justify-between gap-4 rounded-xl bg-background-light dark:bg-background-dark p-4 shadow-sm border border-black/10 dark:border-white/10 opacity-50">
-                <div class="absolute inset-0 bg-black/10 dark:bg-white/10 rounded-xl"></div>
-                <div class="flex flex-[2_2_0px] flex-col justify-between gap-4 z-10">
-                    <div class="flex flex-col gap-1">
-                        <p class="text-black/60 dark:text-white/60 text-sm font-normal leading-normal">Đã sử dụng</p>
-                        <p class="text-black dark:text-white text-lg font-bold leading-tight">Giảm 50%</p>
-                        <p class="text-black/60 dark:text-white/60 text-sm font-normal leading-normal">Tối đa 50.000đ cho
-                            phụ kiện</p>
-                    </div>
-                    <button
-                        class="flex min-w-[84px] max-w-[480px] cursor-not-allowed items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-black/20 dark:bg-white/20 text-black/50 dark:text-white/50 text-sm font-bold leading-normal w-fit"
-                        disabled="">
-                        <span class="truncate">Đã dùng</span>
-                    </button>
-                </div>
-                <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex-1 z-10"
-                    data-alt="Image of a pickleball net."
-                    style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVNLvjt_1f9gIl-ZkQGUOJIqV63N3Kxrpq5lWBYul1yFtkc0SIC7JDsP1ztwMqi-syTUkO7Qh2CJfbhqkxi4ZYOJa5u1amBRxEB6HQDlADSZXnZcP5xgv0Ez1eU8PcOk0jzuZ1w68-gqXUqqKhOBObL2-F3D30yHUD9ssgJsZmC9Shl4wlT7k9vHd34GTWM92dj4HLrzhhdGWlpN5aCOo6jmJ5paf5SWUCjyDPkuT1qrECybkI6t3XkhUkuD4UzBNWh7FauyVFn6l6');">
-                </div>
-            </div>
+                
+            </div> -->
         </div>
     </div>
 </div>
+<script>
+    function getAllVoucher() {
+        const userId = sessionStorage.getItem('id');
+        $.ajax({
+            url: '/api/offer',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token')
+            },
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (response) {
+                let html = '';
+                const data = response.data; // Đây là mảng các Offer
+
+                // 1. Kiểm tra xem data có phần tử nào không
+                if (!data || data.length === 0) {
+                    html = `<p class="text-center text-gray-400">Bạn chưa có voucher nào</p>`;
+                } else {
+                    // 2. Lặp qua từng Offer (thường mỗi user chỉ có 1 bản ghi offer như bạn muốn)
+                    data.forEach(item => {
+                        // 3. Lặp qua mảng offer_details bên trong
+                        if (item.offer_details && item.offer_details.length > 0) {
+                            item.offer_details.forEach(detail => {
+                                const discount = detail.discount;
+
+                                const expiryDateObj = new Date(discount.end_date);
+                                const today = new Date();
+
+                                // Tính số mili giây chênh lệch và chuyển sang số ngày
+                                const diffTime = expiryDateObj - today;
+                                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+                                // Xác định class màu sắc: nếu <0 ngày thì dùng text-red-500, ngược lại dùng màu mặc định
+                                const dateColorClass = diffDays < 0 ? "text-red-600 dark:text-red-400 font-bold" : "text-black/60 dark:text-white/60";
+                                
+                                // Format dữ liệu
+                                const displayValue = discount.discount_type === 'percentage' 
+                                    ? `Giảm ${parseFloat(discount.discount_value)}%` 
+                                    : `Giảm ${new Intl.NumberFormat('vi-VN').format(discount.discount_value)}đ`;
+                                
+                                const minOrder = new Intl.NumberFormat('vi-VN').format(discount.min_order_value);
+                                const expiryDate = new Date(discount.end_date).toLocaleDateString('vi-VN');
+
+                                html += `
+                                <div class="flex items-stretch justify-between gap-4 rounded-xl bg-background-light dark:bg-background-dark p-4 shadow-sm border border-black/10 dark:border-white/10 mb-4">
+                                    <div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-lg shrink-0"
+                                        style="background-image: url('https://meta.vn/Data/image/2022/10/04/LDP-voucher-1236x700.png');">
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-between gap-2">
+                                        <div class="flex flex-col gap-1">
+                                            <p class="${dateColorClass} text-black/60 dark:text-white/60 text-xs font-normal">HSD: ${expiryDate}</p>  
+                                            <p class="text-black dark:text-white text-base font-bold leading-tight">${displayValue} tối đa ${new Intl.NumberFormat('vi-VN').format(discount.max_discount_amount)}</p>
+                                            <p class="text-black/60 dark:text-white/60 text-xs font-normal">Áp dụng cho: Đơn từ ${minOrder}đ</p>
+                                        </div>
+                                        <button id="use_voucher" class="flex cursor-pointer items-center justify-center rounded-lg h-8 px-4 bg-primary text-black text-xs font-bold w-fit">
+                                            <span>Dùng ngay</span>
+                                        </button>
+                                    </div>
+                                </div>`;
+                            });
+                        }
+                    });
+                }
+
+                // Nếu lặp xong mà vẫn không có html (trường hợp data có nhưng offer_details rỗng)
+                if (html === '') {
+                    html = `<p class="text-center text-gray-400">Bạn chưa có voucher nào khả dụng</p>`;
+                }
+
+                $('#voucher_list').html(html);
+            },
+            error: function(error) {
+                Swal.fire('Lỗi', 'Không thể tải danh sách đơn hàng', 'error');
+            },
+            complete: function () {
+                hideLoader();
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        getAllVoucher();
+    });
+
+    $(document).on('click', '#use_voucher', function() {
+        window.location.href = '/san-pham';
+    });
+</script>
 @endsection
