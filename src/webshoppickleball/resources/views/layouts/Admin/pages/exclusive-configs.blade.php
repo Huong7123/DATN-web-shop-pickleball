@@ -380,7 +380,7 @@
                             <p class="text-xs text-gray-500">
                                 ${v.title || 'Không có tiêu đề'} - 
                                 Giảm ${formatPrice(v.discount_value || '0')}${v.discount_type === 'percentage' ? '%' : 'đ'} 
-                                ${parseFloat(v.max_discount_value) > 0 ? `(Tối đa ${formatPrice(v.max_discount_value)})` : ''} 
+                                ${parseFloat(v.max_discount_amount) > 0 ? `(Tối đa ${formatPrice(v.max_discount_amount)})` : ''} 
                                 cho đơn hàng từ ${v.min_order_value ? formatPrice(v.min_order_value) : '0'}đ
                             </p>
                         </div>
