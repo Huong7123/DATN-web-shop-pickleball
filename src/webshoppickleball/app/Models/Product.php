@@ -25,7 +25,7 @@ class Product extends Model
         'status',
         'level',
         'play_style',
-        // 'sold',
+        'sold',
     ];
 
     public function category()
