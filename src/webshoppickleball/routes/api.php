@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\CartController;
 use App\Http\Controllers\Backend\ChatAIController;
 use App\Http\Controllers\Backend\ExclusiveConfigController;
+use App\Http\Controllers\Backend\OfferController;
 use App\Http\Controllers\Backend\PaymentController;
 use Illuminate\Http\Request;
 
@@ -42,6 +43,9 @@ Route::post('/chatbot', ChatAIController::class);
 
 
 Route::middleware('auth:api')->group(function () {
+    //voucher
+    Route::get('/offer', [OfferController::class, 'getOfferByUserId']);
+
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::post('/logout', [AuthController::class, 'logout']);
