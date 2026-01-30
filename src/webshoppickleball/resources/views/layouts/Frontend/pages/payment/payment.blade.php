@@ -123,18 +123,17 @@
                 <div id="checkout_products" class="mt-6 space-y-4">
                     
                 </div>
-                <!-- <div class="my-6 border-t border-border-light dark:border-border-dark"></div>
-                <div class="flex items-end gap-3">
+                <div class="my-6 border-t border-border-light dark:border-border-dark"></div>
+                <div class="flex items-end gap-3 cursor-pointer" onclick="openVoucherModal()">
                     <div class="flex-grow">
                         <label class="mb-2 block text-sm font-medium">Mã giảm giá</label>
-                        <input
-                            class="form-input block h-12 w-full rounded-lg border border-border-light bg-background-light px-3 placeholder:text-subtle-light dark:border-border-dark dark:bg-background-dark/50"
-                            placeholder="Nhập mã" />
+                        <div id="selected_voucher_display" 
+                            class="flex h-12 w-full items-center justify-between rounded-lg border border-dashed border-primary bg-primary/5 px-4">
+                            <span class="text-sm text-subtle-light dark:text-gray-400" id="voucher_placeholder">Chưa có mã giảm giá nào được áp dụng</span>
+                            <i class="fa-solid fa-chevron-right text-primary text-xs"></i>
+                        </div>
                     </div>
-                    <button
-                        class="h-12 shrink-0 rounded-lg bg-primary/20 px-5 font-bold text-text-light dark:text-text-dark">Áp
-                        dụng</button>
-                </div> -->
+                </div>
                 <div class="my-6 border-t border-border-light dark:border-border-dark"></div>
                 <div id="checkout_summary" class="space-y-3">
 
@@ -147,8 +146,216 @@
         </div>
     </div>
 </div>
+<div id="voucher_modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-background-dark border dark:border-white/10">
+        <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-lg font-bold">Chọn Voucher</h3>
+            <button onclick="closeVoucherModal()" class="text-gray-500 hover:text-red-500">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <div id="voucher_list_modal" class="max-h-[400px] overflow-y-auto flex flex-col gap-3">
+            
+        </div>
+    </div>
+</div>
 
 <script>
+    let selectedVoucher = null;
+    let discountAmount = 0;
+    window.voucherList = [];
+
+    function getSubTotal() {
+        let subTotal = 0;
+        checkoutItems.forEach(i => {
+            subTotal += i.price * i.quantity;
+        });
+        return subTotal;
+    }
+
+    function formatPricePercent(price) {
+        if (!price) return '0';
+
+        // Ép về string → bỏ phần thập phân
+        const integerPart = price.toString().split('.')[0];
+
+        // Format dấu phẩy
+        return integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    function getAllVoucher() {
+        const userId = sessionStorage.getItem('id');
+        const subTotal = getSubTotal(); 
+        $.ajax({
+            url: '/api/offer',
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('user_token')
+            },
+            success: function (response) {
+                let html = '';
+                window.voucherList = [];
+                const data = response.data; // Đây là mảng các Offer
+
+                // 1. Kiểm tra xem data có phần tử nào không
+                if (!data || data.length === 0) {
+                    html = `<p class="text-center text-gray-400">Bạn chưa có voucher nào</p>`;
+                } else {
+                    // 2. Lặp qua từng Offer (thường mỗi user chỉ có 1 bản ghi offer như bạn muốn)
+                    data.forEach(item => {
+                        // 3. Lặp qua mảng offer_details bên trong
+                        if (item.offer_details && item.offer_details.length > 0) {
+                            item.offer_details.forEach(detail => {
+                                const discount = detail.discount;// Debug thông tin chi tiết giảm giá
+                                window.voucherList.push(discount);
+                                const minOrder = parseFloat(discount.min_order_value || 0);
+                                const isEligible = subTotal >= minOrder;
+
+                                html += `
+                                <label 
+                                    class="voucher-item flex items-start gap-4 p-3 rounded-xl border
+                                        ${isEligible ? 'border-gray-100 hover:bg-primary/5 cursor-pointer' : 'border-gray-200 opacity-50'}
+                                    "
+                                    data-code="${discount.code}"
+                                >
+                                    <div class="flex-1">
+                                        <p class="text-sm font-bold text-[#0d1b12] dark:text-white">
+                                            ${discount.code}
+                                        </p>
+
+                                        <p class="text-xs text-gray-500">
+                                            ${discount.title || 'Ưu đãi'} -
+                                            ${
+                                                discount.discount_type === 'percentage'
+                                                ? `Giảm ${formatPricePercent(discount.discount_value)}%
+                                                    ${
+                                                        parseFloat(discount.max_discount_amount) > 0
+                                                        ? `tối đa ${formatPrice(discount.max_discount_amount)}`
+                                                        : ''
+                                                    }`
+                                                : `Giảm ${formatPrice(discount.discount_value)}`
+                                            }
+                                            cho đơn từ ${formatPrice(minOrder)}
+                                        </p>
+
+                                        ${
+                                            !isEligible
+                                            ? `<p class="mt-1 text-xs text-red-500 font-medium">
+                                                Chưa đủ điều kiện (đơn hiện tại: ${formatPrice(subTotal)})
+                                            </p>`
+                                            : ''
+                                        }
+                                    </div>
+                                </label>
+                                `;
+                            });
+                        }
+                    });
+                }
+
+                // Nếu lặp xong mà vẫn không có html (trường hợp data có nhưng offer_details rỗng)
+                if (html === '') {
+                    html = `<p class="text-center text-gray-400">Bạn chưa có voucher nào khả dụng</p>`;
+                }
+
+                $('#voucher_list_modal').html(html);
+            },
+            error: function(error) {
+                Swal.fire('Lỗi', 'Không thể tải danh sách voucher', 'error');
+            }
+        });
+    }
+
+    // Mở Modal và load dữ liệu
+    function openVoucherModal() {
+        $('#voucher_modal').removeClass('hidden').addClass('flex');
+        
+    }
+
+    // Đóng Modal
+    function closeVoucherModal() {
+        $('#voucher_modal').addClass('hidden').removeClass('flex');
+    }
+
+    $(document).on('click', '.voucher-item', function () {
+        if ($(this).hasClass('cursor-not-allowed')) return;
+
+        const code = $(this).data('code');
+        selectVoucher(code);
+    });
+
+
+    // Hàm chọn Voucher từ danh sách
+    function selectVoucher(code) {
+        const voucher = window.voucherList.find(v => v.code === code);
+        if (!voucher) return;
+
+        selectedVoucher = voucher;
+
+        $('#voucher_placeholder').html(`
+            <div class="flex items-center gap-2">
+                <span class="bg-primary text-black px-2 py-0.5 rounded text-xs font-bold">
+                    ${voucher.code}
+                </span>
+                <span class="text-black dark:text-white font-medium truncate">
+                    ${
+                        voucher.discount_type === 'percentage'
+                        ? `Giảm ${formatPricePercent(voucher.discount_value)}%
+                            ${
+                                parseFloat(voucher.max_discount_amount) > 0
+                                ? `tối đa ${formatPrice(voucher.max_discount_amount)}`
+                                : ''
+                            }`
+                        : `Giảm ${formatPrice(voucher.discount_value)}`
+                    }
+                </span>
+            </div>
+        `);
+
+        calculateDiscount();
+        renderCheckoutSummary();
+        closeVoucherModal();
+    }
+
+
+    function findVoucherByCode(code) {
+        return window.voucherList.find(v => v.code === code);
+    }
+
+    function calculateDiscount() {
+        discountAmount = 0;
+
+        if (!selectedVoucher) return 0;
+
+        const subTotal = getSubTotal();
+        const discountValue = parseFloat(selectedVoucher.discount_value);
+        const maxDiscount = parseFloat(selectedVoucher.max_discount_amount || 0);
+
+        // CHỈ xử lý percentage trước (đúng yêu cầu bạn nói)
+        if (selectedVoucher.discount_type === 'percentage') {
+            let calculated = subTotal * discountValue / 100;
+
+            if (maxDiscount > 0 && calculated > maxDiscount) {
+                discountAmount = maxDiscount;
+            } else {
+                discountAmount = calculated;
+            }
+        } else{
+            discountAmount = discountValue;
+        }
+
+        return discountAmount;
+    }
+
+
+
+    // Đóng modal khi click ra ngoài vùng trắng
+    $(window).on('click', function(e) {
+        if ($(e.target).is('#voucher_modal')) {
+            closeVoucherModal();
+        }
+    });
+
     let shippingFee = 0;
 
     function getShippingFee() {
@@ -196,14 +403,13 @@
     }
 
     function renderCheckoutSummary() {
-        let subTotal = 0;
+        const subTotal = getSubTotal();
+        calculateDiscount();
 
-        checkoutItems.forEach(i => {
-            subTotal += i.price * i.quantity;
-        });
-
-        const discount = 0;
-        const grandTotal = Math.max(0, subTotal + shippingFee - discount);
+        const grandTotal = Math.max(
+            0,
+            subTotal + shippingFee - discountAmount
+        );
 
         $('#checkout_summary').html(`
             <div class="flex justify-between">
@@ -211,12 +417,19 @@
                 <span>${formatPrice(subTotal)}</span>
             </div>
 
+            ${
+                discountAmount > 0
+                ? `<div class="flex justify-between text-green-600">
+                    <span>Giảm giá</span>
+                    <span id="discount" data-discount="${discountAmount}">- ${formatPrice(discountAmount)}</span>
+                </div>`
+                : ''
+            }
+
             <div class="flex justify-between">
                 <span>Phí vận chuyển</span>
                 <span>${formatPrice(shippingFee)}</span>
             </div>
-
-            
 
             <div class="flex justify-between text-lg font-bold">
                 <span>Tổng cộng</span>
@@ -224,6 +437,7 @@
             </div>
         `);
     }
+
 
     $(document).on('change', 'input[name="shipping"]', function () {
         shippingFee = getShippingFee();
@@ -235,6 +449,7 @@
         renderCheckoutProducts();
         renderCheckoutSummary();
         getAllAddress();
+        getAllVoucher();
     });
 
     $('#btn_place_order').click(function () {

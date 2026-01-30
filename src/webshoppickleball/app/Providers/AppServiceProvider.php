@@ -13,6 +13,7 @@ use App\Interfaces\ChatbotSessionInterface;
 use App\Interfaces\DiscountRepositoryInterface;
 use App\Interfaces\ExclusiveConfigRepositoryInterface;
 use App\Interfaces\Mail\MailServiceInterface;
+use App\Interfaces\OfferRepositoryInterface;
 use App\Interfaces\OrderItemRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
@@ -29,6 +30,7 @@ use App\Repositories\CategoryRepositories;
 use App\Repositories\ChatbotSessionRepositories;
 use App\Repositories\DiscountRepositories;
 use App\Repositories\ExclusiveConfigRepositories;
+use App\Repositories\OfferRepositories;
 use App\Repositories\OrderItemRepositories;
 use App\Repositories\OrderRepositories;
 use App\Repositories\ProductRepositories;
@@ -63,7 +65,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(VnPayRepositoryInterface::class,VnPayRepositories::class);
         $this->app->bind(ChatbotSessionInterface::class, ChatbotSessionRepositories::class);
         $this->app->bind(ExclusiveConfigRepositoryInterface::class, ExclusiveConfigRepositories::class);
-
+        $this->app->bind(OfferRepositoryInterface::class, OfferRepositories::class);
     }
 
     /**
