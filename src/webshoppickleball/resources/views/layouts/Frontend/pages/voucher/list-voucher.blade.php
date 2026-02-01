@@ -7,9 +7,7 @@
         <div class="flex flex-wrap justify-between gap-3">
             <div class="flex min-w-72 flex-col gap-2">
                 <p class="text-black dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Kho Voucher
-                    Độc quyền của bạn</p>
-                <p class="text-black/60 dark:text-white/60 text-base font-normal leading-normal">Sử dụng các ưu đãi này
-                    để mua sắm dụng cụ pickleball với giá tốt nhất.</p>
+                    độc quyền của bạn</p>
             </div>
         </div>
         <!-- PageHeading End -->
@@ -57,7 +55,17 @@
 
                 // 1. Kiểm tra xem data có phần tử nào không
                 if (!data || data.length === 0) {
-                    html = `<p class="text-center text-gray-400">Bạn chưa có voucher nào</p>`;
+                    html = `
+                        <div class="col-span-full flex flex-col items-center justify-center py-8 px-4 text-center">
+                            <h3 class="mb-2 text-xl font-bold text-black dark:text-white">Kho voucher đang trống</h3>
+                            <p class="mb-8 max-w-xs text-sm text-black/60 dark:text-white/60">
+                                Hiện tại bạn chưa có mã giảm giá nào. Hãy tiếp tục mua sắm để nhận thêm nhiều ưu đãi hấp dẫn nhé!
+                            </p>
+                            <a href="/san-pham" class="flex h-11 items-center justify-center rounded-lg bg-primary px-6 text-sm font-bold text-black transition-transform hover:scale-105 active:scale-95">
+                                Khám phá sản phẩm ngay
+                            </a>
+                        </div>
+                    `;
                 } else {
                     // 2. Lặp qua từng Offer (thường mỗi user chỉ có 1 bản ghi offer như bạn muốn)
                     data.forEach(item => {

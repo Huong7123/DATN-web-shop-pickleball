@@ -473,6 +473,7 @@
             description: $('#description').val(),
             payment_method: paymentMethod,
             shipping_method: shippingMethod,
+            discount_id: selectedVoucher ? selectedVoucher.id : null,
             discount: discount,
             items: checkoutItems.map(i => ({
                 parent_id: i.parent_id,

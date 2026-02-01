@@ -21,6 +21,7 @@ class OrderRequest extends FormRequest
             'address'    => 'required|string|max:255',
             'description'=> 'nullable|string|max:500',
             'shipping_method' => 'required|in:0,1',
+            'discount_id' => 'nullable|integer|exists:discounts,id',
             'discount' => 'nullable|integer|min:0|max:100000000',
 
             // PAYMENT
@@ -57,6 +58,8 @@ class OrderRequest extends FormRequest
 
             'items.*.quantity.required' => 'Số lượng không được để trống',
             'items.*.quantity.min'      => 'Số lượng phải lớn hơn 0',
+
+            'discount_id.exists' => 'Mã giảm giá không tồn tại trên hệ thống.',
         ];
     }
 

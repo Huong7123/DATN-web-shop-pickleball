@@ -44,18 +44,36 @@ class OfferRepositories  extends BaseRepositories implements OfferRepositoryInte
 
         return Offer::where('user_id', $userId)
             ->with(['offerDetails' => function ($query) use ($today) {
-                // Bước quan trọng: Chỉ lấy offer_details có discount thỏa mãn điều kiện
-                $query->whereHas('discount', function ($q) use ($today) {
-                    $q->where('end_date', '>=', $today)
-                    ->where('status', 1);
-                })->with('discount'); // Sau khi lọc xong mới load dữ liệu discount vào
+                // 1. Chỉ lấy các chi tiết ưu đãi CHƯA SỬ DỤNG (used = 0)
+                $query->where('used', 0)
+                    ->whereHas('discount', function ($q) use ($today) {
+                        // 2. Và các mã giảm giá đó phải còn hạn + đang hoạt động
+                        $q->where('end_date', '>=', $today)
+                        ->where('status', 1);
+                    })
+                    ->with('discount'); 
             }])
-            // Chỉ lấy Offer nếu nó có ít nhất 1 detail hợp lệ (tránh lấy Offer rỗng)
-            ->whereHas('offerDetails.discount', function ($query) use ($today) {
-                $query->where('end_date', '>=', $today)
-                    ->where('status', 1);
+            // Chỉ lấy Offer cha nếu nó có ít nhất 1 detail thỏa mãn cả 2 điều kiện trên
+            ->whereHas('offerDetails', function ($query) use ($today) {
+                $query->where('used', 0)
+                    ->whereHas('discount', function ($q) use ($today) {
+                        $q->where('end_date', '>=', $today)
+                        ->where('status', 1);
+                    });
             })
             ->get();
     }
+
+    public function updateStatusUsed(int $userId, int $discountId)
+    {
+        // Tìm OfferDetail có discount_id này 
+        // VÀ phải thuộc về Offer của đúng User này
+        return OfferDetail::where('discount_id', $discountId)
+            ->whereHas('offer', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->update(['used' => 1]);
+    }
+
 
 }

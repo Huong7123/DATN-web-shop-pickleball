@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('offer_id');
             $table->unsignedBigInteger('discount_id');
+            $table->tinyInteger('used')->default(0); // 0: Chưa sử dụng, 1: Đã sử dụng
             $table->timestamps();
         });
     }
