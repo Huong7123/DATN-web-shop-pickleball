@@ -11,17 +11,18 @@ class CheckRoleAdmin
     {
         try {
             $token = $request->cookie('admin_token'); // Lấy token từ cookie
+
             if (!$token) {
-                return response()->json("Token không hợp lệ hoặc hết hạn");
+                return redirect()->route('login');
             }
 
             $user = JWTAuth::setToken($token)->authenticate();
 
             if (!$user || $user->role !== '2') {
-                return response()->json("Token không hợp lệ hoặc hết hạn");
+                return redirect()->route('login');
             }
         } catch (\Exception $e) {
-            return response()->json("Token không hợp lệ hoặc hết hạn");
+            return redirect()->route('login');
         }
 
         return $next($request);

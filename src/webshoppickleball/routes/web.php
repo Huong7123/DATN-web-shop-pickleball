@@ -26,7 +26,7 @@ Route::get('/verify-otp', function () {
 
 Route::get('/login', function () {
     return view('layouts.Auth.pages.login', ['title' => 'Đăng nhập']);
-})->name('login');
+});
 
 Route::get('/forgot-password', function () {
     return view('layouts.Auth.pages.forgot-password', ['title' => 'Quên mật khẩu']);
@@ -41,7 +41,7 @@ Route::get('/', function () {
 });
 Route::get('/dang-nhap', function () {
     return view('layouts.Frontend.pages.auth.login', ['title' => 'Đăng nhập']);
-});
+})->name('login');
 Route::get('/dang-ky', function () {
     return view('layouts.Frontend.pages.auth.register', ['title' => 'Đăng ký']);
 });
@@ -100,7 +100,7 @@ Route::get('/kho-voucher', function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', function () {
         return view('layouts.Backend.login',['title' => 'Đăng nhập']);
-    })->name('login');
+    });
 
     //user
     Route::get('/user', function () {
@@ -163,11 +163,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('layouts.Admin.pages.discounts',['title' => 'Quản lý mã giảm giá']);
     });
 
-    Route::get('/cau-hinh-uu-dai', function () {
-        return view('layouts.Admin.pages.exclusive-configs',['title' => 'Cấu hình ưu đãi độc quyền']);
-    });
+    // Route::get('/cau-hinh-uu-dai', function () {
+    //     return view('layouts.Admin.pages.exclusive-configs',['title' => 'Cấu hình ưu đãi độc quyền']);
+    // });
 
-    Route::middleware('admin.role')->group(function () {
-        
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin-data', function () {
+            return response()->json(['data' => 'Thông tin bảo mật cho Role 2']);
+        });
+        Route::get('/cau-hinh-uu-dai', function () {
+            return view('layouts.Admin.pages.exclusive-configs',['title' => 'Cấu hình ưu đãi độc quyền']);
+        });
     });
 });
