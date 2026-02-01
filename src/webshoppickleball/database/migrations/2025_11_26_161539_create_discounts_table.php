@@ -32,11 +32,9 @@ return new class extends Migration
             
             // Tổng chi tiêu tích lũy của User từ trước đến nay để được dùng mã (Dành cho khách VIP)
             $table->decimal('min_total_spent', 15, 2)->default(0);
-            $table->boolean('is_first_order')->default(0); // Chỉ áp dụng cho đơn hàng đầu tiên của khách hàng
 
             $table->date('start_date');
             $table->date('end_date');
-            $table->integer('usage_limit')->nullable(); // Giới hạn tổng số lượt dùng của mã
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

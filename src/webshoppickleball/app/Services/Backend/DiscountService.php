@@ -27,10 +27,8 @@ class DiscountService extends BaseService
             'max_discount_amount' => $data['max_discount_amount'] ?? ($current->max_discount_amount ?? null),
             'min_order_value'     => $data['min_order_value'] ?? ($current->min_order_value ?? 0),
             'min_total_spent'     => $data['min_total_spent'] ?? ($current->min_total_spent ?? 0),
-            'is_first_order'      => isset($data['is_first_order']) ? (bool)$data['is_first_order'] : ($current->is_first_order ?? false),
             'start_date'          => $data['start_date'] ?? $current->start_date,
             'end_date'            => $data['end_date'] ?? $current->end_date,
-            'usage_limit'         => $data['usage_limit'] ?? ($current->usage_limit ?? null),
             'status'              => $data['status'] ?? ($current->status ?? 1),
         ];
     }

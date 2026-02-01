@@ -12,8 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->encryptCookies(except: [
+            'admin_token', // Thêm tên cookie của bạn vào đây
+            'user_token',
+        ]);
         $middleware->alias([
-            'admin.role' => \App\Http\Middleware\CheckRoleAdmin::class,
+            'admin' => \App\Http\Middleware\CheckRoleAdmin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

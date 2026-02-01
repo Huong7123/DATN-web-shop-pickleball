@@ -42,10 +42,6 @@
                         <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Đơn tối thiểu
                         </th>
                         <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Thời hạn</th>
-                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Lượt dùng
-                        </th>
-                        <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Áp dụng cho
-                        </th>
                         <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">
                             Trạng thái</th>
                         <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">
@@ -161,37 +157,7 @@
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[#4c9a66] font-bold">VNĐ</span>
                         </div>
                     </label>
-                    <label class="flex flex-col gap-2">
-                        <p class="text-[#0d1b12] dark:text-white/90 text-sm font-semibold">Áp dụng cho loại đơn hàng</p>
-                        <div class="relative">
-                            <select id="is_first_order"
-                                class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-shadow pr-10">
-                                <option value="0">Tất cả đơn hàng</option>
-                                <option value="1">Đơn hàng đầu tiên</option>
-                            </select>
-                        </div>
-                    </label>
-                </div>
-            </div>
-            <!-- Section: Giới hạn sử dụng -->
-            <div class="space-y-4 pt-4 border-t border-[#cfe7d7] dark:border-white/10">
-                <div class="flex items-center gap-2 text-primary">
-                    <span class="material-symbols-outlined text-[20px]">person_check</span>
-                    <h3 class="font-bold text-[#0d1b12] dark:text-white">Giới hạn sử dụng</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <label class="flex flex-col gap-2">
-                        <p class="text-[#0d1b12] dark:text-white/90 text-sm font-semibold">Tổng lượt sử dụng tối đa</p>
-                        <input id="usage_limit"
-                            class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-gray-400 dark:placeholder:text-gray-600 transition-shadow"
-                            placeholder="VD: 100" type="number" value="100" />
-                    </label>
-                    <!-- <label class="flex flex-col gap-2">
-                        <p class="text-[#0d1b12] dark:text-white/90 text-sm font-semibold">Giới hạn mỗi khách hàng</p>
-                        <input
-                            class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-gray-400 dark:placeholder:text-gray-600 transition-shadow "
-                            placeholder="VD: 1" type="number" value="1" />
-                    </label> -->
+                    
                 </div>
             </div>
             <!-- Section: Thời gian hiệu lực -->
@@ -337,23 +303,6 @@
                     </span>
                 </div>
             </td>
-            <td class="px-6 py-4">
-                <div class="flex flex-col gap-1.5 w-32">
-                    <div class="flex justify-between text-sm font-bold">
-                        <span class="text-primary">${item.usage_limit}</span>
-                    </div>
-                </div>
-            </td>
-            <td class="px-6 py-4">
-                ${item.is_first_order === 1 ? `
-                    <span>
-                        Đơn đầu tiên
-                    </span>` : `
-                    <span>
-                        Tất cả đơn hàng
-                    </span>`
-                }
-            </td>
             <td class="px-6 py-4 text-center">
                 ${item.status === 1 ? `
                     <span
@@ -478,6 +427,13 @@
         $('#modal_discount').removeAttr('data-edit-id');
         $('#modal_discount h2').text('Thêm mã giảm giá mới');
         selectedFile = null;
+        $('#discount_title').val('Ưu đãi mới');
+        $('#discount_code').val('');
+        $('#discount_description').val('');
+        $('#discount_type').val('percentage');
+        $('#discount_value').val('');
+        $('#max_discount_amount').val('');
+        $('#min_order_value').val('');
         $('#modal_discount').removeClass('hidden');
         toggleMaxDiscount();
     });
@@ -540,8 +496,6 @@
                 discount_value: discountValue,
                 min_order_value: parseFloat($('#min_order_value').val().toString().replace(/[\.,]/g, '')) || 0,
                 max_discount_amount: maxDiscount,
-                is_first_order: parseInt($('#is_first_order').val()) || 0,
-                usage_limit: parseInt($('#usage_limit').val()) || null,
                 start_date: $('#start_date').val(),
                 end_date: $('#end_date').val(),
                 status: 1
@@ -564,14 +518,12 @@
                     Swal.fire({
                         icon: 'success',
                         title: isEdit ? 'Cập nhật thành công!' : 'Thêm mới thành công!',
-                        timer: 1200,
+                        timer: 1500,
                         showConfirmButton: false
                     });
 
-                    setTimeout(() => {
-                        $('#modal_discount').addClass('hidden');
-                        getDiscount(currentPage); // Tải lại danh sách thay vì reload trang
-                    }, 1300);
+                    $('#modal_discount').addClass('hidden');
+                    getDiscount(currentPage);
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {
@@ -624,8 +576,6 @@
                 $('#discount_value').val(toInt(item.discount_value));
                 $('#min_order_value').val(toInt(item.min_order_value));
                 $('#max_discount_amount').val(toInt(item.max_discount_amount));
-                $('#is_first_order').val(item.is_first_order);
-                $('#usage_limit').val(item.usage_limit);
                 $('#start_date').val(item.start_date);
                 $('#end_date').val(item.end_date);
 

@@ -7,7 +7,7 @@
             </div>
             <div class="hidden md:flex items-center gap-9">
                 <a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors" href="/san-pham">Sản phẩm</a>
-                <a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors" href="/kho-voucher">Kho voucher</a>
+                <a id="voucher_link" class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors hidden" href="/kho-voucher">Kho voucher</a>
                 <!-- <a class="text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary transition-colors" href="/lien-he">Liên hệ</a> -->
 
             </div>
@@ -170,9 +170,11 @@
         const tokenUser = getCookie("user_token");
 
         if (!tokenUser) {
+            $("#voucher_link").addClass("hidden");
             $("#menu_not_logged_in").show();
             $("#menu_logged_in").hide();
         } else {
+            $("#voucher_link").removeClass("hidden");
             $("#menu_not_logged_in").hide();
             $("#menu_logged_in").show();
         }
