@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\OfferRepositoryInterface;
 use App\Models\Offer;
 use App\Models\OfferDetail;
+use Carbon\Carbon;
 
 class OfferRepositories  extends BaseRepositories implements OfferRepositoryInterface
 {
@@ -39,7 +40,22 @@ class OfferRepositories  extends BaseRepositories implements OfferRepositoryInte
 
     public function getOfferByUserId(int $userId)
     {
-        return Offer::with('offerDetails.discount')->where('user_id', $userId)->get();
+        $today = \Carbon\Carbon::today()->toDateString();
+
+        return Offer::where('user_id', $userId)
+            ->with(['offerDetails' => function ($query) use ($today) {
+                // Bước quan trọng: Chỉ lấy offer_details có discount thỏa mãn điều kiện
+                $query->whereHas('discount', function ($q) use ($today) {
+                    $q->where('end_date', '>=', $today)
+                    ->where('status', 1);
+                })->with('discount'); // Sau khi lọc xong mới load dữ liệu discount vào
+            }])
+            // Chỉ lấy Offer nếu nó có ít nhất 1 detail hợp lệ (tránh lấy Offer rỗng)
+            ->whereHas('offerDetails.discount', function ($query) use ($today) {
+                $query->where('end_date', '>=', $today)
+                    ->where('status', 1);
+            })
+            ->get();
     }
 
 }
