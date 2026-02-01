@@ -102,74 +102,38 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('layouts.Backend.login',['title' => 'Đăng nhập']);
     });
 
-    //user
-    Route::get('/user', function () {
-        return view('layouts.Backend.pages.user.user',['title' => 'Quản lý người dùng']);
-    });
-
-    Route::get('/quan-ly-nguoi-dung', function () {
-        return view('layouts.Admin.pages.user',['title' => 'Quản lý người dùng']);
-    });
-
-    Route::get('/manage', function () {
-        return view('layouts.Backend.pages.user.manage',['title' => 'Quản lý QTV']);
-    });
-    Route::get('/quan-ly-QTV', function () {
-        return view('layouts.Admin.pages.manage',['title' => 'Quản lý QTV']);
-    });
-
-    //category
-    Route::get('/category', function () {
-        return view('layouts.Backend.pages.category.category',['title' => 'Quản lý danh mục']);
-    });
-
-    Route::get('/quan-ly-danh-muc', function () {
-        return view('layouts.Admin.pages.category',['title' => 'Quản lý danh mục']);
-    });
-
-    Route::get('/product', function () {
-        return view('layouts.Backend.pages.product.product',['title' => 'Quản lý sản phẩm']);
-    });
-
-    Route::get('/quan-ly-san-pham', function () {
-        return view('layouts.Admin.pages.product',['title' => 'Quản lý sản phẩm']);
-    });
-
-    Route::get('/quan-ly-don-hang', function () {
-        return view('layouts.Admin.pages.order',['title' => 'Quản lý đơn hàng']);
-    });
-
-    Route::get('/attribute', function () {
-        return view('layouts.Backend.pages.attribute.attribute',['title' => 'Quản lý bộ thuộc tính']);
-    });
-
-    Route::get('/quan-ly-thuoc-tinh', function () {
-        return view('layouts.Admin.pages.attribute',['title' => 'Quản lý thuộc tính']);
-    });
-
-    Route::get('/attribute-value', function () {
-        return view('layouts.Backend.pages.attribute.attribute-value',['title' => 'Quản lý bộ thuộc tính']);
-    });
-
-    Route::get('/quan-ly-gia-tri-thuoc-tinh', function () {
-        return view('layouts.Admin.pages.attribute_value',['title' => 'Quản lý giá trị thuộc tính']);
-    });
-
-    Route::get('/discount', function () {
-        return view('layouts.Backend.pages.discount.discount',['title' => 'Quản lý ưu đãi']);
-    });
-
-    Route::get('/quan-ly-ma-giam-gia', function () {
-        return view('layouts.Admin.pages.discounts',['title' => 'Quản lý mã giảm giá']);
-    });
-
-    // Route::get('/cau-hinh-uu-dai', function () {
-    //     return view('layouts.Admin.pages.exclusive-configs',['title' => 'Cấu hình ưu đãi độc quyền']);
-    // });
-
     Route::middleware('admin')->group(function () {
-        Route::get('/admin-data', function () {
-            return response()->json(['data' => 'Thông tin bảo mật cho Role 2']);
+        
+        Route::get('/quan-ly-nguoi-dung', function () {
+            return view('layouts.Admin.pages.user',['title' => 'Quản lý người dùng']);
+        });
+
+        Route::get('/quan-ly-QTV', function () {
+            return view('layouts.Admin.pages.manage',['title' => 'Quản lý QTV']);
+        });
+
+        Route::get('/quan-ly-danh-muc', function () {
+            return view('layouts.Admin.pages.category',['title' => 'Quản lý danh mục']);
+        });
+
+        Route::get('/quan-ly-san-pham', function () {
+            return view('layouts.Admin.pages.product',['title' => 'Quản lý sản phẩm']);
+        });
+
+        Route::get('/quan-ly-don-hang', function () {
+            return view('layouts.Admin.pages.order',['title' => 'Quản lý đơn hàng']);
+        });
+
+        Route::get('/quan-ly-thuoc-tinh', function () {
+            return view('layouts.Admin.pages.attribute',['title' => 'Quản lý thuộc tính']);
+        });
+
+        Route::get('/quan-ly-gia-tri-thuoc-tinh', function () {
+            return view('layouts.Admin.pages.attribute_value',['title' => 'Quản lý giá trị thuộc tính']);
+        });
+
+        Route::get('/quan-ly-ma-giam-gia', function () {
+            return view('layouts.Admin.pages.discounts',['title' => 'Quản lý mã giảm giá']);
         });
         Route::get('/cau-hinh-uu-dai', function () {
             return view('layouts.Admin.pages.exclusive-configs',['title' => 'Cấu hình ưu đãi độc quyền']);
