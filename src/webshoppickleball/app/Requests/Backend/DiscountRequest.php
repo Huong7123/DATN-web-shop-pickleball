@@ -35,10 +35,8 @@ class DiscountRequest extends FormRequest
             'max_discount_amount' => 'nullable|numeric|min:0',
             'min_order_value'     => 'nullable|numeric|min:0',
             'min_total_spent'     => 'nullable|numeric|min:0',
-            'is_first_order'      => 'nullable|in:0,1,true,false',
             'start_date'          => 'required|date|before_or_equal:end_date',
             'end_date'            => 'required|date|after_or_equal:start_date',
-            'usage_limit'         => 'nullable|integer|min:1',
             'status'              => 'nullable|in:0,1',
         ];
     }
