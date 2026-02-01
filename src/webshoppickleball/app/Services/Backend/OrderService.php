@@ -4,6 +4,7 @@ namespace App\Services\Backend;
 
 use App\DTO\DataResult;
 use App\Interfaces\CartItemRepositoryInterface;
+use App\Interfaces\OfferRepositoryInterface;
 use App\Interfaces\OrderItemRepositoryInterface;
 use App\Interfaces\OrderRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
@@ -17,7 +18,7 @@ class OrderService extends BaseService
     protected ProductRepositoryInterface $productRepository;
     protected CartItemRepositoryInterface $cartItemRepository;
     protected UserRepositoryInterface $userRepository;
-    
+    protected OfferRepositoryInterface $offerRepository;
 
     public function __construct(
         OrderRepositoryInterface $repository,
@@ -25,12 +26,14 @@ class OrderService extends BaseService
         ProductRepositoryInterface $productRepository,
         CartItemRepositoryInterface $cartItemRepository,
         UserRepositoryInterface $userRepository,
+        OfferRepositoryInterface $offerRepository
     ){
         parent::__construct($repository);
         $this->orderItemRepository = $orderItemRepository;
         $this->productRepository = $productRepository;
         $this->cartItemRepository = $cartItemRepository;
         $this->userRepository = $userRepository;
+        $this->offerRepository = $offerRepository;
     }
     public function getAllOrderAdmin($perPage, $status, $orderId): DataResult
     {
@@ -127,7 +130,12 @@ class OrderService extends BaseService
             $this->repository->update($order->id, ['total' => $grandTotal]);
             $order->total = $grandTotal;
 
-            // Cập nhật chi tiêu cho User =====
+            //Cập nhật 
+            if (!empty($data['discount_id'])) {
+                $this->offerRepository->updateStatusUsed($user->id, (int)$data['discount_id']);
+            }
+
+            // Cập nhật chi tiêu cho User
             $newTotalSpending = $user->total_spending + $grandTotal;
             // Sử dụng repo của user để update
             $this->userRepository->update($user->id, [

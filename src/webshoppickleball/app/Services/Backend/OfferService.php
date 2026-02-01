@@ -52,9 +52,24 @@ class OfferService extends BaseService
     private function processUserRewards(User $user, $configs)
     {
         foreach ($configs as $config) {
-            // Kiểm tra điều kiện chi tiêu
-            if ($user->total_spending >= $config->min_spending) {
-                
+            $canGrant = false;
+
+            // Trường hợp 1: User mới hoàn toàn (Spending = 0)
+            // Chỉ nhận các gói ưu đãi có min_spending đúng bằng 0
+            if ($user->total_spending == 0) {
+                if ($config->min_spending == 0) {
+                    $canGrant = true;
+                }
+            } 
+            // Trường hợp 2: User đã có chi tiêu (Spending > 0)
+            // Chỉ nhận các gói ưu đãi dành cho các hạng (min_spending > 0)
+            else {
+                if ($config->min_spending > 0 && $user->total_spending >= $config->min_spending) {
+                    $canGrant = true;
+                }
+            }
+
+            if ($canGrant) {
                 $discountIds = $config->discounts->pluck('id')->toArray();
                 if (empty($discountIds)) continue;
 

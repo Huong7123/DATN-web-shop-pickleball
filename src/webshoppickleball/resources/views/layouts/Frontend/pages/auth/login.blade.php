@@ -68,6 +68,17 @@
             icon.text("visibility");
         }
     });
+    function deleteAllCookies() {
+        const cookies = document.cookie.split(";");
+
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i];
+            const eqPos = cookie.indexOf("=");
+            const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+            // Xoá cookie bằng cách đặt max-age=0 và path=/
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+    }
     function login() {
         const data = {
             email: $('#email').val(),
@@ -82,6 +93,7 @@
                 showLoader();
             },
             success: function (response) {
+                deleteAllCookies();
                 if(response.data.user.role == 1){
                     sessionStorage.setItem('email', response.data.user.email);
                     sessionStorage.setItem('name', response.data.user.name);

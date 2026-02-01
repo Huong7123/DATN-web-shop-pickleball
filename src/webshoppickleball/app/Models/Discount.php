@@ -27,10 +27,8 @@ class Discount extends Model
         'max_discount_amount',
         'min_order_value',
         'min_total_spent',
-        'is_first_order',
         'start_date',
         'end_date',
-        'usage_limit',
         'status',
     ];
 }
