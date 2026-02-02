@@ -18,7 +18,7 @@
                     <div class="text-primary/70 dark:text-primary/70 flex bg-primary/10 dark:bg-primary/20 items-center justify-center pl-4 rounded-l-lg border-r-0">
                         <span class="material-symbols-outlined">search</span>
                     </div>
-                    <input style="--tw-ring-shadow: none;" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d1b12] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-primary/10 dark:bg-primary/20 h-full placeholder:text-primary/70 dark:placeholder:text-primary/70 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Tìm kiếm sản phẩm..." value="" />
+                    <input id="search_input" style="--tw-ring-shadow: none;" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d1b12] dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-primary/10 dark:bg-primary/20 h-full placeholder:text-primary/70 dark:placeholder:text-primary/70 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Tìm kiếm sản phẩm..." value="" />
                 </div>
             </label>
             <!-- <button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-primary/10 dark:bg-primary/20 text-[#0d1b12] dark:text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
@@ -142,6 +142,41 @@
 </div>
 
 <script>
+    $(document).on('keydown', '#search_input', function(event) {
+        if (event.key === "Enter" || event.which === 13) {
+            event.preventDefault();
+            let keyword = $(this).val();
+            // 1. Reset Checkbox danh mục
+            $('input[name="category[]"]').prop('checked', false);
+            currentFilter.categories = '';
+
+            // 2. Reset Slider giá về mặc định (0 - 100%)
+            minPercent = 0;
+            maxPercent = 100;
+            updateRange(); // Gọi hàm này để giao diện slider và số tiền nhảy về mặc định
+            
+            const price = getPriceRange();
+            currentFilter.min_price = price.min;
+            currentFilter.max_price = price.max;
+
+            let currentPath = window.location.pathname;
+
+            // Lưu từ khóa vào bộ nhớ tạm của trình duyệt
+            sessionStorage.setItem('pending_search', keyword);
+
+            if (currentPath === '/san-pham' || currentPath.startsWith('/san-pham')) {
+                // Nếu đã ở trang sản phẩm, chỉ cần cập nhật filter và gọi API
+                currentFilter.keyword = keyword;
+                currentFilter.categories = [];
+                getAllProduct();
+                // Xóa ngay sau khi dùng để tránh dính lại cho lần load trang sau
+                sessionStorage.removeItem('pending_search'); 
+            } else {
+                // Nếu ở trang khác, chuyển hướng bình thường
+                window.location.href = '/san-pham';
+            }
+        }
+    });
     $('#icon_cart').on('click', function () {
         window.location.href = '/gio-hang';
     });
