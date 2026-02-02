@@ -345,6 +345,7 @@ class ProductService extends BaseService
                     ];
 
                     $variant = $repo->create([
+                        'image'       => $product->image,
                         'name'        => $variantName,
                         'slug'        => Str::slug($variantName) . '-' . Str::random(4),
                         'price'       => $data['price'][$i] ?? $productData['price'],
