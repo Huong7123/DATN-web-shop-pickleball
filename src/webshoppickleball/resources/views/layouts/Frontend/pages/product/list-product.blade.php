@@ -309,6 +309,18 @@
     }
 
     $(document).ready(function () {
+        let pendingSearch = sessionStorage.getItem('pending_search');
+
+        if (pendingSearch) {
+            // Fill vào ô input
+            $('#search_input').val(pendingSearch);
+            
+            // Cập nhật vào biến filter của bạn
+            currentFilter.keyword = pendingSearch;
+
+            // Xóa sạch để lần sau vào lại trang sản phẩm (trực tiếp) không bị tự động search lại cái cũ
+            sessionStorage.removeItem('pending_search');
+        }
         getAllCategory();
         getAllProduct();
     });
@@ -569,12 +581,13 @@
 
     $('#btn_apply_filter').on('click', function () {
 
+        $('#search_input').val(''); // reset ô search
         const price = getPriceRange();
 
         currentFilter.categories = getSelectedCategories();
         currentFilter.min_price  = price.min;
         currentFilter.max_price  = price.max;
-
+        currentFilter.keyword  = '';
         getAllProduct(1); // reset về trang 1
     });
 
