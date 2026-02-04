@@ -619,7 +619,6 @@
                     selectAddress(defaultAddr);
 
                 } else {
-                    console.log("111")
                     $('#list_address').addClass('hidden')
                     // $('#address_summary_content').html('<span class="text-red-500 text-sm">Chưa có địa chỉ. Vui lòng nhập thông tin bên dưới.</span>');
                     // $('#address_options_list').empty();

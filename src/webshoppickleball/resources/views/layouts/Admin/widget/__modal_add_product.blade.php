@@ -213,7 +213,6 @@
             </div>
         `);
 
-        console.log('Ảnh đã chọn:', productImages);
     }
 
     /* Xoá ảnh */
@@ -226,7 +225,6 @@
 
         reIndexImages();
 
-        console.log('Ảnh còn lại:', productImages);
     }
 
     function reIndexImages() {
