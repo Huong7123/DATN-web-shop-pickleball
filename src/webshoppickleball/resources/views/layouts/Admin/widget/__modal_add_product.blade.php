@@ -285,7 +285,7 @@
             wrapper.append(`
                 <div class="attribute-block flex flex-col gap-2" data-attribute-id="${attribute.id}">
                     <label class="text-sm font-medium">${attribute.name}</label>
-                    <div class="flex flex-wrap gap-2">
+                    <div class="flex flex-wrap gap-x-2 gap-y-5">
                         ${valuesHtml}
                     </div>
                 </div>
