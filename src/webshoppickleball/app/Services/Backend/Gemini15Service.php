@@ -66,16 +66,20 @@ class Gemini15Service
 
             $json = json_decode($text, true);
 
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                Log::error('Gemini trả về JSON lỗi: ' . json_last_error_msg(), ['text' => $text]);
-                // Thử cứu vãn bằng cách đóng ngoặc nếu bị cắt cụt (Optional)
-                if (strpos($text, '"data": [') !== false && substr($text, -1) !== '}') {
-                    $text .= ' ] }'; 
-                    $json = json_decode($text, true);
-                }
+            if (json_last_error() !== JSON_ERROR_NONE || !is_array($json)) {
+                Log::error('Gemini trả về JSON lỗi', [
+                    'error' => json_last_error_msg(),
+                    'text' => $text
+                ]);
+
+                return [
+                    'message' => '',
+                    'data' => []
+                ];
             }
 
             return $json;
+
 
         } catch (\Throwable $e) {
             // ⚠️ CHỈ log – KHÔNG nuốt lỗi

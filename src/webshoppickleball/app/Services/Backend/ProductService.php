@@ -170,6 +170,7 @@ class ProductService extends BaseService
                     'image'     => $mainProduct->image,
                     'level' => $data['level'],
                     'play_style' => $data['play_style'],
+                    'category_id' => $data['category_id'] ?? null,
                 ]);
 
                 // 👇 GẮN ATTRIBUTE_VALUE CHO VARIANT

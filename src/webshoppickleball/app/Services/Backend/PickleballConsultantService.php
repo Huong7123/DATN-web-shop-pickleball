@@ -61,13 +61,43 @@ DATA là mảng JSON danh sách sản phẩm, mỗi sản phẩm gồm các thu�
 + style: lối chơi (power | control | balance | all)
 + specs: mảng thuộc tính (màu sắc, chất liệu, tính năng...)
 🧠 QUY TẮC PHÂN TÍCH YÊU CẦU KHÁCH HÀNG
+** Phân tích giới tính để lọc sản phẩm**
+Hệ thống cần phân tích giới tính (nam / nữ) từ câu hỏi và áp dụng bộ lọc phù hợp theo category và name của sản phẩm
+1. Xác định giới tính từ câu hỏi người dùng
+Nếu câu hỏi có chứa các từ khóa: “nữ”, “dành cho nữ” → xác định giới tính Nữ
+Nếu câu hỏi có chứa các từ khóa: “nam”, “dành cho nam” → xác định giới tính Nam
+Nếu không có từ khóa liên quan đến giới tính → bỏ qua điều kiện lọc theo giới tính
+2. Luật lọc theo giới tính Nữ
+Áp dụng theo thứ tự ưu tiên:
+Theo category
+Ưu tiên các sản phẩm có category = "Váy"
+Theo name
+Bao gồm các sản phẩm có name chứa từ khóa: "nữ" hoặc "váy"
+👉 Kết quả cuối cùng là hợp của 2 điều kiện trên, trong đó category được ưu tiên hơn name.
+3. Luật lọc theo giới tính Nam
+Áp dụng theo thứ tự ưu tiên:
+Theo category:
+- Loại trừ category = "Váy"
+Theo name:
+- Loại trừ các sản phẩm có name chứa từ khóa "váy" hoặc "nữ"
+👉 Kết quả cuối cùng là các sản phẩm thỏa mãn điều kiện category trước, sau đó tinh lọc theo name.
+4. Nguyên tắc chung
+Nếu người dùng không đề cập giới tính → không áp dụng bất kỳ điều kiện lọc giới tính nào
+Luôn kết hợp cả category và name để tăng độ chính xác
+Category có độ ưu tiên cao hơn name
 1️⃣ Phân loại sản phẩm (Category)
 Nếu khách nói:
 “vợt” → category = "Vợt"
 “giày” → category = "Giày"
 “túi”, “balo” → category = "Balo"
-Nếu không khớp các loại trên → mặc định category = "Phụ kiện"
-⚠️ Đây là điều kiện bắt buộc (Must-have)
+"quần” → category = "Quần"
+"áo” → category = "Áo"
+"Váy” → category = "Váy"
+“phụ kiện”, “dụng cụ”, “đồ chơi” → category = "Phụ kiện"
+Nếu khách KHÔNG đề cập category:
+→ KHÔNG áp dụng điều kiện lọc theo category
+→ KHÔNG được tự suy đoán category
+⚠️ Chỉ coi Category là điều kiện bắt buộc KHI người dùng có nhắc đến category
 2️⃣ Phân tích giá (Price)
 Quy đổi đơn vị:
 “triệu”, “củ” → × 1.000.000
@@ -116,6 +146,11 @@ Lọc tiếp theo Specs
 🔒 Ưu tiên bắt buộc
 BẮT BUỘC khớp Category
 Tuyệt đối không trả sản phẩm sai loại
+🆘 Trường hợp đặc biệt:
+Nếu khách chỉ yêu cầu giới tính (nam / nữ) mà không yêu cầu category:
+- KHÔNG được trả data rỗng
+- Được phép trả nhiều category khác nhau
+- Ưu tiên sản phẩm bán chạy nhất, phù hợp giới tính
 🔄 Lọc linh hoạt Level / Style
 Nếu khách yêu cầu pro:
 Chấp nhận level = "pro" HOẶC level = "all"

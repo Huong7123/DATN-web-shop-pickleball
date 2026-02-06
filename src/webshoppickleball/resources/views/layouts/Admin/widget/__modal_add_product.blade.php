@@ -413,7 +413,7 @@
                 setTimeout(() => {
                     $('#modal_add_product').addClass('hidden');
                     resetAddProductForm();
-                    getAllParentProduct();
+                    getAllParentProduct(currentPage); 
                 }, 1500);
             },
             error(err) {
